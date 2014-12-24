@@ -1,0 +1,82 @@
+########################
+DESCRIZIONE DEL PROGETTO
+########################
+Si vuole realizzare un database dei soci dell'osservatorio copernico. Pertanto si decide che:
+. Ogni persona inserita nel database (sia che abbia o meno la tessera) costituisce un'identità
+. Se un'identità ha la tessera (come accade sempre quando viene iscritto) è anche un socio: quindi un socio è anche un'identità mentre un'identità non è detto che sia anche un socio
+. il diritto di socio scade dopo un anno solare (31/12) mentre l'essere un'identita' scade dopo 5 anni consecutivi di mancato rinnovo tessera.
+
+Inoltre:
+. Si vuole una stampa di tutti i soci nell'anno corrente in un foglio elettronico
+. Alla fine di ogni anno solare verrà meno il diritto di socio ma non verrà cancellata la sua anagrafica dal database
+. I soci devono poter essere collegati (ad esempio da legami di parentela)
+
+*****
+MYSQL
+*****
+-- Si decide di implementare un database di nome "soci" con le seguenti tabelle:
+1. Tabella "anagrafica" con i seguenti campi
+	"member_id": discrimina univocamente un'identità
+	"cognome"
+	"nome"
+	"data_nascita"
+	"luogo_nascita"
+	"sesso"
+	"cf"
+	"indirizzo"
+	"cap"
+	"citta"
+	"provincia": serve sapere la regione per l'implementazione del calcolo automatico cf
+	"stato"
+	"telefono"
+	"email": utile per eventuali comunicazioni
+	"tessera": questo numero varierà da un anno all'altro relativamente al momento del nuovo tesseramento
+	"scadenza": avrà valore +5 rispetto l'ultimo anno di tesseramento (es tesseramento 2016 => 2021)
+	
+2. Tabella "presenze" con i seguenti campi:
+	"data"
+	"member_id"
+	
+3. Tabella "collegamenti" con i seguenti campi:
+	"tipo": padre, nonna, compagna, ecc
+	"member_id_rel"
+	"member_id"
+	
+***************Per il momento non la implemento*********
+4. Tabella "eventi" con i seguenti campi:
+	"descrizione"
+	"quota_integrativa"
+	"data": campo di relazione da tabella "presenze"??
+********************************************************
+	
+. Come engine utilizzo quello di default per la versione di MySql che ho installato (5.6.20) ovvero InnoDB
+. Creo l'utente copernico con pieni diritti sul database soci
+. Creo la procedura "reset_members" che elimina tutti i soci.
+	.. mysql>CALL reset_members(); come azione:
+    .. Cancella tutti i dati dalla tabella "presenze"
+    .. Mette NULL nel campo "tessera" dalla tabella "anagrafica"
+	.. Questo file deve essere lanciato assolutamente prima dell'inserimento del primo socio nel nuovo anno
+	.. Non è necessario il riavvio del server mysql
+        .. Chiudere e riaprire firefox perazzerare i contatori soci
+. Creo la procedura "expire_identities" che elimina definitivamente dal database le identità che non diventano più soci per 5 anni consecutivi
+	.. mysql>CALL expire_identities(FALSE); mostra quali identità vengono eliminate definitivamente dal database, ma non elimina nulla. 
+	.. mysql>CALL expire_identities(TRUE); eliminà tali identità !
+	.. Dopo l'eliminazione è necessario riavviare il server mysql
+        .. Chiudere e riaprire firefox perazzerare i contatori soci
+
+		
+Nella cartella mysql sono presenti questi file:
+. init_database.bat: se lanciato inizializza un nuovo database (tabelle e procedure)
+. reset_members.proc.bat: aggiorna la procedura "reset_members" in caso dovesse essere modificata
+. expire_identities.proc.bat: aggiorna la procedura "expire_identities" in caso dovesse essere modificata
+. XXXX-ELENCO_SOCI.csv: se esiste è l'estrazione dei soci per l'anno XXXX
+
+
+	
+####
+TODO
+####
+. Nella parte di inserimento nuovo socio
+    .. controllare che abbia l'età maggiore o uguale ad 8 anni
+. Log errori
+. Warning nelle query
