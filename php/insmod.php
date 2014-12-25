@@ -283,19 +283,19 @@ if ($membersobj != FALSE)
     /* Sto inserendo un nuovo socio (in pratica aggiorno quello appena inserito) */
     else
     {
-        $member->member_id=$last_member_id;
-        $membersobj=$dbh->query("INSERT INTO presenze (data, member_id) VALUES ('$member->data_tessera', '$member->member_id')");
+        $member->id=$last_member_id;
+        $membersobj=$dbh->query("INSERT INTO presenze (data, member_id) VALUES ('$member->data_tessera', '$member->id')");
         /* La data di nascita non è stata definita nel form quindi la metto NULL */
         if ($_POST['gg_nascita']=="GG" || $_POST['mm_nascita']=="MM" || empty($_POST['aaaa_nascita']))
         {
-            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita=NULL WHERE member_id='$$member->member_id'");
+            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita=NULL WHERE member_id='$$member->id'");
         }
         /* la data di nascita è definita, la metto nel formato per MySql: AAAA-MM-GG e poi la rimetto nel formato GG/MM/AAAA */
         else
         {
             $date=DateTime::createFromFormat('Y-m-d', "$_POST[aaaa_nascita]-$_POST[mm_nascita]-$_POST[gg_nascita]"); //RICICLO $date
             $member->data_nascita=$date->format('Y-m-d');
-            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita='$member->data_nascita' WHERE member_id='$member->member_id'");
+            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita='$member->data_nascita' WHERE member_id='$member->id'");
             $member->data_nascita=$date->format('d/m/Y'); //rimetto il formato data di nascita GG/MM/AAA in oggetto $member !!
 
         }

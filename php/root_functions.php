@@ -46,12 +46,11 @@ switch ($_GET['action'])
             $date=new DateTime();
             $year=$date->format('Y');
             
-            $members=$dbh->query("(SELECT 'Numero tessera', 'Cognome', 'Nome', 'Data di nascita', 'Data tessera') UNION "
-                    ."(SELECT tessera, cognome, nome, DATE_FORMAT(anagrafica.data_nascita, '%d/%m/%Y') data_nascita, DATE_FORMAT(presenze.data, '%d/%m/%Y') data FROM anagrafica "
+            $members=$dbh->query(" SELECT cognome, nome, DATE_FORMAT(anagrafica.data_nascita, '%d/%m/%Y') data_nascita, tessera, DATE_FORMAT(presenze.data, '%d/%m/%Y') data FROM anagrafica "
                     ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.tessera IS NOT NULL "
-                    ."ORDER BY anagrafica.tessera DESC "
-                    ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\sql\\\\".$year."-ELENCO_SOCI.csv' "
-                    ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n')");
+                    ."ORDER BY anagrafica.cognome ASC "
+                    ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$year."-ELENCO_SOCI.csv' "
+                    ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
             if(!$members)
             {
                 echo '<img src="../img/check_ko.png" height="100" width="100">';
@@ -60,7 +59,7 @@ switch ($_GET['action'])
             else
             {
                 echo '<img src="../img/check_ok.png" height="100" width="100">';
-                echo "<br/>FILE "?><a href="http://localhost/soci/sql/<?php echo $year."-ELENCO_SOCI.csv";?>"><?php echo $year."-ELENCO_SOCI ";?></a><?php echo "CREATO CORRETTAMENTE";     
+                echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $year."-ELENCO_SOCI.csv";?>"><?php echo $year."-ELENCO_SOCI ";?></a><?php echo "CREATO CORRETTAMENTE";     
             }
             
             $dbh = null; //Chiudo la connessione con mysql come root 
