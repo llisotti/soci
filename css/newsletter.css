@@ -12,6 +12,10 @@ form {
 	padding:0
 	}
 img {border:none;}
+img.message_sent {
+    display: block;
+    margin: 0 auto;
+}
 a {color:#060606;text-decoration: none}
 a:hover {text-decoration: underline}
 input {vertical-align:middle;}
@@ -25,24 +29,32 @@ input#ricerca {font-style:lighter; }
 input.text,
 select,
 textarea {
-	font-family:arial,sans-serif;
+	font-family: Times new roman;
 	color:#333;
-	font-size:12px;
+	//font-size:14px;
 	vertical-align:middle;
+        overflow:auto;
 	}
 input.text {
 	padding:1px 0 0 4px;
 	height:14px;
-	font-weight:lighter;
+	//font-weight:lighter;
 	}
-        
+    
 input[type=submit] {
-	background:url(../img/send_newsletter.png) no-repeat;
+	float:right;
+	display:block;
+	width:35px;
+	height:35px;
         text-indent:-9999px;
         cursor:pointer;
         border: none;
-        width:24px;
-	height:24px;
+	text-align:center;
+	color:#fff;
+	text-transform:uppercase;
+	font-weight:bold;
+	line-height:15px;
+	background:url(../img/send_newsletter.png) no-repeat;
 	}
 /* main container */
 #main {
@@ -217,19 +229,6 @@ ul.nav li.last {background:none;}
 	font:20px/21px verdana,sans-serif;
 	color:#43729F;
 	margin:0 0 4px 0;
-	}
-/* orange button */
-.top-bar a.button {
-	float:right;
-	display:block;
-	width:35px;
-	height:35px;
-	text-align:center;
-	color:#fff;
-	text-transform:uppercase;
-	font-weight:bold;
-	line-height:15px;
-	background:url(../img/add_new_member.png) no-repeat;
 	}
 	
 /* bar with select */

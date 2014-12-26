@@ -1,6 +1,7 @@
 <?php
 require "member.php"; //OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE  !
-//require "class.phpmailer.php";
+require "class.phpmailer.php";
+require "class.smtp.php";
 session_start();
 /* Setto la sessione di 5 ore */
 ini_set('session.gc_maxlifetime',18000);
@@ -11,14 +12,12 @@ ini_set('session.gc_maxlifetime',18000);
 <head>
 <title>Gruppo Astrofili "N. Copernico"</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/newsletter.css" media="all"/>
 </style>
 </head>
 <body>
 <?php
-$member_obj=array(); //Array per oggetti socio
-
+$member_obj=array(); //Array per le identità a cui inviare la mail
 /* Mi connetto al database */
 try {
     if(!isset($dbh))
@@ -98,7 +97,16 @@ catch (PDOException $exception) {
 </table>
 </div>
 <div id="center-column">
-<div class="top-bar"> <a href="http://localhost/soci/php/profile_editor.php" class="button" alt="Aggiungi nuovo socio" title="Aggiungi nuovo socio"></a>
+ <?php
+/* Se non ho inviato la newsletter visualizzo il form per l'invio */
+if(!isset($_POST['title'])) {
+    ?>
+    <!-- Tipo di codifica dei dati, DEVE essere specificato come segue -->
+    <form enctype="multipart/form-data" accept-charset="ISO-8859-15" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+<?php
+}   
+?>
+<div class="top-bar"> <input type="submit" value="Invia_newsletter" title="Invia Newsletter"/>
 <?php
 /* Se non ho inviato la newsletter richiedo le identità con email */
 if(!isset($_POST['title'])) {
@@ -106,28 +114,21 @@ if(!isset($_POST['title'])) {
     $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.email!='' AND anagrafica.email IS NOT NULL ORDER BY anagrafica.tessera");
     echo "<h1>ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER (".$members->rowCount().")</h1>";
 }
- else {
-    echo "bau";
-}
 ?>
 </div>
 <br />
 <div class="select-bar">
 <?php
-/* Se non ho inviato la newsletter visualizzo il form per l'invio */
+/* Se non ho inviato la newsletter visualizzo il resto del form per l'invio */
 if(!isset($_POST['title'])) {
     ?>
-<!-- Tipo di codifica dei dati, DEVE essere specificato come segue -->
-    <form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
     <!-- MAX_FILE_SIZE (in byte) deve precedere campo di input del nome file -->
     <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-    <input type="text" name="title" placeholder="Oggetto" required/>
-    <!-- Il nome dell'elemento di input determina il nome nell'array $_FILES -->
-    <input name="userfile" type="file" />
-    <input type="submit" value="Invia_newsletter" title="Invia Newsletter"/>
+    <input type="text" name="title" placeholder="Oggetto" size="50" required/>
+    <input type="file" name="userfile"  />
+    <input type="password" name="psw" placeholder="Password" size="22" required />
+    <textarea name="body_message" rows="2" cols="107" style="overflow:auto;resize:none" placeholder="Corpo del messaggio"></textarea>
     <!-- <input type="hidden" name="nonserve" value="true"/>  Barbatrucco per passare variabile in GET dopo $_SERVER['PHP_SELF'] -->
-    <textarea name="body_message" rows="2" cols="124" style="overflow:auto;resize:none" placeholder="Corpo del messaggio"></textarea>
-    
     <?php
 } 
 ?>
@@ -188,7 +189,7 @@ if(!isset($_POST['title'])) {
             <td id="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="../img/edit-icon.gif" width="16" height="16" alt="" /></a></td>
             <td id="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="../img/add-icon.gif" width="16" height="16" alt="" /></a></td>
             <td id="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="../img/not_linked.png" width="16" height="16" alt="add" /></a></td>
-            <td><input class="member_checkbox" name="member_check" type="checkbox" value="<?php echo $member->id; ?>" checked /></td>
+            <td><input class="member_checkbox" name="checklist[]" type="checkbox" value="<?php echo $member->id; ?>" checked /></td>
             <!-- <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
             <td><!--<img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>-->
         </tr>
@@ -201,6 +202,43 @@ if(!isset($_POST['title'])) {
 </table>
 <br/>
 <?php	
+}
+/* Invio newsletter */
+else {
+    /* Creo l'oggetto PHPMailer */
+    $mail= new PHPMailer();
+    //$mail->SMTPDebug= 3; //Per debug
+    
+    /* Configuro server SMTP */
+    $mail->IsSMTP();
+    $mail->Host = "smtp.gmail.com";
+    $mail->SMTPAuth = TRUE;
+    $mail->SMTPSecure = "ssl";
+    $mail->Username = "luca.lisotti@gmail.com";
+    $mail->Password = $_POST['psw'];
+    $mail->Port = "465";
+    
+    /* Setto le codifiche e i campi della email */
+    $mail->IsHTML(TRUE);
+    $mail->CharSet= "ISO-8859-15";
+    $mail->setFrom(FROM_ADDRESS, FROM_NAME);
+    foreach ($_POST['checklist'] as $id_checked) {
+        
+        
+    }
+    $mail->AddAddress("luca.lisotti@yahoo.com");
+    $mail->Subject  = $_POST['title'];
+    $mail->Body     = $_POST['body_message'];
+    $mail->WordWrap = 50;
+
+    /* Invio email */
+    if(!$mail->Send()) {
+    echo '<img class="message_sent" src="../img/check_ko.png" height="256" width="256">';
+    echo "\n\n".$mail->ErrorInfo;
+    } else {
+    echo '<img class="message_sent" src="../img/check_ok.png" height="256" width="256">';
+    }
+    
 }
 ?>
 <div class="select-bar_bottom">
