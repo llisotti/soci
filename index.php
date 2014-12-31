@@ -78,7 +78,7 @@ catch (PDOException $exception) {
 </ul>
 <table class="counter" cellpadding="0" cellspacing="0">
     <tr>
-        <td><strong>N° SOCI SERATA</strong></td>
+        <td>N° SOCI SERATA</td>
     </tr>
     <tr>
         <td width="137" align="center">
@@ -99,7 +99,7 @@ catch (PDOException $exception) {
         <td><br/><br/></td>
     </tr>
     <tr>
-        <td width="137" align="center"><strong>N° SOCI <?php $time=getdate(); echo $time['year'] ?></strong></td>
+        <td width="137" align="center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
     </tr>
     <tr>
     <?php
@@ -107,6 +107,14 @@ catch (PDOException $exception) {
     $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");					
     ?>
         <td width="137" align="center"><h1><font color="#F70"><?php echo $members->fetchColumn(); ?></font></h1></td>
+    </tr>
+    <tr>
+        <td><br/><br/><br/><br/></td>
+    </tr>
+    <tr>
+    <td>   
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valido!" title="CSS Valido!" />
+    </td>        
     </tr>
 </table>
 </div>

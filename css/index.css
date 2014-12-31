@@ -15,7 +15,7 @@ img {border:none;}
 a {color:#060606;text-decoration: none}
 a:hover {text-decoration: underline}
 input {vertical-align:middle;}
-input#ricerca {font-style:lighter; }
+input#ricerca {font-weight: lighter; }
 .floatleft {float:left !important}
 .floatright {float:right !important}
 .clear {clear:both !important}
@@ -61,7 +61,7 @@ a.version {
 position:absolute;
 color:#000;
 font-weight:bold;
-font-family: Times New Roman;
+font-family: "Times New Roman";
 top:48px;
 right:230px;
 }
@@ -230,7 +230,7 @@ ul.nav li.last {background:none;}
 	border-bottom:2px solid #f70;
 	padding:5px 0 3px 0;
 	margin:0 0 17px 0;
-	font-family:Times new roman;
+	font-family:"Times new roman";
 	font-size: 14px;
 	}
 .select-bar select {width:145px;margin:0 2px;}
@@ -241,7 +241,7 @@ ul.nav li.last {background:none;}
 	border-bottom:2px solid #f70;
 	padding:5px 0 3px 0;
 	margin:0 0 17px 0;
-	font-family:Times new roman;
+	font-family:"Times new roman";
 	font-size:10px;
 	}
 	
