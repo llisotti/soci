@@ -106,14 +106,21 @@ if(!isset($_POST['title'])) {
 <?php
 }   
 ?>
-<div class="top-bar"> <input type="submit" value="Invia_newsletter" title="Invia Newsletter"/>
+<div class="top-bar">
+<?php
+
+if(!isset($_POST['title'])) {
+    ?> 
+<input type="submit" value="Invia_newsletter" title="Invia Newsletter"/>
 <?php
 /* Se non ho inviato la newsletter richiedo le identità con email */
-if(!isset($_POST['title'])) {
+
     /* Visualizzo le identità provviste di email */
     $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.email!='' AND anagrafica.email IS NOT NULL ORDER BY anagrafica.tessera");
     echo "<h1>ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER (".$members->rowCount().")</h1>";
 }
+else
+    echo "<h1>ESITO NEWSLETTER</h1>";
 ?>
 </div>
 <br />
@@ -125,22 +132,27 @@ if(!isset($_POST['title'])) {
     <!-- MAX_FILE_SIZE (in byte) deve precedere campo di input del nome file -->
     <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
     <input type="text" name="title" placeholder="Oggetto" size="50" required/>
-    <input type="file" name="userfile"  />
-    <input type="password" name="psw" placeholder="Password" size="22" required />
-    <textarea name="body_message" rows="2" cols="107" style="overflow:auto;resize:none" placeholder="Corpo del messaggio"></textarea>
+    <input type="file" name="userfile" disabled />
+    <input id="psw_input" type="password" name="psw" placeholder="Password" size="22" required />
+    <img id="lock" src="../img/locked.png" width="16" height="16" title="Visualizza password" />
+    <textarea name="body_message" rows="2" cols="107" style="overflow:auto;resize:none" placeholder="Inserire qui un eventuale messaggio (ad esempio un'errata corrige)"></textarea>
     <!-- <input type="hidden" name="nonserve" value="true"/>  Barbatrucco per passare variabile in GET dopo $_SERVER['PHP_SELF'] -->
     <?php
 } 
 ?>
 </div>
-<div class="table">  
-<img src="img/bg-th-left.gif" width="8" height="7" alt="" class="left" />
-<img src="img/bg-th-right.gif" width="7" height="7" alt="" class="right" />
+<div class="table">
+<?php
+if(!isset($_POST['title'])) {
+    ?>
+<img src="../img/bg-th-left.gif" width="8" height="7" alt="" class="left" />
+<img src="../img/bg-th-right.gif" width="7" height="7" alt="" class="right" />
+
 <?php
 /* Se non ho inviato la newsletter visualizzo la tebella dei soci con l'email */
-if(!isset($_POST['title'])) {
-    $rows=$members->fetchAll();
-    $odd_tr=1;
+
+$rows=$members->fetchAll();
+$odd_tr=1;
 ?>
 <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
@@ -223,13 +235,18 @@ else {
     $mail->CharSet= "ISO-8859-15";
     $mail->setFrom(FROM_ADDRESS, FROM_NAME);
     foreach ($_POST['checklist'] as $id_checked) {
-        
-        
+        foreach ($_SESSION['members'] as $member) {
+            if($member->id!=$id_checked)
+                continue;
+            $mail->AddAddress($member->email, $member->nome);
+        }         
     }
-    $mail->AddAddress("luca.lisotti@yahoo.com");
     $mail->Subject  = $_POST['title'];
-    $mail->Body     = $_POST['body_message'];
-    $mail->WordWrap = 50;
+    
+    /* Costruisco il corpo della mail */
+    $message= $_POST['body_message'];
+    $message .= file_get_contents('http://localhost/soci/html/newsletter_template.html');
+    $mail->msgHTML($message);
 
     /* Invio email */
     if(!$mail->Send()) {
@@ -238,7 +255,7 @@ else {
     } else {
     echo '<img class="message_sent" src="../img/check_ok.png" height="256" width="256">';
     }
-    
+    $mail->clearAttachments();
 }
 ?>
 <div class="select-bar_bottom">
@@ -295,7 +312,22 @@ $(document).ready(function(){
         } else {
             $(".member_checkbox").prop("checked", false);
         }
-    });   
+    });
+    
+    
+    /* Funzione per gestire la visualizzazione o meno della password */
+    $("#lock").on('click', function () {
+        if($("#psw_input").attr('type')=='password') {
+            $("#psw_input").attr('type', 'text');
+            $(this).attr('src', '../img/unlocked.png');
+            $(this).attr('title', 'Nascondi password');
+        }
+        else {
+            $("#psw_input").attr('type', 'password');
+            $(this).attr('src', '../img/locked.png');
+            $(this).attr('title', 'Visualizza password');
+        }
+    });
 });
 </script>
 </body>

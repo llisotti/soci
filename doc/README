@@ -72,7 +72,23 @@ Nella cartella mysql sono presenti questi file:
 . XXXX-ELENCO_SOCI.csv: se esiste è l'estrazione dei soci per l'anno XXXX
 
 
-	
+###################
+GESTIONE NEWSLETTER
+###################
+Il funzionamento della Newsletter è il seguente:
+. Per essere iscritti alla newsletter basta inserire un indirizzo email. Viceversa per cancellarsi alla newsletter basterà cancellare l'indirizzo email
+. L'invio della email avviene tramite protocollo SMTP autenticato da password con connessione SSL/TSL
+. Il corpo della email è una pagina web in html salvata nella cartella html del sito. In essa è contenuta un'immagine con il nome evento.jpg. E' proprio quest'ultima che rappresenta la locandina dell'evento da pubblicizzare viene letta nella cartella doc del sito. Pertanto ad ogni nuovo evento occorre creare un'immagine con il nome evento.jpg e metterla nella cartella doc del sito. A quel punto automaticamente essa viene inserita nel corpo della email
+ 
+Accedendo alla pagina Newsletter il layout si presenta in questo modo:
+. Accanto alla scritta ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER, dentro le parentesi tonde, viene mostrato il numero di identità che sono iscritti alla newsletter
+. A fianco sulla destra cliccando sulla busta gialla si invia la newsletter
+. Nel campo oggetto dovrà obbligatoriamente essere scritto quello che apparirà come oggetto nella email.
+. Nel campo password dovrà obbligatoriamente essere scritta la password per la connessione al server SMTP per l'invio della email. Il lucchetto a lato indica se, al momento in cui si sta digitando la password, quest'ultima appare criptata durante la digitazione(lucchetto chiuso, come di default) oppure la password è visibile(lucchetto aperto). Il lucchetto si apre e si chiude cliccandoci sopra
+. Nel campo area di testo è possibile inserire un messaggio personalizzato che apparirà subito prima dell'immagine che pubblicizza l'evento. Potrebbe essere utile nel caso si voglia inviare una nuova email che corregge un errore di un precedente invio
+. La tabella mostra le identità a cui sarà inviata la email. Tramite delle caselle di check si possono escludere o includere solo alcune identità
+
+
 ####
 TODO
 ####

@@ -10,7 +10,7 @@
 !/doc/doc_generation.bat
 !/doc/README
 !/html/
-!/html/.gitkeep
+!/html/*.*
 !/img/
 !/img/*.*
 !/js/

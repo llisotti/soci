@@ -32,6 +32,7 @@ catch (PDOException $exception) {
 <ul id="top-navigation">
     <li><span><span><a href= 'http://localhost/soci/index.php'>Home</a></span></span></li>
     <li class="active"><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>
+    <li><span><span><a href="http://localhost/soci/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
