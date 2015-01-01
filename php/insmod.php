@@ -15,6 +15,14 @@ ini_set('session.gc_maxlifetime',18000);
 </head>
 <body>
 <?php
+/* Se nel form di profile_editor è stato cliccato annulla torno alla pagina precedente */
+if(isset($_POST['clean'])) {
+    if(isset($_GET['id']))
+        header("Location: http://localhost/soci/php/profile_editor.php?id=".$_GET['id']); //Con id
+    else
+        header("Location: http://localhost/soci/php/profile_editor.php"); //Senza id
+}
+
 /* Mi connetto al database */
 try {
     if(!isset($dbh))

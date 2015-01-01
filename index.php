@@ -22,11 +22,11 @@ ini_set('session.gc_maxlifetime',18000);
 <!DOCTYPE html>
 <html>
 <head>
+<style></style>
 <title>Gruppo Astrofili "N. Copernico"</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="css/index.css" media="all"/>
-</style>
 </head>
 <body>
 <?php
@@ -60,7 +60,7 @@ catch (PDOException $exception) {
 </div>
 <div id="middle">
 <div id="left-column">
-<h3>&nbsp &nbsp &nbsp &nbsp &nbsp Funzionalità</h3>
+<h3>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Funzionalità</h3>
 <ul class="nav">
     <?php
     /* Se sto visualizzando i soci più recenti, nel menù delle funzionalità propongo la visualizzazione di tutti i soci */
@@ -76,14 +76,14 @@ catch (PDOException $exception) {
     <li><a href="#"></a></li>
 <li class="last"><a href="#"></a></li>
 </ul>
-<table class="counter" cellpadding="0" cellspacing="0">
+<table class="counter">
     <tr>
         <td>N° SOCI SERATA</td>
     </tr>
     <tr>
-        <td width="137" align="center">
+        <td style="width: 137px; text-align: center">
         <h1>
-        <font color="#F70">
+        <span style="color: #F70">
         <?php
         /* Se sono stati inseriti soci per questa serata visualizzo quanti altrimenti visualizzo 0 */
         if(!isset($_SESSION['members_evening']))
@@ -91,7 +91,7 @@ catch (PDOException $exception) {
         
         echo $_SESSION['members_evening'];
         ?>
-        </font>
+        </span>
         </h1>
         </td>
     </tr>
@@ -99,14 +99,14 @@ catch (PDOException $exception) {
         <td><br/><br/></td>
     </tr>
     <tr>
-        <td width="137" align="center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
+        <td style="width: 137; text-align: center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
     </tr>
     <tr>
     <?php
     /* Conto i soci ovvero le righe di anagrafica che hanno la tessera per l'anno corrente */
     $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");					
     ?>
-        <td width="137" align="center"><h1><font color="#F70"><?php echo $members->fetchColumn(); ?></font></h1></td>
+        <td style="width: 137px; text-align: center"><h1><span style="color: #F70"><?php echo $members->fetchColumn(); ?></span></h1></td>
     </tr>
     <tr>
         <td><br/><br/><br/><br/></td>
@@ -119,7 +119,7 @@ catch (PDOException $exception) {
 </table>
 </div>
 <div id="center-column">
-<div class="top-bar"> <a href="http://localhost/soci/php/profile_editor.php" class="button" alt="Aggiungi nuovo socio" title="Aggiungi nuovo socio"></a>
+<div class="top-bar"> <a href="http://localhost/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
 <?php
 /* Se non passo nulla in GET visualizzo i soci più recenti */
 if(empty($_GET) || !isset($_GET['show']))
@@ -168,15 +168,15 @@ else
 $rows=$members->fetchAll();
 $odd_tr=1;
 ?>
-<table class="listing" cellpadding="0" cellspacing="0">
+<table class="listing">
     <tr>
-        <th class="first" width="30">ID</th>
-        <th width="167">Cognome e Nome</th>
+        <th class="first" style="width: 30px">ID</th>
+        <th style="width: 167px">Cognome e Nome</th>
         <th>Data di nascita</th>
         <th>N° Tessera</th>
         <th colspan="4">Azioni</th>
         <th class="last">Stato</th>
-    <tr/>
+    </tr>
     <?php
     foreach($rows as $row)
     {
@@ -211,13 +211,15 @@ $odd_tr=1;
             <td><?php echo $member->cognome." ".$member->nome ?></td>
             <td><?php echo $member->data_nascita ?></td>
             <td><?php echo $member->tessera ?></td>
-            <td id="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="img/login-icon.gif" width="16" height="16" alt="login" /></a></td>
-            <td id="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="img/edit-icon.gif" width="16" height="16" alt="" /></a></td>
-            <td id="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="img/add-icon.gif" width="16" height="16" alt="" /></a></td>
-            <td id="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="img/not_linked.png" width="16" height="16" alt="add" /></a></td>
+            <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="img/login-icon.gif" width="16" height="16" /></a></td>
+            <td class="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="img/edit-icon.gif" width="16" height="16" /></a></td>
+            <td class="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="img/add-icon.gif" width="16" height="16" /></a></td>
+            <td class="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="img/not_linked.png" width="16" height="16" /></a></td>
             <td></td>
-            <!-- <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
-            <td><!--<img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>-->
+            <!--
+            <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
+            <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>
+            -->
         </tr>
     <?php	
     }
@@ -246,7 +248,7 @@ $(document).ready(function(){
     
         
     /* Funzione di gestione 'Visualizza profilo' */
-    $("td#see_profile").click(function() {
+    $("td.see_profile").click(function() {
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
         var member_id = $(this).siblings(":first").text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_viewer.php"
@@ -255,7 +257,7 @@ $(document).ready(function(){
 
 
     /* Funzione di gestione 'Modifica profilo' */
-    $("td#edit_profile").click(function() {
+    $("td.edit_profile").click(function() {
         //recupero il testo dentro due td precedenti (che per come ho strutturato la tabella è il numero di tessera)
         var member_id = $(this).siblings(":first").text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_editor.php" inviando il numero tessera quindi MODIFICO il socio
