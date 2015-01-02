@@ -10,10 +10,10 @@ ini_set('session.gc_maxlifetime',18000);
 <!DOCTYPE html>
 <html>
 <head>
+<style></style>
 <title>Gruppo Astrofili "N. Copernico"</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/newsletter.css" media="all"/>
-</style>
 </head>
 <body>
 <?php
@@ -46,7 +46,7 @@ catch (PDOException $exception) {
 </div>
 <div id="middle">
 <div id="left-column">
-<h3>&nbsp &nbsp &nbsp &nbsp &nbsp Funzionalità</h3>
+<h3>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Funzionalità</h3>
 <ul class="nav">
     <?php
     /* Se sto visualizzando i soci più recenti, nel menù delle funzionalità propongo la visualizzazione di tutti i soci */
@@ -62,37 +62,25 @@ catch (PDOException $exception) {
     <li><a href="#"></a></li>
 <li class="last"><a href="#"></a></li>
 </ul>
-<table class="counter" cellpadding="0" cellspacing="0">
+<table class="counter">
     <tr>
         <td>N° SOCI SERATA</td>
     </tr>
     <tr>
-        <td width="137" align="center">
-        <h1>
-        <font color="#F70">
-        <?php
-        /* Se sono stati inseriti soci per questa serata visualizzo quanti altrimenti visualizzo 0 */
-        if(!isset($_SESSION['members_evening']))
-            $_SESSION['members_evening']=0;
-        
-        echo $_SESSION['members_evening'];
-        ?>
-        </font>
-        </h1>
-        </td>
+        <td style="width: 137px; text-align: center"><h1><span style="color: #F70"><?php if(isset($_SESSION['members_evening'])) echo $_SESSION['members_evening']; else echo 0; ?></span></h1></td>
     </tr>
     <tr>
         <td><br/><br/></td>
     </tr>
     <tr>
-        <td width="137" align="center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
+        <td style="width: 137px; text-align: center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
     </tr>
     <tr>
-    <?php
-    /* Conto i soci ovvero le righe di anagrafica che hanno la tessera per l'anno corrente */
-    $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");					
-    ?>
-        <td width="137" align="center"><h1><font color="#F70"><?php echo $members->fetchColumn(); ?></font></h1></td>
+        <?php
+        /* Conto le righe di anagrafica che hanno la tessera per l'anno corrente */
+        $membersobj=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");				
+        ?>
+        <td style="width: 137px; text-align: center"><h1><span style="color:#F70"><?php $members= $membersobj->fetchColumn(); echo $members; ?></span></h1></td>
     </tr>
     <tr>
         <td><br/><br/><br/><br/></td>
@@ -104,7 +92,7 @@ catch (PDOException $exception) {
     </tr>
 </table>
 </div>
-<div id="center-column">
+
  <?php
 /* Se non ho inviato la newsletter visualizzo il form per l'invio */
 if(!isset($_POST['title'])) {
@@ -113,7 +101,7 @@ if(!isset($_POST['title'])) {
     <form enctype="multipart/form-data" accept-charset="ISO-8859-15" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 <?php
 }   
-?>
+?><div id="center-column">
 <div class="top-bar">
 <?php
 
@@ -142,7 +130,7 @@ if(!isset($_POST['title'])) {
     <input type="text" name="title" placeholder="Oggetto" size="50" required/>
     <input type="file" name="userfile" disabled />
     <input id="psw_input" type="password" name="psw" placeholder="Password" size="22" required />
-    <img id="lock" src="../img/locked.png" width="16" height="16" title="Visualizza password" />
+    <img id="lock" src="../img/locked.png" width="16" height="16" alt="Visualizza password" title="Visualizza password" />
     <textarea name="body_message" rows="2" cols="107" style="overflow:auto;resize:none" placeholder="Inserire qui un eventuale messaggio (ad esempio un'errata corrige)"></textarea>
     <!-- <input type="hidden" name="nonserve" value="true"/>  Barbatrucco per passare variabile in GET dopo $_SERVER['PHP_SELF'] -->
     <?php
@@ -162,11 +150,11 @@ if(!isset($_POST['title'])) {
 $rows=$members->fetchAll();
 $odd_tr=1;
 ?>
-<table class="listing" cellpadding="0" cellspacing="0">
+<table class="listing">
     <tr>
-        <th class="first" width="30">ID</th>
-        <th width="167">Cognome e Nome</th>
-        <th width="220">Email</th>
+        <th class="first" style="width: 30px">ID</th>
+        <th style="width: 167px">Cognome e Nome</th>
+        <th style="width: 220px">Email</th>
         <th>N° Tessera</th>
         <th colspan="4">Azioni</th>
         <th class="last"><input id="allchecked" type="checkbox" title="Seleziona o deseleziona tutti" checked /></th>
@@ -205,15 +193,15 @@ $odd_tr=1;
             <td><?php echo $member->cognome." ".$member->nome ?></td>
             <td><?php echo $member->email ?></td>
             <td><?php echo $member->tessera ?></td>
-            <td id="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="../img/login-icon.gif" width="16" height="16" alt="login" /></a></td>
-            <td id="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="../img/edit-icon.gif" width="16" height="16" alt="" /></a></td>
-            <td id="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="../img/add-icon.gif" width="16" height="16" alt="" /></a></td>
-            <td id="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="../img/not_linked.png" width="16" height="16" alt="add" /></a></td>
+            <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="../img/login-icon.gif" width="16" height="16" /></a></td>
+            <td class="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="../img/edit-icon.gif" width="16" height="16" /></a></td>
+            <td class="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="../img/add-icon.gif" width="16" height="16" /></a></td>
+            <td class="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="../img/not_linked.png" width="16" height="16" /></a></td>
             <td><input class="member_checkbox" name="checklist[]" type="checkbox" value="<?php echo $member->id; ?>" checked /></td>
             <!-- <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
-            <td><!--<img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>-->
+            <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td> -->
         </tr>
-        </form>
+        
     <?php	
     }
     /* Creo una variabile di sessione e gli metto dentro l'array che contiene gli oggetti soci viaualizzati */
@@ -266,10 +254,11 @@ else {
     $mail->clearAttachments();
 }
 ?>
+
 <div class="select-bar_bottom">
 </div>
 </div>
-</div>
+</div></form>
 <div id="footer">
 </div>
 </div>
@@ -286,7 +275,7 @@ $(document).ready(function(){
     
         
     /* Funzione di gestione 'Visualizza profilo' */
-    $("td#see_profile").click(function() {
+    $("td.see_profile").click(function() {
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
         var member_id = $(this).siblings(":first").text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_viewer.php"
@@ -295,7 +284,7 @@ $(document).ready(function(){
 
 
     /* Funzione di gestione 'Modifica profilo' */
-    $("td#edit_profile").click(function() {
+    $("td.edit_profile").click(function() {
         //recupero il testo dentro due td precedenti (che per come ho strutturato la tabella è il numero di tessera)
         var member_id = $(this).siblings(":first").text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_editor.php" inviando il numero tessera quindi MODIFICO il socio
@@ -305,8 +294,10 @@ $(document).ready(function(){
 
     /* Funzione di gestione testo in grassetto al passaggio con il mouse sulla tabella elenco soci */
     $('td').mouseover(function(){
+        if($(this).closest('table').hasClass('listing')) {
         $(this).css({'font-weight':'bold'}); //effetto anche su elemento dove si trova il mouse
         $(this).siblings().css({'font-weight':'bold'})
+    }
     }).mouseout(function(){
         $(this).css({'font-weight':''}); //effetto anche su elemento dove si trova il mouse
         $(this).siblings().css({'font-weight':''});

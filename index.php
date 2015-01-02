@@ -267,8 +267,10 @@ $(document).ready(function(){
 
     /* Funzione di gestione testo in grassetto al passaggio con il mouse sulla tabella elenco soci */
     $('td').mouseover(function(){
+        if($(this).closest('table').hasClass('listing')) {
         $(this).css({'font-weight':'bold'}); //effetto anche su elemento dove si trova il mouse
         $(this).siblings().css({'font-weight':'bold'})
+    }
     }).mouseout(function(){
         $(this).css({'font-weight':''}); //effetto anche su elemento dove si trova il mouse
         $(this).siblings().css({'font-weight':''});

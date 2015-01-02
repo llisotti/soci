@@ -193,7 +193,7 @@ else
 <ol class="contact" style="padding-left: 15px">
 <li><label>GENERALITA'</label></li>
 </ol>
-<input name="cognome" placeholder="Cognome" autofocus required tabindex="1" type="text" value="<?php if(isset($_GET['id'])) echo $member->cognome; ?>"/>  
+    <input name="cognome" placeholder="Cognome" autofocus required tabindex="1" type="text" value="<?php if(isset($_GET['id'])) echo $member->cognome; ?>"/>  
 <input name="nome" placeholder="Nome" required tabindex="2" type="text" value="<?php if(isset($_GET['id'])) echo $member->nome; ?>"/> 
 <br><br>
 data di nascita

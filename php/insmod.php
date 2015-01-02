@@ -16,11 +16,12 @@ ini_set('session.gc_maxlifetime',18000);
 <body>
 <?php
 /* Se nel form di profile_editor è stato cliccato annulla torno alla pagina precedente */
-if(isset($_POST['clean'])) {
-    if(isset($_GET['id']))
-        header("Location: http://localhost/soci/php/profile_editor.php?id=".$_GET['id']); //Con id
+if(!empty($_POST['clean'])) {
+    if(!empty($_GET['id']))
+        header("Location: http://localhost/soci/php/profile_editor.php?id=$_GET[id]"); //Con id
     else
         header("Location: http://localhost/soci/php/profile_editor.php"); //Senza id
+    die(); //Fondamentale, altrimenti lo script continua
 }
 
 /* Mi connetto al database */
@@ -52,7 +53,7 @@ catch (PDOException $exception) {
 </div>
 <div id="middle">
 <div id="left-column">
-<h3>&nbsp &nbsp &nbsp &nbsp &nbsp Funzionalità</h3>
+<h3>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Funzionalità</h3>
 <ul class="nav">
     <?php
     if(!isset($_GET['allmembers']) || $_GET['allmembers']!="true")
@@ -66,25 +67,25 @@ catch (PDOException $exception) {
     <li><a href="#"></a></li>
     <li class="last"><a href="#"></a></li>
 </ul>
-<table class="counter" cellpadding="0" cellspacing="0">
+<table class="counter">
     <tr>
         <td>N° SOCI SERATA</td>
     </tr>
     <tr>
-        <td width="137" align="center"><h1><font color="#F70"><?php if(isset($_SESSION['members_evening'])) echo $_SESSION['members_evening']; else echo 0; ?></font></h1></td>
+        <td style="width: 137px; text-align: center"><h1><span style="color: #F70"><?php if(isset($_SESSION['members_evening'])) echo $_SESSION['members_evening']; else echo 0; ?></span></h1></td>
     </tr>
     <tr>
         <td><br/><br/></td>
     </tr>
     <tr>
-        <td width="137" align="center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
+        <td style="width: 137px; text-align: center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
     </tr>
     <tr>
         <?php
         /* Conto le righe di anagrafica che hanno la tessera per l'anno corrente */
         $membersobj=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");				
         ?>
-        <td width="137" align="center"><h1><font color="#F70"><?php $members= $membersobj->fetchColumn(); echo $members; ?></font></h1></td>
+        <td style="width: 137px; text-align: center"><h1><span style="color: #F70"><?php $members= $membersobj->fetchColumn(); echo $members; ?></span></h1></td>
     </tr>
     <tr>
         <td><br/><br/><br/><br/></td>
@@ -291,9 +292,9 @@ if ($membersobj != FALSE)
         }
         
         if (!$membersobj)
-            echo '<img src="../img/check_ko.png" height="256" width="256">';
+            echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
          else
-            echo '<img src="../img/check_ok.png" height="256" width="256">';
+            echo '<img src="../img/check_ok.png" height="256" width="256" alt="check_ok">';
     }
     /* Sto inserendo un nuovo socio (in pratica aggiorno quello appena inserito) */
     else
@@ -315,9 +316,9 @@ if ($membersobj != FALSE)
 
         }
         if (!$membersobj)
-            echo '<img src="../img/check_ko.png" height="256" width="256">';
+            echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
         else
-            echo '<img src="../img/check_ok.png" height="256" width="256">';
+            echo '<img src="../img/check_ok.png" height="256" width="256" alt="check_ok">';
     }
 
     /* Aggiorno il contatore di soci inseriti nella serata */
@@ -325,19 +326,20 @@ if ($membersobj != FALSE)
         $_SESSION['members_evening']++;
 }
 else
-    echo '<img src="../img/check_ko.png" height="256" width="256">';
+    echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
         
 
 //unset($_SESSION['socio']);
 ?>
-<h6 align="center">
 <form action="http://localhost/soci/php/profile_editor.php" method="get" > 
-<input name="insert_member" value="Inserisci altro socio" type="submit" style="display: inline" >
+<span style="margin-left: 270px">
+<input name="insert_member" value="Inserisci altro socio" type="submit" style="display: inline" >    
+</span>
 </form>
 <form action="http://localhost/soci/index.php" method="get" style="display: inline"> 
 <input name="home" value="Home" type="submit" >
 </form>
-</h6>
+
 <p>
 <!-- <div class="select-bar_bottom">
 <table>
