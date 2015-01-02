@@ -208,8 +208,7 @@ if (isset($_GET['id']))
                                                     , provincia='$member->provincia'
                                                     , stato='$member->stato'
                                                     , telefono='$member->telefono'
-                                                    , email='$member->email'
-                                                    , scadenza='$member->scadenza_id' WHERE member_id='$_GET[id]' 
+                                                    , email='$member->email' WHERE member_id='$_GET[id]' 
                             ");
 }
 /* Sto inserendo un nuovo socio */
@@ -274,8 +273,7 @@ if ($membersobj != FALSE)
         }
         if(isset($_POST['tessera']) && $update_card) //Il socio cambia numero tessera
         {
-            $last_member_id=$date_drop_identity->format('Y-m-d'); //RICICLO $last_member_id
-            $membersobj=$dbh->query("UPDATE anagrafica SET scadenza='$last_member_id', tessera='$member->tessera' WHERE member_id='$_GET[id]'");
+            $membersobj=$dbh->query("UPDATE anagrafica tessera='$member->tessera' WHERE member_id='$_GET[id]'");
         }
         elseif(isset($_POST['tessera']) && $id_to_member) //Da identità diventa socio
         {
