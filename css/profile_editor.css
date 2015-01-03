@@ -23,7 +23,7 @@ input#ricerca {font-weight:lighter; }
 .normal {font-weight:normal !important}
 .block {display:block !important}
 .contact {
-    padding: 20;
+    padding: 0px;
 }
 input.text,
 select,

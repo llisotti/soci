@@ -15,8 +15,7 @@ ini_set('session.gc_maxlifetime',18000);
 </head> 
 <body>
 <div class="container">
-<div class="form">
-<table>		
+<div class="form">		
 <?php
 switch ($_GET['action'])
 {
@@ -24,7 +23,7 @@ switch ($_GET['action'])
         if(!isset($_POST['export']))
         {
         ?>
-            <form action="" method="post">
+            <form action="<?php echo "$_SERVER[PHP_SELF]"."?"."$_SERVER[QUERY_STRING]" ?>" method="post">
             <!-- <input autocomplete="off" type="password" name="root_password" autofocus placeholder="Password"/> -->
             <input type="submit" name="export" value="Esporta" />
             </form>
@@ -39,7 +38,7 @@ switch ($_GET['action'])
             }
             catch (PDOException $exception)
             {
-                echo '<img src="../img/check_ko.png" height="100" width="100">';
+                echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
                 echo "<br/>Errore di connessione al database: ".$exception->getMessage();
                 die();
             }
@@ -53,12 +52,12 @@ switch ($_GET['action'])
                     ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
             if(!$members)
             {
-                echo '<img src="../img/check_ko.png" height="100" width="100">';
+                echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
                 echo "<br/>ERRORE CREAZIONE FILE !";
             }
             else
             {
-                echo '<img src="../img/check_ok.png" height="100" width="100">';
+                echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
                 echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $year."-ELENCO_SOCI.csv";?>"><?php echo $year."-ELENCO_SOCI ";?></a><?php echo "CREATO CORRETTAMENTE";     
             }
             
@@ -69,6 +68,7 @@ switch ($_GET['action'])
         break;
 }
 ?>
+</div>
 </div>	
 </body> 
 </html>

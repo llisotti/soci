@@ -69,30 +69,45 @@ catch (PDOException $exception) {
 </ul>
 <table class="counter">
     <tr>
-        <td>N° SOCI SERATA</td>
+        <td colspan="2">N° SOCI SERATA</td>
     </tr>
     <tr>
-        <td style="width: 137px; text-align: center"><h1><span style="color: #F70"><?php if(isset($_SESSION['members_evening'])) echo $_SESSION['members_evening']; else echo 0; ?></span></h1></td>
-    </tr>
-    <tr>
-        <td><br/><br/></td>
-    </tr>
-    <tr>
-        <td style="width: 137px; text-align: center">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
-    </tr>
-    <tr>
+        <td style="width: 137px; text-align: center" colspan="2">
+        <h1>
+        <span style="color: #F70">
         <?php
-        /* Conto le righe di anagrafica che hanno la tessera per l'anno corrente */
-        $membersobj=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");				
+        /* Se sono stati inseriti soci per questa serata visualizzo quanti altrimenti visualizzo 0 */
+        if(!isset($_SESSION['members_evening']))
+            $_SESSION['members_evening']=0;
+        
+        echo $_SESSION['members_evening'];
         ?>
-        <td style="width: 137px; text-align: center"><h1><span style="color: #F70"><?php $members= $membersobj->fetchColumn(); echo $members; ?></span></h1></td>
+        </span>
+        </h1>
+        </td>
     </tr>
     <tr>
-        <td><br/><br/><br/><br/></td>
+        <td colspan="2"><br/><br/></td>
+    </tr>
+    <tr>
+        <td style="width: 137; text-align: center" colspan="2">N° SOCI <?php $time=getdate(); echo $time['year'] ?></td>
+    </tr>
+    <tr>
+    <?php
+    /* Conto i soci ovvero le righe di anagrafica che hanno la tessera per l'anno corrente */
+    $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");					
+    ?>
+        <td style="width: 137px; text-align: center" colspan="2"><h1><span style="color: #F70"><?php echo $members->fetchColumn(); ?></span></h1></td>
+    </tr>
+    <tr>
+        <td colspan="2"><br/><br/><br/><br/></td>
     </tr>
     <tr>
     <td>   
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valido!" title="CSS Valido!" />
+        <img style="border:0;width:32px;height:32px" src="../img/HTML5_Logo.png" alt="HTML5 compliance code!" title="HTML5 compliance code!" />
+    </td> 
+    <td>   
+        <img style="border:0;width:88px;height:31px" src="../img/vcss.gif" alt="CSS Valido!" title="CSS Valido!" />
     </td>        
     </tr>
 </table>
