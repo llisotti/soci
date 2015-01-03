@@ -144,7 +144,7 @@ if(!isset($_POST['title'])) {
     <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
     <input type="text" name="title" placeholder="Oggetto" size="50" required/>
     <input type="file" name="userfile" disabled />
-    <input id="psw_input" type="password" name="psw" placeholder="Password" size="22" required />
+    <input id="psw_input" type="password" name="psw" placeholder="Password" size="18" required />
     <img id="lock" src="../img/locked.png" width="16" height="16" alt="Visualizza password" title="Visualizza password" />
     <textarea name="body_message" rows="2" cols="107" style="overflow:auto;resize:none" placeholder="Inserire qui un eventuale messaggio (ad esempio un'errata corrige)"></textarea>
     <!-- <input type="hidden" name="nonserve" value="true"/>  Barbatrucco per passare variabile in GET dopo $_SERVER['PHP_SELF'] -->
