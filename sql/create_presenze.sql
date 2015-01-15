@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS presenze;
 CREATE TABLE presenze
 (
   data	DATE NOT NULL,
+  iscrizione	DATE NOT NULL,
   member_id		SMALLINT UNSIGNED NOT NULL
 );
 

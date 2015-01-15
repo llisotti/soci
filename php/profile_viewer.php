@@ -71,9 +71,8 @@ if(isset($_SESSION['members']))
         <tr>
             <td><label>TESSERA:</label></td>
             <td><input readonly value="<?php echo "N°".$member->tessera." del ".$member->data_tessera; ?>"></td>
-            <td><label>SCADENZA IDENTITA':</label></td>
-            <td><input readonly id=scadenza value="<?php echo $member->scadenza_id; ?>"></td>
-            <td colspan="2"></td>
+            <td><label>ISCRIZIONE:</label></td>
+            <td colspan="3"><input readonly style="width: 218px" value="<?php echo $member->data_iscrizione." scadenza ".$member->scadenza_id; ?>"></td>
         </tr>
     </table>
         <?php

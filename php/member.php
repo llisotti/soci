@@ -83,6 +83,7 @@ class Socio_Copernico extends Person {
     private $email; /**< Indirizzo email: obbligatorio per iscrizione alla Newsletter */
     private $tessera; /**< Numero tessera socio per l'anno corrente */
     private $data_tessera; /**< Data in cui è stata effettuata la tessera */
+    private $data_iscrizione; /**< Data di iscrizione per la prima volta ovvero nuova identità */
     private $scadenza_id; /**< Scadenza identità: cancellazione dal database */
 
     /* Array di controllo per l'esistenza del campo */
@@ -102,6 +103,7 @@ class Socio_Copernico extends Person {
                                     "email",
                                     "tessera",
                                     "data_tessera",
+                                    "data_iscrizione",
                                     "scadenza_id"
                         );
 	

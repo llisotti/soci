@@ -197,6 +197,7 @@ if(!isset($_GET['id']) || $member->tessera==NULL)
 {
     $date_ins=DateTime::createFromFormat('Y-m-d', "$this_year-$_POST[mm_inserimento]-$_POST[gg_inserimento]");
     $member->data_tessera=$date_ins->format('Y-m-d');
+    $member->data_iscrizione=$date_ins->format('Y-m-d');
 }
 /* ...se aggiorno un socio */
  else
@@ -315,7 +316,7 @@ if ($membersobj != FALSE)
     else
     {
         $member->id=$last_member_id;
-        $membersobj=$dbh->query("INSERT INTO presenze (data, member_id) VALUES ('$member->data_tessera', '$member->id')");
+        $membersobj=$dbh->query("INSERT INTO presenze (data, iscrizione, member_id) VALUES ('$member->data_tessera', '$member->data_iscrizione', '$member->id')");
         /* La data di nascita non è stata definita nel form quindi la metto NULL */
         if ($_POST['gg_nascita']=="GG" || $_POST['mm_nascita']=="MM" || empty($_POST['aaaa_nascita']))
         {

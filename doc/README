@@ -35,6 +35,7 @@ MYSQL
 	
 2. Tabella "presenze" con i seguenti campi:
 	"data"
+	"iscrizione"
 	"member_id"
 	
 3. Tabella "collegamenti" con i seguenti campi:
