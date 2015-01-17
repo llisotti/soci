@@ -305,7 +305,7 @@ if ($membersobj != FALSE)
         {
             $last_member_id=$date_drop_identity->format('Y-m-d'); //RICICLO $last_member_id
             $membersobj=$dbh->query("UPDATE anagrafica SET scadenza='$last_member_id', tessera='$member->tessera' WHERE member_id='$_GET[id]'");
-            $membersobj=$dbh->query("INSERT INTO presenze (data, member_id) VALUES ('$member->data_tessera', '$_GET[id]')");
+            $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
         }
         
         if (!$membersobj)

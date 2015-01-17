@@ -30,7 +30,7 @@ define ("DROP_IDENTITY", "+5 years");
 /**
  * Versione del software
  */
-define ("VERSION", "GESTIONE SOCI 1.6");
+define ("VERSION", "GESTIONE SOCI 1.7");
 
 
 /**

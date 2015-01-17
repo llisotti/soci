@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 1.6
+ * 1.7
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -127,7 +127,7 @@ catch (PDOException $exception) {
 /* Se non passo nulla in GET visualizzo i soci più recenti */
 if(empty($_GET) || !isset($_GET['show']))
 {
-    $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze WHERE anagrafica.member_id = presenze.member_id ORDER BY anagrafica.tessera DESC LIMIT ".MEMBERS_RECENT_MAX);
+    $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id AND anagrafica.tessera IS NOT NULL ORDER BY anagrafica.tessera DESC LIMIT ".MEMBERS_RECENT_MAX);
     echo "<h1>ELENCO SOCI RECENTI (".$members->rowCount().")</h1>";
 }
 else
@@ -140,8 +140,8 @@ else
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
             break;
         case "allmembers": //Visualizzo tutti i soci
-            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id ORDER BY anagrafica.tessera DESC");
-            echo "<h1>ELENCO COMPLETO SOCI</h1>";
+            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze WHERE anagrafica.member_id = presenze.member_id AND anagrafica.tessera IS NOT NULL ORDER BY anagrafica.tessera DESC");
+            echo "<h1>ELENCO SOCI RECENTI (".$members->rowCount().")</h1>";
             break;
         case "allidentities": //Visualizzo tutte le identità (persone in anagrafica + soci= TUTTI)
             $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id ORDER BY anagrafica.cognome ASC");
@@ -149,7 +149,7 @@ else
             break;
         case "recentmembers": //Visualizzo i soci più recenti
         default:
-            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze WHERE anagrafica.member_id = presenze.member_id ORDER BY anagrafica.tessera DESC LIMIT ".MEMBERS_RECENT_MAX);
+            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze WHERE anagrafica.member_id = presenze.member_id AND anagrafica.tessera IS NOT NULL ORDER BY anagrafica.tessera DESC LIMIT ".MEMBERS_RECENT_MAX);
             echo "<h1>ELENCO SOCI RECENTI (".$members->rowCount().")</h1>";
             break;
     }

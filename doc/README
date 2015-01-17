@@ -86,17 +86,17 @@ Prima di cominciare un nuovo anno è necessario effettuare quanto segue:
 BACKUP / RESTORE
 ################
 Per fare il backup di tutto il database, comprese procedure e trigger, basta portarsi dentro la cartella dei binari mysql e lanciare il programma:
-mysqldump.exe -u copernico --routines soci> XXXX_backup.sql (con XXXX che indica l'anno in cui si effettua il backup).
-Verrà creato il file XXXX_backup.sql nella stessa directory dei binari mysql
-. Spostare il file XXXX_backup.sql nella cartella doc del software dove sono anche presenti i file csv
+mysqldump.exe -u copernico --routines soci > XXXX-backup.sql (con XXXX che indica l'anno in cui si effettua il backup).
+Verrà creato il file XXXX-backup.sql nella stessa directory dei binari mysql
+. Spostare il file XXXX-backup.sql nella cartella doc del software dove sono anche presenti i file csv
 
 Per fare il restore di tutto il database, comprese procedure e trigger:
-. Assicurarsi che il file di backup (XXXX_backup.sql) sia nella stessa directory dei binari di mysql
+. Assicurarsi che il file di backup (XXXX-backup.sql) sia nella stessa directory dei binari di mysql
 . Connettersi a mysql con l'utente che avrà i permessi su quel database: mysql.exe -u copernico
 . Nel caso non esistesse, creare il database (senza le tabelle!): create database copernico;
 Nel caso non esistesse l'utente copernico occorre consultare la sezione di inizializzazione mysql nel file "Sviluppo web.odt" 
 . Fare il logout da mysql, portarsi dentro la cartella dei binari mysql e lanciare il programma:
-mysql -u copernico soci < XXXX_backup.sql (con XXXX che indica l'anno in cui si è effettuato il backup).
+mysql -u copernico soci < XXXX-backup.sql (con XXXX che indica l'anno in cui si è effettuato il backup).
 
 
 ###################
