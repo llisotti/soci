@@ -5,11 +5,11 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 1.5
+ * 1.6
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
- * @li Nessun requisito richiesto
+ * @li Necessita della classe PHPMailer per la gestione della Newsletter
  * @section Autore
  * Luca Lisotti
  */
@@ -71,10 +71,10 @@ catch (PDOException $exception) {
         echo "<li><a href='http://localhost/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
     ?>
     <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
-    <li><a id="esporta" href="#">Esporta elenco soci completo</a></li>
+    <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
+    <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
     <li><a href="#"></a></li>
-    <li><a href="#"></a></li>
-<li class="last"><a href="#"></a></li>
+    <li class="last"><a href="#"></a></li>
 </ul>
 <table class="counter">
     <tr>
@@ -245,11 +245,17 @@ $odd_tr=1;
 <script type="text/javascript">
 $(document).ready(function(){
     
-    /* Funzione di gestione esportazione elenco */
-    $("a#esporta").click(function() {
+    /* Funzione di gestione esportazione elenco soci */
+    $("a#esporta_soci").click(function() {
         window.open('./php/root_functions.php?action=members_export','', "height=190,width=580");
     })
     
+        
+    /* Funzione di gestione esportazione elenco identità*/
+    $("a#esporta_identita").click(function() {
+        window.open('./php/root_functions.php?action=identities_export','', "height=190,width=580");
+    })
+        
         
     /* Funzione di gestione 'Visualizza profilo' */
     $("td.see_profile").click(function() {
