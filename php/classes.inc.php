@@ -108,7 +108,7 @@ class InputValidate {
      */
     public function __construct(&$control) {
         /* Nelle stringchar permetto i seguenti catarreri: spazio e ' */
-        $this->permitted_chars=array(" ","'");
+        $this->permitted_chars=array(" ","'","à","è","é","ì","ò","ù");
         
         $this->ctrl=$control;
     }
