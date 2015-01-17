@@ -58,12 +58,12 @@ MYSQL
     .. Mette NULL nel campo "tessera" dalla tabella "anagrafica"
 	.. Questo file deve essere lanciato assolutamente prima dell'inserimento del primo socio nel nuovo anno
 	.. Non è necessario il riavvio del server mysql
-        .. Chiudere e riaprire firefox perazzerare i contatori soci
+        .. Chiudere e riaprire firefox per azzerare i contatori soci
 . Creo la procedura "expire_identities" che elimina definitivamente dal database le identità che non diventano più soci per 5 anni consecutivi
 	.. mysql>CALL expire_identities(FALSE); mostra quali identità vengono eliminate definitivamente dal database, ma non elimina nulla. 
 	.. mysql>CALL expire_identities(TRUE); eliminà tali identità !
 	.. Dopo l'eliminazione è necessario riavviare il server mysql
-        .. Chiudere e riaprire firefox perazzerare i contatori soci
+        .. Chiudere e riaprire firefox per azzerare i contatori soci
 
 		
 Nella cartella mysql sono presenti questi file:
@@ -71,6 +71,32 @@ Nella cartella mysql sono presenti questi file:
 . reset_members.proc.bat: aggiorna la procedura "reset_members" in caso dovesse essere modificata
 . expire_identities.proc.bat: aggiorna la procedura "expire_identities" in caso dovesse essere modificata
 . XXXX-ELENCO_SOCI.csv: se esiste è l'estrazione dei soci per l'anno XXXX
+
+
+##############################################
+INIZIALIZZAZIONE DEL SISTEMA PER UN NUOVO ANNO
+##############################################
+Prima di cominciare un nuovo anno è necessario effettuare quanto segue:
+. Fare un backup del database: si veda la sezione BACKUP/RESTORE
+. Esportare in due file csv tutti i soci e tutte le identità tramite il programma stesso
+. Lanciare le procedure "reset_members" ed "expire_identities" il cui funzionamento è descritto alla sezione precedente
+
+
+################
+BACKUP / RESTORE
+################
+Per fare il backup di tutto il database, comprese procedure e trigger, basta portarsi dentro la cartella dei binari mysql e lanciare il programma:
+mysqldump.exe -u copernico --routines soci> XXXX_backup.sql (con XXXX che indica l'anno in cui si effettua il backup).
+Verrà creato il file XXXX_backup.sql nella stessa directory dei binari mysql
+. Spostare il file XXXX_backup.sql nella cartella doc del software dove sono anche presenti i file csv
+
+Per fare il restore di tutto il database, comprese procedure e trigger:
+. Assicurarsi che il file di backup (XXXX_backup.sql) sia nella stessa directory dei binari di mysql
+. Connettersi a mysql con l'utente che avrà i permessi su quel database: mysql.exe -u copernico
+. Nel caso non esistesse, creare il database (senza le tabelle!): create database copernico;
+Nel caso non esistesse l'utente copernico occorre consultare la sezione di inizializzazione mysql nel file "Sviluppo web.odt" 
+. Fare il logout da mysql, portarsi dentro la cartella dei binari mysql e lanciare il programma:
+mysql -u copernico soci < XXXX_backup.sql (con XXXX che indica l'anno in cui si è effettuato il backup).
 
 
 ###################
