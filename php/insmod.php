@@ -146,6 +146,10 @@ $format_input=array("cognome" => "FUC", "nome" => "FUC", "cf" => "UC", "citta" =
 $formatter= new InputFormat($format_input);
 $formatter->format($_POST);
 
+/* Prelevo i numeri di tessera ed i member_id*/
+$results=$dbh->query("SELECT member_id, tessera FROM anagrafica");
+$rows=$results->fetchAll();
+
 /* Sto aggiornando i dati di un socio oppure da identità diventa socio */
 if (isset($_GET['id']))
 {        
@@ -214,6 +218,15 @@ if($member->tessera!=NULL && $member->tessera!=$_POST['tessera']) //Un socio cam
     $update_card=TRUE;
 elseif($member->tessera==NULL && $_POST['tessera']!=NULL) //Un' identità vuole diventare socio
     $id_to_member=TRUE;
+
+
+/* Controllo che in caso di cambio tessera o inserimento nuovo socio il numero tessera già non esista */
+if($update_card || $id_to_member) {
+    foreach ($rows as $card) {
+        if($_POST['tessera']==$card['tessera'] && $member->id!=$card['member_id'])  //Se la tessera è uguale e il socio non è lo stesso
+            die("Numero di tessera già esistente");
+    }
+}
 
 $member->tessera=$_POST['tessera'];
 

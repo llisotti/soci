@@ -107,7 +107,7 @@ class InputValidate {
      * @endcode
      */
     public function __construct(&$control) {
-        /* Nelle stringchar permetto i seguenti catarreri: spazio e ' */
+        /* Nelle stringchar permetto i seguenti caratteri: spazio, ', lettere accentate */
         $this->permitted_chars=array(" ","'","à","è","é","ì","ò","ù");
         
         $this->ctrl=$control;

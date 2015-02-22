@@ -54,16 +54,14 @@ MYSQL
 . Creo l'utente copernico con pieni diritti sul database soci
 . Creo la procedura "reset_members" che elimina tutti i soci.
 	.. mysql>CALL reset_members(); come azione:
-    .. Cancella tutti i dati dalla tabella "presenze"
-    .. Mette NULL nel campo "tessera" dalla tabella "anagrafica"
+    .. Mette NULL nel campo "data" della tabella "presenze"
+    .. Mette NULL nel campo "tessera" della tabella "anagrafica"
 	.. Questo file deve essere lanciato assolutamente prima dell'inserimento del primo socio nel nuovo anno
-	.. Non è necessario il riavvio del server mysql
-        .. Chiudere e riaprire firefox per azzerare i contatori soci
+	.. Non è necessario il riavvio del server mysql ma occorre chiudere e riaprire firefox per azzerare i contatori soci
 . Creo la procedura "expire_identities" che elimina definitivamente dal database le identità che non diventano più soci per 5 anni consecutivi
 	.. mysql>CALL expire_identities(FALSE); mostra quali identità vengono eliminate definitivamente dal database, ma non elimina nulla. 
 	.. mysql>CALL expire_identities(TRUE); eliminà tali identità !
-	.. Dopo l'eliminazione è necessario riavviare il server mysql
-        .. Chiudere e riaprire firefox per azzerare i contatori soci
+	.. Dopo l'eliminazione è necessario riavviare il server mysql ed occorre chiudere e riaprire firefox per azzerare i contatori soci
 
 		
 Nella cartella mysql sono presenti questi file:

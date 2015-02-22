@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 1.7
+ * 1.8
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -135,7 +135,8 @@ else
     switch ($_GET['show'])
     {
         case "Cerca": //Visualizzo le identità (persone in anagrafica + soci= TUTTI) cercate
-            $param=$dbh->quote($_GET['surname'].'%');
+            $surname_trimmed=rtrim($_GET['surname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
+            $param=$dbh->quote($surname_trimmed.'%');
             $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param ORDER BY anagrafica.cognome ASC");
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
             break;
