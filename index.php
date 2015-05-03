@@ -135,9 +135,9 @@ else
     switch ($_GET['show'])
     {
         case "Cerca": //Visualizzo le identità (persone in anagrafica + soci= TUTTI) cercate
-            $surname_trimmed=rtrim($_GET['surname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
-            $param=$dbh->quote($surname_trimmed.'%');
-            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param ORDER BY anagrafica.cognome ASC");
+            $fullname_trimmed=rtrim($_GET['fullname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
+            $param=$dbh->quote('%'.$fullname_trimmed.'%');
+            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
             break;
         case "allmembers": //Visualizzo tutti i soci
@@ -160,7 +160,7 @@ else
 <br />
 <div class="select-bar">
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-<input id="ricerca" autocomplete="off" type="text" name="surname" placeholder="Cognome"/>
+<input id="ricerca" autocomplete="off" type="text" name="fullname" placeholder="Cognome o Nome"/>
 <input type="submit" name="show" value="Cerca" />
 <!-- <input type="hidden" name="nonserve" value="true"/>  Barbatrucco per passare variabile in GET dopo $_SERVER['PHP_SELF'] -->
 </form>
@@ -213,7 +213,9 @@ $odd_tr=1;
         array_push($member_obj, $member);
         ?>
             <td class="first style3"><?php echo $member->id ?></td>
-            <td><?php echo $member->cognome." ".$member->nome ?></td>
+            <?php if(isset($_GET['show']) && $_GET['show']=="Cerca") { ?>
+            <td><?php echo str_ireplace($_GET['fullname'], '<span style="color: red; text-transform: uppercase";>'.$_GET['fullname'].'</span>', $member->cognome." ".$member->nome); ?></td>
+            <?php } else { ?><td><?php echo $member->cognome." ".$member->nome ?></td> <?php } ?>
             <td><?php echo $member->data_nascita ?></td>
             <td><?php echo $member->tessera ?></td>
             <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="img/login-icon.gif" width="16" height="16" /></a></td>
