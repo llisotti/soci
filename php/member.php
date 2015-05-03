@@ -30,7 +30,7 @@ define ("DROP_IDENTITY", "+5 years");
 /**
  * Versione del software
  */
-define ("VERSION", "GESTIONE SOCI 1.8");
+define ("VERSION", "GESTIONE SOCI 1.9");
 
 
 /**
@@ -45,7 +45,10 @@ define ("FROM_NAME", "Osservatorio Copernico");
 define ("FROM_ADDRESS", "localhost@osservatoriocopernico");
 
 
-
+/**
+ * Percorso per il backup del database
+ */
+define("BACKUP_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
 
 
 

@@ -81,7 +81,7 @@ if(isset($_GET['id']))
     <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
     <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
-    <li><a href="#"></a></li>
+    <li><a id="backup" href="#">Backup database</a></li>
     <li class="last"><a href="#"></a></li>
 </ul>
 <table class="counter">
@@ -282,13 +282,18 @@ $(document).ready(function(){
     $("#luogo_nascita").focus(function(){
         $("#message").show();
         });
-    
-    
+        
     $("#luogo_nascita").focusout(function(){
         $("#message").hide();
         });
         
         
+    /* Funzione di creazione backup */
+    $("a#backup").click(function() {
+        window.open('../php/root_functions.php?action=backup','', "height=190,width=580");
+    });
+    
+    
     /* Funzione di gestione esportazione elenco soci */
     $("a#esporta_soci").click(function() {
         window.open('../php/root_functions.php?action=members_export','', "height=190,width=580");

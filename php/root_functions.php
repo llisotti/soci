@@ -38,7 +38,8 @@ catch (PDOException $exception) {
     die();
 }
 $date=new DateTime();
-$year=$date->format('Y');
+$data=$date->format('Ymd');
+//$month=$date->format('m');
 
 /* Verifico l'azione che devo fare */
 switch ($_GET['action']) {
@@ -46,7 +47,7 @@ switch ($_GET['action']) {
         $members=$dbh->query(" SELECT cognome, nome, DATE_FORMAT(anagrafica.data_nascita, '%d/%m/%Y') data_nascita, tessera, DATE_FORMAT(presenze.data, '%d/%m/%Y') data FROM anagrafica "
                 ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.tessera IS NOT NULL "
                 ."ORDER BY anagrafica.cognome ASC "
-                ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$year."-ELENCO_SOCI.csv' "
+                ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$data."_Elenco soci.csv' "
                 ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
         if(!$members) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
@@ -54,14 +55,14 @@ switch ($_GET['action']) {
         }
         else {
             echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $year."-ELENCO_SOCI.csv";?>"><?php echo $year."-ELENCO_SOCI ";?></a><?php echo "CREATO CORRETTAMENTE";     
+            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco soci.csv";?>"><?php echo $data."_Elenco soci ";?></a><?php echo "CREATO CORRETTAMENTE";     
         }
         break;
     case "identities_export": //Esporto identità
         $members=$dbh->query(" SELECT anagrafica.member_id, cognome, nome, DATE_FORMAT(anagrafica.data_nascita, '%d/%m/%Y') data_nascita, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica "
                 ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id "
                 ."ORDER BY anagrafica.cognome ASC "
-                ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$year."-ELENCO_IDENTITA\'.csv' "
+                ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$data."_Elenco identita\'.csv' "
                 ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
          if(!$members) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
@@ -69,9 +70,20 @@ switch ($_GET['action']) {
         }
         else {
             echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $year."-ELENCO_IDENTITA'.csv";?>"><?php echo $year."-ELENCO_IDENTITA' ";?></a><?php echo "CREATO CORRETTAMENTE";     
+            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco identita'.csv";?>"><?php echo $data."_Elenco identità ";?></a><?php echo "CREATO CORRETTAMENTE";     
         }
-        break;       
+        break;
+    case "backup": //Creazione backup database
+        system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysqldump.exe -u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+        if($return_value!=0) {
+            echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
+            echo "<br/>ERRORE BACKUP: controllare il contenuto del file di backup!";
+        }           
+        else {
+            echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
+            echo "<br/>BACKUP OK";
+        }
+        break;            
     default:
         break;
 }

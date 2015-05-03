@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 1.8
+ * 1.9
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -73,7 +73,7 @@ catch (PDOException $exception) {
     <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
     <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
-    <li><a href="#"></a></li>
+    <li><a id="backup" href="#">Backup database</a></li>
     <li class="last"><a href="#"></a></li>
 </ul>
 <table class="counter">
@@ -251,14 +251,20 @@ $(document).ready(function(){
     /* Funzione di gestione esportazione elenco soci */
     $("a#esporta_soci").click(function() {
         window.open('./php/root_functions.php?action=members_export','', "height=190,width=580");
-    })
+    });
     
         
-    /* Funzione di gestione esportazione elenco identità*/
+    /* Funzione di gestione esportazione elenco identità */
     $("a#esporta_identita").click(function() {
         window.open('./php/root_functions.php?action=identities_export','', "height=190,width=580");
-    })
+    });
         
+    
+    /* Funzione di creazione backup */
+    $("a#backup").click(function() {
+        window.open('./php/root_functions.php?action=backup','', "height=190,width=580");
+    });
+    
         
     /* Funzione di gestione 'Visualizza profilo' */
     $("td.see_profile").click(function() {
