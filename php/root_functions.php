@@ -22,7 +22,16 @@ if(!isset($_POST['export'])) {
     ?>
     <form action="<?php echo "$_SERVER[PHP_SELF]"."?"."$_SERVER[QUERY_STRING]" ?>" method="post">
     <!-- <input autocomplete="off" type="password" name="root_password" autofocus placeholder="Password"/> -->
-    <input type="submit" name="export" value="Esporta" />
+    <input type="submit" name="export" value="Esegui" /> <br/><br/>
+    <?php
+    if(isset($_GET['action']) && $_GET['action']=="DB_functions") {
+        ?>
+            <table >
+                <tr><td style="text-align: left">Backup database<input name="azione" value="backup" type="radio" checked="" /></td></tr>
+                <tr><td style="text-align: left">Ripristino database<input name="azione" value="restore" type="radio" /></td><td><input type="file" name="restorefile" accept=".sql" /></td></tr>
+            </table>
+    <?php }
+    ?>
     </form>
     <?php
     die();
@@ -73,15 +82,24 @@ switch ($_GET['action']) {
             echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco identita'.csv";?>"><?php echo $data."_Elenco identità ";?></a><?php echo "CREATO CORRETTAMENTE";     
         }
         break;
-    case "backup": //Creazione backup database
-        system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysqldump.exe -u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+    case "DB_functions": //Creazione backup database
+        if($_POST['azione']=="backup") //Faccio il backup
+            system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysqldump.exe -u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+        else //Faccio il restore
+            system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe -u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
         if($return_value!=0) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
-            echo "<br/>ERRORE BACKUP: controllare il contenuto del file di backup!";
+            if($_POST['azione']=="backup")
+                echo "<br/>ERRORE BACKUP: controllare il contenuto del file di backup!";
+            else
+                echo "<br/>ERRORE RIPRISTINO";
         }           
         else {
             echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-            echo "<br/>BACKUP OK";
+            if($_POST['azione']=="backup")
+                echo "<br/>BACKUP OK!";
+            else
+                echo "<br/>RIPRISTINO OK";
         }
         break;            
     default:
@@ -89,6 +107,13 @@ switch ($_GET['action']) {
 }
 ?>
 </div>
-</div>	
+</div>
+<!-- Javascript non funziona in questa pagina: capire perchè e risolvere!
+<script type="text/javascript" src="../js/jquery-1.11.1.js"> </script>
+<script type="text/javascript">
+$(document).ready(function(){
+    alert('prova');
+});
+</script> -->
 </body> 
 </html>

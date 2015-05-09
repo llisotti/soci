@@ -84,19 +84,30 @@ Prima di cominciare un nuovo anno è necessario effettuare quanto segue:
 BACKUP / RESTORE
 ################
 Per fare il backup di tutto il database, comprese procedure e trigger è possibile agire in due modi:
-1. MANUALMENTE: portarsi dentro la cartella dei binari mysql e lanciare: mysqldump.exe -u copernico --routines soci > AAAAMMDD_Backup.sql (con AAAA che indica l'anno, MM il mese e GG il giorno in cui si effettua il backup).
+1. MANUALMENTE:
+Portarsi dentro la cartella dei binari mysql e lanciare: mysqldump.exe -u copernico --routines soci > AAAAMMDD_Backup.sql (con AAAA che indica l'anno, MM il mese e GG il giorno in cui si effettua il backup).
 Verrà creato il file AAAAMMDD_Backup.sql nella stessa directory dei binari mysql.
 Spostare tale file nella cartella doc del software dove sono anche presenti i file csv
-2. AUTOMATICAMENTE: dal programma cliccare sulla funzionalità "Backup database". Il file AAAAMMDD_Backup.sql (con AAAA che indica l'anno, MM il mese e GG il giorno in cui si effettua il backup) verrà automaticamente creato nella cartella doc del software dove sono anche presenti i file csv
+2. AUTOMATICAMENTE:
+Dal programma cliccare sulla funzionalità "Operazioni sul DB".
+Nella finestra che si apre scegliere "Backup database" (selezionato di default)
+Cliccare su "Esegui"
+Quando apparirà l'cona che conferma il successo dell'operazione significa che il file AAAAMMDD_Backup.sql (con AAAA che indica l'anno, MM il mese e GG il giorno in cui si effettua il backup) è stato creato nella cartella doc del software dove sono anche presenti i file csv
 
-Per fare il restore di tutto il database, comprese procedure e trigger:
+Per fare il restore di tutto il database, comprese procedure e trigger è possibile agire in due modi:
+1. MANUALMENTE:
 . Assicurarsi che il file di backup (XXXX-backup.sql) sia nella stessa directory dei binari di mysql
 . Connettersi a mysql con l'utente che avrà i permessi su quel database: mysql.exe -u copernico
 . Nel caso non esistesse, creare il database (senza le tabelle!): create database copernico;
 Nel caso non esistesse l'utente copernico occorre consultare la sezione di inizializzazione mysql nel file "Sviluppo web.odt" 
 . Fare il logout da mysql, portarsi dentro la cartella dei binari mysql e lanciare il programma:
 mysql -u copernico soci < XXXX-backup.sql (con XXXX che indica l'anno in cui si è effettuato il backup).
-
+2. AUTOMATICAMENTE:
+Dal programma cliccare sulla funzionalità "Operazioni sul DB".
+Nella finestra che si apre scegliere "Ripristino database"
+Dal pulsante a fianco "Sfoglia" scegliere un backup che si vuole ripristinare
+Cliccare su "Esegui"
+Quando apparirà l'cona che conferma il successo dell'operazione ricaricare nuovamente la pagina Home
 
 ###################
 GESTIONE NEWSLETTER

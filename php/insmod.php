@@ -64,7 +64,7 @@ catch (PDOException $exception) {
     <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
     <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
-    <li><a id="backup" href="#">Backup database</a></li>
+    <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
     <li><a href="#"></a></li>
     <li class="last"><a href="#"></a></li>
 </ul>
@@ -404,8 +404,8 @@ $(document).ready(function(){
     
     
     /* Funzione di creazione backup */
-    $("a#backup").click(function() {
-        window.open('../php/root_functions.php?action=backup','', "height=190,width=580");
+    $("a#DB_functions").click(function() {
+        window.open('../php/root_functions.php?action=DB_functions','', "height=190,width=580");
     });
 });
 </script>
