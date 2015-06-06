@@ -325,6 +325,146 @@ class InputFormat {
 
 
 /**
+ * @class Logger
+ * @brief Rappresenta un logger
+ * @attention Necessita della classe MyException
+ */
+class Logger {
+    private $file_path; /**< Percorso dove verrà salvato il file di log */
+    private $file_size_max; /**< Dimensione massima del file di log in KByte */
+    private $last_logfile_name; /**< Nome del file di log se già esistente all'avvio di una snuova sessione */
+    private $last_logfile_size; /**< Dimensione del file di log se già esistente all'avvio di una snuova sessione */
+    private $iterator; /**< Oggetto per il controllo della directory del file di log */
+    private $is_new_logger_file; /**< Indica se il file di log è stato appena creato all'avvio di una nuova sessione */
+
+
+    /** 
+     * @brief Costruttore
+     * @details Inizializza un file di log del tipo AAAAMMGG.log
+     * @param[in] string $file_path Percorso del file di log
+     * @param[in] int $file_size_max Dimensione massima del file in KByte
+     * @code
+     * //Creo un logger con dimensione massima 1MByte
+     * log=new Logger(MYPATH, 1024);
+     * @endcode
+     */
+    public function __construct($file_path, $file_size_max) {
+        $this->file_path=$file_path;
+        $this->file_size_max=$file_size_max;
+        $this->is_new_logger_file=FALSE;        
+        /* Verifico se la directory esiste */
+        try {
+            $this->iterator=new DirectoryIterator($this->file_path);
+        } catch (Exception $ex) {
+            throw new MyException("Errore creazione oggetto Logger: ".$ex->getMessage(), 0);
+        }        
+        /* Se tutto ok inizializzo il file di log */
+        $this->initLogFile();
+        unset($this->iterator); //Necessario perchè DirectoryIterator non si serializza quindi l'oggetto logger non potrei passarlo nella sessione
+    }
+    
+    
+    /** 
+     * @brief Inizializza un file di log 
+     * @details Se il file esiste ma è maggiore di $file_size_max oppure non esiste ne crea uno nuovo\n
+     * Se il file esiste ed è minore di $file_size_max oontinua ad utilizzarlo
+     */
+    private function initLogFile() {
+        /* Verifico, se esiste, qual'è l'ultimo file di log utile tra quelli presenti nella directory file_path */
+        $accessed=0;
+        foreach ($this->iterator as $fileinfo) {
+            if($fileinfo->isFile() && $fileinfo->getExtension()=="log") { //Se è un file di log
+                if($fileinfo->getCTime() > $accessed) { //Se il file di log è l'ultimo...
+                    $accessed = $fileinfo->getAtime();
+                    $this->last_logfile_name=$fileinfo->getBasename(); //...ne catturo il nome...
+                    $this->last_logfile_size=$fileinfo->getSize(); //...e il size
+                }
+            }           
+        }
+        if(!$accessed || $this->last_logfile_size >= LOGFILE_MAXSIZE*$this->file_size_max) //Se non esiste alcun file di log oppure supera il file_size_max (in KByte) allora ne creo uno nuovo            
+            $this->is_new_logger_file=TRUE;
+        else
+            $this->is_new_logger_file=FALSE;
+    }
+
+
+    /** 
+     * @brief Scrive una riga nel file di log 
+     * @param[in] int $type_message Stringa da controllare \n
+     * $type_message può valere
+     * @li @c 0: ERRORE - Messaggio di errore
+     * @li @c 1: WARNING - Messaggio di warning
+     * @li @c 2: INFO - Messaggio d'informazione
+     * @li @c 3: DEBUG - Messaggio di debug
+     * @note I messaggi sono del tipo \n
+     * [data ora] TAB PID\@pagina\@linea di codice che hanno inviato il log TAB tipomessaggio messaggio
+     * @return Messages
+     */
+    private function writeLog($type_message, $message, $caller_file, $caller_line) {
+        $date=new DateTime(); //Aggiorno qui la data e l'ora dell'evento, è più preciso
+        if($this->is_new_logger_file)
+            $fp=fopen($this->file_path.$date->format('Ymd').".log", "a");
+        else
+            $fp= fopen($this->file_path.$this->last_logfile_name, "a");
+        switch($type_message) {
+           case 0:
+               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tERRORE ".$message.PHP_EOL);
+               break;
+           case 1:
+               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tWARNING ".$message.PHP_EOL);
+               break;
+           case 2:
+               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tINFO ".$message.PHP_EOL);
+               break;
+           case 3:
+               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tDEBUG ".$message.PHP_EOL);
+               break;
+       }
+    }
+    
+    
+    /** 
+     * @brief Scrive una riga di ERRORE nel file di log 
+     */
+    public function logError($param) {
+        $caller=debug_backtrace();
+        $caller_file=basename($caller[0]["file"]);
+        $this->writeLog(0, $param, $caller_file, $caller[0]["line"]);
+    }
+    
+    
+    /** 
+     * @brief Scrive una riga di INFO nel file di log 
+     */
+    public function logInfo($param) {
+        $caller=debug_backtrace();
+        $caller_file=basename($caller[0]["file"]);
+        $this->writeLog(2, $param, $caller_file, $caller[0]["line"]);
+    }
+    
+    
+    /** 
+     * @brief Scrive una riga di WARNING nel file di log 
+     */
+    public function logWarning($param) {
+        $caller=debug_backtrace();
+        $caller_file=basename($caller[0]["file"]);
+        $this->writeLog(1, $param, $caller_file, $caller[0]["line"]);
+    }
+    
+    
+    /** 
+     * @brief Scrive una riga di DEBUG nel file di log 
+     */
+    public function logDebug($param) {
+        $caller=debug_backtrace();
+        $caller_file=basename($caller[0]["file"]);
+        $this->writeLog(3, $param, $caller_file, $caller[0]["line"]);
+    }
+}
+
+
+/**
  * @class Person
  * @brief Rappresenta l'entità di una persona
  * @details Contiene i requisiti minimi che una persona deve avere
