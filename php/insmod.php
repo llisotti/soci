@@ -312,7 +312,7 @@ if ($membersobj != FALSE)
         }
         if(isset($_POST['tessera']) && $update_card) //Il socio cambia numero tessera
         {
-            $membersobj=$dbh->query("UPDATE anagrafica tessera='$member->tessera' WHERE member_id='$_GET[id]'");
+            $membersobj=$dbh->query("UPDATE anagrafica SET tessera='$member->tessera' WHERE member_id='$_GET[id]'");
         }
         elseif(isset($_POST['tessera']) && $id_to_member) //Da identità diventa socio
         {
