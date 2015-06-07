@@ -32,12 +32,27 @@ ini_set('session.gc_maxlifetime',18000);
 <?php
 $member_obj=array(); //Array per oggetti socio
 
+/* Inizializzo il logger */
+if(!isset($_SESSION['logger'])) {
+    try {
+        $mylog=new Logger(LOGFILE_PATH, LOGFILE_MAXSIZE);   
+        $mylog->logInfo("Inizio nuova sessione@".VERSION);
+    } catch (MyException $ex) {
+        die($ex->show());
+    }   
+}
+else 
+    $mylog=$_SESSION['logger'];
+
+
 /* Mi connetto al database */
 try {
-    if(!isset($dbh))
-        $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
+    if(!isset($dbh)) {
+        $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");       
+    }
 }
 catch (PDOException $exception) {
+    $mylog->logError("Errore di connessione al database: ".$exception->getMessage());
     die("Errore di connessione al database: ".$exception->getMessage());
 }
 ?>
@@ -139,6 +154,7 @@ else
             $param=$dbh->quote('%'.$fullname_trimmed.'%');
             $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
+            $mylog->logInfo("Ricerca (".$fullname_trimmed.") tra le identità");
             break;
         case "allmembers": //Visualizzo tutti i soci
             $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze WHERE anagrafica.member_id = presenze.member_id AND anagrafica.tessera IS NOT NULL ORDER BY anagrafica.tessera DESC");
@@ -232,6 +248,7 @@ $odd_tr=1;
     }
     /* Creo una variabile di sessione e gli metto dentro l'array che contiene gli oggetti soci viaualizzati */
     $_SESSION['members']=$member_obj;
+    $_SESSION['logger']=$mylog;
     ?>
 </table>
 <br/>

@@ -30,7 +30,7 @@ define ("DROP_IDENTITY", "+5 years");
 /**
  * Versione del software
  */
-define ("VERSION", "GESTIONE SOCI 2.0");
+define ("VERSION", "GESTIONE SOCI 2.1");
 
 
 /**
@@ -49,6 +49,18 @@ define ("FROM_ADDRESS", "localhost@osservatoriocopernico");
  * Percorso per il backup del database
  */
 define("BACKUP_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
+
+
+/**
+ * Dimensione massima (in KByte) per il file di log
+ */
+define("LOGFILE_MAXSIZE", 1024);
+
+
+/**
+ * Percorso dove salvare il file di log
+ */
+define("LOGFILE_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
 
 
 

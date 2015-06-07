@@ -16,17 +16,20 @@ ini_set('session.gc_maxlifetime',18000);
 </head>
 <body>
 <?php
+/* RIchiedo il logger */
+$mylog=$_SESSION['logger'];
+
 /* Mi connetto al database */
 try
 {
     if(!isset($dbh))
         $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
 }
-catch (PDOException $exception)
-{
-    echo "Errore di connessione al database: ".$exception->getMessage();
-    die();
+catch (PDOException $exception) {
+    $mylog->logError("Errore di connessione al database: ".$exception->getMessage());
+    die("Errore di connessione al database: ".$exception->getMessage());
 }
+
 $gg=NULL;
 $mm=NULL;
 /* Se passo id allora cerco il socio corrispondente */

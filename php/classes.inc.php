@@ -69,9 +69,9 @@ class MyException extends Exception {
      */
     public function show($hide_path=FALSE) {
         if(!$hide_path)
-            return "{$this->file}.{$this->line}: {$this->message}[{$this->code}]\n"; //Path del file.riga: messaggio custom[numero di errore classe Messages]
+            return "{$this->file}.{$this->line}: {$this->message}[{$this->code}]"; //Path del file.riga: messaggio custom[numero di errore classe Messages]
         else
-            return "{$this->message}[{$this->code}]\n"; //Messaggio custom[numero di errore classe Messages]
+            return "{$this->message}[{$this->code}]"; //Messaggio custom[numero di errore classe Messages]
     }
 }
 
@@ -408,16 +408,16 @@ class Logger {
             $fp= fopen($this->file_path.$this->last_logfile_name, "a");
         switch($type_message) {
            case 0:
-               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tERRORE ".$message.PHP_EOL);
+               fwrite($fp, "[".$date->format('d-m-Y H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tERRORE ".$message.PHP_EOL);
                break;
            case 1:
-               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tWARNING ".$message.PHP_EOL);
+               fwrite($fp, "[".$date->format('d-m-Y H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tWARNING ".$message.PHP_EOL);
                break;
            case 2:
-               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tINFO ".$message.PHP_EOL);
+               fwrite($fp, "[".$date->format('d-m-Y H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tINFO ".$message.PHP_EOL);
                break;
            case 3:
-               fwrite($fp, "[".$date->format('Y-m-d H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tDEBUG ".$message.PHP_EOL);
+               fwrite($fp, "[".$date->format('d-m-Y H:i:s')."]\t".getmypid()."@".$caller_file."@".$caller_line."\tDEBUG ".$message.PHP_EOL);
                break;
        }
     }

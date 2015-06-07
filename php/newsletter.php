@@ -228,6 +228,9 @@ $odd_tr=1;
 }
 /* Invio newsletter */
 else {
+    /* RIchiedo il logger */
+    $mylog=$_SESSION['logger'];
+    
     /* Creo l'oggetto PHPMailer */
     $mail= new PHPMailer();
     //$mail->SMTPDebug= 3; //Per debug
@@ -263,8 +266,10 @@ else {
     if(!$mail->Send()) {
     echo '<img class="message_sent" src="../img/check_ko.png" height="256" width="256" alt="check_ko.png">';
     echo "\n\n".$mail->ErrorInfo;
+    $mylog->logError("Tentativo di invio newsletter da account ".$mail->Username." fallito (".$mail->ErrorInfo.")");
     } else {
     echo '<img class="message_sent" src="../img/check_ok.png" height="256" width="256" alt="check_ko.png">';
+    $mylog->logInfo("Tentativo di invio newsletter da account ".$mail->Username." riuscito");
     }
     $mail->clearAttachments();
 }

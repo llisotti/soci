@@ -15,6 +15,9 @@ ini_set('session.gc_maxlifetime',18000);
 </head>
 <body>
 <?php
+/* RIchiedo il logger */
+$mylog=$_SESSION['logger'];
+
 /* Se nel form di profile_editor è stato cliccato annulla torno alla pagina precedente */
 if(!empty($_POST['clean'])) {
     if(!empty($_GET['id']))
@@ -30,8 +33,8 @@ try {
         $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
 }
 catch (PDOException $exception) {
-    echo "Errore di connessione al database: ".$exception->getMessage();
-    die();
+    $mylog->logError("Errore di connessione al database: ".$exception->getMessage());
+    die("Errore di connessione al database: ".$exception->getMessage());
 }
 ?>
 <div id="main">
@@ -65,7 +68,7 @@ catch (PDOException $exception) {
     <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
     <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
-    <li><a href="#"></a></li>
+    <!--<li><a href="#"></a></li>-->
     <li class="last"><a href="#"></a></li>
 </ul>
 <table class="counter">
@@ -137,6 +140,10 @@ try {
     $validator->isValidFormat($_POST);
     $validator->isValidLenght($_POST['cf'], 16, 1);
 } catch (MyException $exc) {
+    if(!isset($_GET['id']))
+        $mylog->logError("Tentativo di inserimento nuovo socio fallito (COGNOME:".$_POST['cognome']." NOME:".$_POST['nome']."), ".$exc->show(TRUE));
+    else
+        $mylog->logError("Tentativo di aggiornamento socio fallito (ID:".$_GET['id']." COGNOME:".$_POST['cognome']." NOME:".$_POST['nome']."), ".$exc->show(TRUE));
     die($exc->show());
 }
 
@@ -223,11 +230,17 @@ elseif($member->tessera==NULL && $_POST['tessera']!=NULL) //Un' identità vuole 
 /* Controllo che in caso di cambio tessera o inserimento nuovo socio il numero tessera già non esista */
 if($update_card || $id_to_member) {
     foreach ($rows as $card) {
-        if($_POST['tessera']==$card['tessera'] && $member->id!=$card['member_id'])  //Se la tessera è uguale e il socio non è lo stesso
+        if($_POST['tessera']==$card['tessera'] && $member->id!=$card['member_id']) {  //Se la tessera è uguale e il socio non è lo stesso
+            if(isset($_GET['id']))
+                $mylog->logError("Tentativo di aggiornamento socio fallito (ID:".$_GET['id']."), numero di tessera già esistente (TESSERA:".$_POST['tessera'].")");
+            else
+                $mylog->logError("Tentativo inserimento nuovo socio fallito (COGNOME:".$_POST['cognome']." NOME:".$_POST['nome']."), numero di tessera già esistente (TESSERA:".$_POST['tessera'].")");
             die("Numero di tessera già esistente");
+        }
     }
 }
 
+$vecchia_tessera=$member->tessera; //Prima di sovrascrivere recupero la vecchia tessera per il log
 $member->tessera=$_POST['tessera'];
 
 
@@ -249,6 +262,7 @@ if (isset($_GET['id']))
                                                     , telefono='$member->telefono'
                                                     , email='$member->email' WHERE member_id='$_GET[id]' 
                             ");
+    $mylog->logInfo("Tentativo di aggiornare un socio (ID:".$_GET['id'].")");
 }
 /* Sto inserendo un nuovo socio */
 else
@@ -310,21 +324,26 @@ if ($membersobj != FALSE)
             $member->data_nascita=$date->format('d/m/Y'); //rimetto il formato data di nascita GG/MM/AAA in oggetto $member !!
 
         }
-        if(isset($_POST['tessera']) && $update_card) //Il socio cambia numero tessera
-        {
+        if(isset($_POST['tessera']) && $update_card) { //Il socio cambia numero tessera
             $membersobj=$dbh->query("UPDATE anagrafica SET tessera='$member->tessera' WHERE member_id='$_GET[id]'");
+            $mylog->loginfo("Tentativo cambio tessera socio (ID:".$_GET['id']." VECCHIA TESSERA:".$vecchia_tessera." NUOVA TESSERA:".$member->tessera.")");
         }
         elseif(isset($_POST['tessera']) && $id_to_member) //Da identità diventa socio
         {
             $last_member_id=$date_drop_identity->format('Y-m-d'); //RICICLO $last_member_id
             $membersobj=$dbh->query("UPDATE anagrafica SET scadenza='$last_member_id', tessera='$member->tessera' WHERE member_id='$_GET[id]'");
             $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
+            $mylog->loginfo("Tentativo identità diventa socio (ID:".$_GET['id']." TESSERA:".$member->tessera.")");
         }
         
-        if (!$membersobj)
+        if (!$membersobj) {
             echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
-         else
+            $mylog->logError("Tentativo fallito");
+        }
+         else {
             echo '<img src="../img/check_ok.png" height="256" width="256" alt="check_ok">';
+            $mylog->logInfo("Tentativo riuscito");
+         }
     }
     /* Sto inserendo un nuovo socio (in pratica aggiorno quello appena inserito) */
     else
@@ -345,19 +364,29 @@ if ($membersobj != FALSE)
             $member->data_nascita=$date->format('d/m/Y'); //rimetto il formato data di nascita GG/MM/AAA in oggetto $member !!
 
         }
-        if (!$membersobj)
-            echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
-        else
+        if (!$membersobj) {
+            echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';          
+            $mylog->logError("Tentativo inserimento nuovo socio fallito (".$member->cognome." ".$member->nome." con tessera ".$member->tessera.")");
+        }
+        else {
             echo '<img src="../img/check_ok.png" height="256" width="256" alt="check_ok">';
+            $mylog->logInfo("Inserito nuovo socio (ID:".$member->id." COGNOME:".$member->cognome." NOME:".$member->nome." TESSERA:".$member->tessera.")");
+        }
     }
 
     /* Aggiorno il contatore di soci inseriti nella serata */
-    if(!isset($_GET['id']) || $id_to_member)
+    if(!isset($_GET['id']) || $id_to_member) {
         $_SESSION['members_evening']++;
+        $mylog->logInfo("Soci inseriti per questa sessione: ".$_SESSION['members_evening']);
+    }
 }
-else
+else {
     echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
-        
+    if(isset($_GET['id']))
+        $mylog->logError("Tentativo inserimento/aggiornamento socio fallito (".$_POST['cognome']." ".$_POST['nome'].")");
+    else
+        $mylog->logError("Tentativo inserimento nuovo socio fallito (".$_POST['cognome']." ".$_POST['nome'].")");
+}
 
 //unset($_SESSION['socio']);
 ?>

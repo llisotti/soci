@@ -37,6 +37,9 @@ if(!isset($_POST['export'])) {
     die();
 }
 
+/* RIchiedo il logger */
+$mylog=$_SESSION['logger'];
+
 /* Mi connetto al database */
 try {
     $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
@@ -61,10 +64,12 @@ switch ($_GET['action']) {
         if(!$members) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
             echo "<br/>ERRORE CREAZIONE FILE !";
+            $mylog->logError("Tentativo di esportare file soci fallito");
         }
         else {
             echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco soci.csv";?>"><?php echo $data."_Elenco soci ";?></a><?php echo "CREATO CORRETTAMENTE";     
+            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco soci.csv";?>"><?php echo $data."_Elenco soci ";?></a><?php echo "CREATO CORRETTAMENTE";
+            $mylog->logInfo("Tentativo di esportare file soci riuscito");
         }
         break;
     case "identities_export": //Esporto identità
@@ -76,10 +81,12 @@ switch ($_GET['action']) {
          if(!$members) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
             echo "<br/>ERRORE CREAZIONE FILE !";
+            $mylog->logError("Tentativo di esportare file identità fallito");
         }
         else {
             echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco identita'.csv";?>"><?php echo $data."_Elenco identità ";?></a><?php echo "CREATO CORRETTAMENTE";     
+            echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco identita'.csv";?>"><?php echo $data."_Elenco identità ";?></a><?php echo "CREATO CORRETTAMENTE";
+            $mylog->logInfo("Tentativo di esportare file identità riuscito");
         }
         break;
     case "DB_functions": //Creazione backup database
@@ -89,17 +96,25 @@ switch ($_GET['action']) {
             system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe -u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
         if($return_value!=0) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
-            if($_POST['azione']=="backup")
+        if($_POST['azione']=="backup") {
                 echo "<br/>ERRORE BACKUP: controllare il contenuto del file di backup!";
-            else
+                $mylog->logError("Tentativo di effettuare il backup soci fallito (system return value: ".$return_value.")");
+        }
+            else {
                 echo "<br/>ERRORE RIPRISTINO";
+                $mylog->logError("Tentativo di effettuare il ripristino dal backup soci fallito (system return value: ".$return_value.")");
+            }
         }           
         else {
             echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-            if($_POST['azione']=="backup")
+            if($_POST['azione']=="backup") {
                 echo "<br/>BACKUP OK!";
-            else
+                $mylog->logInfo("Tentativo di effettuare il backup soci riuscito");
+            }
+            else {
                 echo "<br/>RIPRISTINO OK";
+                $mylog->logInfo("Tentativo di effettuare il ripristino soci riuscito");
+            }
         }
         break;            
     default:
