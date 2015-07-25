@@ -14,3 +14,4 @@ source create_tables.sql;
 /* Registro le procedure */
 source expire_identities.proc.sql;
 source reset_members.proc.sql;
+source find_duplicates.proc.sql;

@@ -62,6 +62,10 @@ MYSQL
 	.. mysql>CALL expire_identities(FALSE); mostra quali identità vengono eliminate definitivamente dal database, ma non elimina nulla. 
 	.. mysql>CALL expire_identities(TRUE); eliminà tali identità !
 	.. Dopo l'eliminazione è necessario riavviare il server mysql ed occorre chiudere e riaprire firefox per azzerare i contatori soci
+. Creo la procedura "find_duplicates" che elimina eventuali soci duplicati che vengono erroneamente inserite. In pratica invece di aggiornare un'identità che già esiste, erroneamente si inserisce un nuovo socio, e quindi una nuova identità che a quel punto si duplica
+	.. mysql>CALL find_duplicates(FALSE); mostra quali identità sono duplicate, ma non elimina nulla. 
+	.. mysql>CALL find_duplicates(TRUE); eliminà le identità duplicate che hanno member_id più alto trasferendfo numero tessera e data tessera in quelli con member_id più basso
+	.. Non è necessario il riavvio del server mysql.
 
 		
 Nella cartella mysql sono presenti questi file:
