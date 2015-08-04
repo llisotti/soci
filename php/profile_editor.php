@@ -194,9 +194,9 @@ else
     $gg_inserimento=$time['mday'];
     $mm_inserimento=$time['mon'];
     $aaaa_inserimento=$time['year'];
-    echo "Oggi <select class=date_ins name=gg_inserimento>";
+    echo "Oggi <select class=date_ins style='width: 6%' name=gg_inserimento>";
     $date_not_null->showDays($time['mday']);
-    echo "</select><select class=date_ins name=mm_inserimento>";
+    echo "</select><select class=date_ins style='width: 6%' name=mm_inserimento>";
     $date_not_null->showMonths($time['mon']);
     echo "</select>";
     //echo "</select> <input id=card name=aaaa_inserimento placeholder=AAAA size=2 type=text maxlength=4 value=$time[year]> ";
@@ -209,10 +209,11 @@ else
 </div>
 <div class="table">
 <ol class="contact" style="padding-left: 15px">
-<li><label>GENERALITA'</label></li>
+    <li><label>GENERALITA'</label>&nbsp;&nbsp;<img style="margin-right: 400px; float: right;" id="searching" hidden="hidden" src="../img/ajax-loader.gif" ></li>
 </ol>
-    <input name="cognome" placeholder="Cognome" autofocus required tabindex="1" type="text" value="<?php if(isset($_GET['id'])) echo $member->cognome; ?>"/>  
-<input name="nome" placeholder="Nome" required tabindex="2" type="text" value="<?php if(isset($_GET['id'])) echo $member->nome; ?>"/> 
+<input id="scr" name="cognome" placeholder="Cognome" autofocus required tabindex="1" type="text" value="<?php if(isset($_GET['id'])) echo $member->cognome; ?>"/>  
+<input name="nome" placeholder="Nome" required tabindex="2" type="text" value="<?php if(isset($_GET['id'])) echo $member->nome; ?>"/>
+
 <br><br>
 data di nascita
 <br>
@@ -280,6 +281,38 @@ else
 <script type="text/javascript" src="../js/jquery-1.11.1.js"> </script>
 <script type="text/javascript">
 $(document).ready(function(){
+    
+    /* Funzione di ricerca durante la digitazione */
+    $(function(){
+        $("#scr").keyup(function() //function(e) se voglio sapere quale tasto premuto
+        {
+            //var code = e.keyCode || e.which; Catturo il tasto premuto
+            $("#searching").show(); //Mostro la gif animata di ricerca quando premo un pulsante
+            var dataString = $(this).val();
+        {
+            $.ajax({
+            type: "POST",
+            url: "search.php",
+            data: {searched: dataString},
+            dataType: 'html',
+            //cache: true,
+            success: function(data)
+            {
+                $("#searching").show(); //Mostro la gif animata di ricerca quando ritornano i dati dalla richiesta in ajax
+                if($("#scr").val()=='')//(code==8 && $("#scr").val()=='') //code=8: tasto premuto è backspace
+                    $(".select-bar_bottom").html("");
+                else
+                    $(".select-bar_bottom").html(data);               
+            },
+            complete: function()
+            {
+                $("#searching").hide(); //Quando la richiesta ajax è completata nascondo la gif animata di ricerca
+            }
+            });
+        }return false;
+        });
+    });
+    
 
     /* Funzione gestione messaggio "luogo nascita se inserimento straniero" */
     $("#luogo_nascita").focus(function(){
