@@ -150,7 +150,7 @@ else
     switch ($_GET['show'])
     {
         case "Cerca": //Visualizzo le identità (persone in anagrafica + soci= TUTTI) cercate
-            $fullname_trimmed=rtrim($_GET['fullname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
+            $fullname_trimmed=trim($_GET['fullname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
             $param=$dbh->quote('%'.$fullname_trimmed.'%');
             $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
@@ -230,7 +230,7 @@ $odd_tr=1;
         ?>
             <td class="first style3"><?php echo $member->id ?></td>
             <?php if(isset($_GET['show']) && $_GET['show']=="Cerca") { ?>
-            <td><?php echo str_ireplace($_GET['fullname'], '<span style="color: red; text-transform: uppercase";>'.$_GET['fullname'].'</span>', $member->cognome." ".$member->nome); ?></td>
+            <td><?php echo str_ireplace($fullname_trimmed, '<span style="color: red; text-transform: uppercase";>'.$fullname_trimmed.'</span>', $member->cognome." ".$member->nome); ?></td>
             <?php } else { ?><td><?php echo $member->cognome." ".$member->nome ?></td> <?php } ?>
             <td><?php echo $member->data_nascita ?></td>
             <td><?php echo $member->tessera ?></td>

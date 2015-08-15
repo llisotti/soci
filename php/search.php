@@ -17,7 +17,7 @@ ini_set('session.gc_maxlifetime',18000);
 <body>
 <?php
 $dbh = new PDO(SOCI_DBCONNECTION, "copernico", ""); 
-$fullname_trimmed=rtrim($_POST['searched']); // Tolgo tutti gli spazi dopo l'ultimo carattere
+$fullname_trimmed=trim($_POST['searched']); // Tolgo tutti gli spazi dopo l'ultimo carattere
 //$db = new PDO(SOCI_DBCONNECTION, "copernico", "");
 $param=$dbh->quote($fullname_trimmed.'%');
 $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param AND anagrafica.tessera IS NULL ORDER BY anagrafica.cognome ASC");

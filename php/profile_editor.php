@@ -282,12 +282,14 @@ else
 <script type="text/javascript">
 $(document).ready(function(){
     
-    /* Funzione di ricerca durante la digitazione */
+    /* Funzione di ricerca quando esco dal campo */
     $(function(){
-        $("#scr").keyup(function() //function(e) se voglio sapere quale tasto premuto
+        $("#scr").blur(function() //function(e) se voglio sapere quale tasto premuto
         {
             //var code = e.keyCode || e.which; Catturo il tasto premuto
-            $("#searching").show(); //Mostro la gif animata di ricerca quando premo un pulsante
+            if($("#scr").val()=='') //Esco subito se campo vuoto
+                return false;
+            $("#searching").show(); //Mostro la gif animata di ricerca
             var dataString = $(this).val();
         {
             $.ajax({
@@ -298,7 +300,6 @@ $(document).ready(function(){
             //cache: true,
             success: function(data)
             {
-                $("#searching").show(); //Mostro la gif animata di ricerca quando ritornano i dati dalla richiesta in ajax
                 if($("#scr").val()=='')//(code==8 && $("#scr").val()=='') //code=8: tasto premuto è backspace
                     $(".select-bar_bottom").html("");
                 else
@@ -306,7 +307,7 @@ $(document).ready(function(){
             },
             complete: function()
             {
-                $("#searching").hide(); //Quando la richiesta ajax è completata nascondo la gif animata di ricerca
+                $("#searching").hide(); //Quando la richiesta ajax è completata nascondo la gif animata
             }
             });
         }return false;
