@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 2.2
+ * 2.3
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -32,16 +32,36 @@ ini_set('session.gc_maxlifetime',18000);
 <?php
 $member_obj=array(); //Array per oggetti socio
 
-/* Inizializzo il logger */
+/* Inizializzo il logger e controllo gli aggiornamenti*/
 if(!isset($_SESSION['logger'])) {
     try {
         $mylog=new Logger(LOGFILE_PATH, LOGFILE_MAXSIZE);   
         $mylog->logInfo("Inizio nuova sessione@".VERSION);
     } catch (MyException $ex) {
         die($ex->show());
-    }   
+    }
+    /* Controllo se c'è connessione internet */
+    $_SESSION['update']=FALSE; //La prima volta suppongo che non ci siano aggiornamenti disponibili
+    $local_commit = NULL;
+    system("ping -s 1 www.google.com > null", $local_commit);
+    /* Se sono connesso ad internet controllo se ci sono aggiornamenti */
+    if($local_commit == 0) {
+        $mylog->logInfo("Connessione ad internet presente, controllo se ci sono aggiornamenti");
+        exec(GITPORTABLE_PATH."git.exe fetch -v --dry-run");
+        $local_commit=exec(GITPORTABLE_PATH."git.exe rev-parse @");
+        $remote_commit=exec(GITPORTABLE_PATH."git.exe rev-parse @{u}");
+        //echo "HASH LOCALE: $local_commit HASH REMOTO: $remote_commit";
+        if($local_commit != $remote_commit) {
+            $_SESSION['update']=TRUE; //Se ci sono aggiornamenti lo segnalo
+            $mylog->logInfo("Sono presenti aggiornamenti software");
+        }
+        else
+            $mylog->logInfo("Non sono presenti aggiornamenti software");
+    }
+    else
+        $mylog->logInfo("Nessuna connessione ad internet, non è possibile controllare lo stato di aggiornamento");
 }
-else 
+else
     $mylog=$_SESSION['logger'];
 
 
@@ -89,7 +109,19 @@ catch (PDOException $exception) {
     <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
     <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
-    <li class="last"><a href="#"></a></li>
+    <?php
+    if($_SESSION['update']) {
+        ?>
+        <li class="last"><a href="./php/root_functions.php?action=update">Aggiornamento sw (*)</a></li>
+        <?php
+    }
+    else {
+        ?>
+        <li class="last"><a href="#">Aggiornamento sw</a></li>
+        <?php
+    }
+    ?>
+    
 </ul>
 <table class="counter">
     <tr>
