@@ -80,11 +80,9 @@ catch (PDOException $exception) {
         <h1>
         <span style="color: #F70">
         <?php
-        /* Se sono stati inseriti soci per questa serata visualizzo quanti altrimenti visualizzo 0 */
-        if(!isset($_SESSION['members_evening']))
-            $_SESSION['members_evening']=0;
-        
-        echo $_SESSION['members_evening'];
+        /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
+        $maxkey=max(array_keys($_SESSION['members_evening']));
+        echo $maxkey;
         ?>
         </span>
         </h1>
@@ -376,8 +374,9 @@ if ($membersobj != FALSE)
 
     /* Aggiorno il contatore di soci inseriti nella serata */
     if(!isset($_GET['id']) || $id_to_member) {
-        $_SESSION['members_evening']++;
-        $mylog->logInfo("Soci inseriti per questa sessione: ".$_SESSION['members_evening']);
+        //$_SESSION['members_evening']++;
+        array_push($_SESSION['members_evening'], $member->tessera);
+        $mylog->logInfo("Soci inseriti per questa sessione: ".$maxkey);
     }
 }
 else {

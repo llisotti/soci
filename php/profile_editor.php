@@ -82,8 +82,8 @@ if(isset($_GET['id']))
             echo "<li><a href='http://localhost/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
     ?>
     <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
-    <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
-    <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
+    <li><a id="esporta_soci" href="#">Esporta soci</a></li>
+    <li><a id="esporta_identita" href="#">Esporta identità</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
     <li class="last"><a href="#"></a></li>
 </ul>
@@ -96,11 +96,9 @@ if(isset($_GET['id']))
         <h1>
         <span style="color: #F70">
         <?php
-        /* Se sono stati inseriti soci per questa serata visualizzo quanti altrimenti visualizzo 0 */
-        if(!isset($_SESSION['members_evening']))
-            $_SESSION['members_evening']=0;
-        
-        echo $_SESSION['members_evening'];
+        /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
+        $maxkey=max(array_keys($_SESSION['members_evening']));
+        echo $maxkey;
         ?>
         </span>
         </h1>
