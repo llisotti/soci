@@ -13,27 +13,27 @@ DECLARE id_scroll SMALLINT UNSIGNED DEFAULT 0;
 DECLARE corretti SMALLINT UNSIGNED DEFAULT 0;
 DECLARE _tessera SMALLINT UNSIGNED DEFAULT 0;
 DECLARE _data DATE;
-SET id_index = (SELECT MAX(member_id) FROM anagrafica);
+SET id_index = (SELECT MAX(member_id) FROM anagrafica); /* Trovo il member_id più alto */
 SET id_scroll = id_index-1;
 label:WHILE (id_index != 1) DO
-IF NOT EXISTS(SELECT member_id FROM anagrafica WHERE member_id=id_index) THEN
+IF NOT EXISTS(SELECT member_id FROM anagrafica WHERE member_id=id_index) THEN /* Se il member_id non esiste decremento member_id e itero di nuovo altrimenti ... */
 SET id_index = id_index-1;
 SET id_scroll = id_index-1;
 ITERATE label;
 END IF;
-SELECT cognome FROM anagrafica WHERE member_id=id_index INTO surname;
+SELECT cognome FROM anagrafica WHERE member_id=id_index INTO surname; /* ... seleziono il cognome */
 label_2:WHILE (id_scroll != 1) DO
-IF NOT EXISTS(SELECT member_id FROM anagrafica WHERE member_id=id_scroll) THEN
+IF NOT EXISTS(SELECT member_id FROM anagrafica WHERE member_id=id_scroll AND tessera IS NULL) THEN /* Se il member_id senza tessera non esiste decremento member_id e riprovo altrimenti ... */
 SET id_scroll = id_scroll-1;
 ITERATE label_2;
 END IF;
-SELECT cognome FROM anagrafica WHERE member_id=id_scroll INTO temp;
-IF (temp=surname) THEN
+SELECT cognome FROM anagrafica WHERE member_id=id_scroll  INTO temp; /* ... seleziono il cognome */
+IF (temp=surname) THEN /* Se i due member_id hanno lo stesso cognome controllo i due nomi */
 SELECT nome FROM anagrafica WHERE member_id=id_index INTO name;
 SELECT nome FROM anagrafica WHERE member_id=id_scroll INTO temp;
-IF (temp=name) THEN
-SET corretti=corretti+1;
-IF (action) THEN
+IF (temp=name) THEN /* Se i due member_id hanno lo stesso nome allora è un duplicato */
+SET corretti=corretti+1; 
+IF (action) THEN /* Se ho chiamato la procedura con TRUE allora applico la correzione */
 SELECT tessera FROM anagrafica WHERE member_id=id_index INTO _tessera;
 SELECT data FROM presenze WHERE member_id=id_index INTO _data;
 UPDATE anagrafica SET tessera=_tessera WHERE member_id=id_scroll;

@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 2.3
+ * 2.4
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
