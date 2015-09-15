@@ -73,7 +73,7 @@ catch (PDOException $exception) {
         <?php
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
         $maxkey=max(array_keys($_SESSION['members_evening']));
-        echo $maxkey;
+        echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
         ?>
         </span>
         </h1>
@@ -363,6 +363,12 @@ $(document).ready(function(){
             $(this).attr('src', '../img/locked.png');
             $(this).attr('title', 'Visualizza password');
         }
+    });
+    
+    
+    /* Funzione visualizzazione tessere inserite nella sessione */
+    $("a#view").click(function() {
+        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580");
     });
 });
 </script>

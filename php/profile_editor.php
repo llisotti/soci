@@ -98,7 +98,7 @@ if(isset($_GET['id']))
         <?php
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
         $maxkey=max(array_keys($_SESSION['members_evening']));
-        echo $maxkey;
+        echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
         ?>
         </span>
         </h1>
@@ -340,6 +340,11 @@ $(document).ready(function(){
         window.open('../php/root_functions.php?action=identities_export','', "height=190,width=580");
     })
 
+
+    /* Funzione visualizzazione tessere inserite nella sessione */
+    $("a#view").click(function() {
+        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580");
+    });
 });
 </script>
 </body>
