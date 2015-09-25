@@ -75,6 +75,14 @@ Nella cartella mysql sono presenti questi file:
 . XXXX-ELENCO_SOCI.csv: se esiste è l'estrazione dei soci per l'anno XXXX
 
 
+#################
+INSTALLAZIONE GIT
+#################
+E' indispensabile per il funzionamento degli aggiornamenti
+. Lanciare il file GitPortable_X.X.X.paf.exe (le X rappresentano il numero di versione) per installare la versione portabile di Git
+. Assicurarsi che il file venga scompattato nella directory del software (D:\dati\xampp\htdocs\soci\): verrà creata la cartella D:\dati\xampp\htdocs\soci\GitPortable
+
+
 ##############################################
 INIZIALIZZAZIONE DEL SISTEMA PER UN NUOVO ANNO
 ##############################################
