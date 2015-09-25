@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 2.4
+ * 2.5
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -317,7 +317,7 @@ $(document).ready(function(){
     
     /* Funzione visualizzazione tessere inserite nella sessione */
     $("a#view").click(function() {
-        window.open('./php/root_functions.php?action=view_members_evening','', "height=190,width=580");
+        window.open('./php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
     });
     
 });

@@ -30,8 +30,8 @@ catch (PDOException $exception) {
     die("Errore di connessione al database: ".$exception->getMessage());
 }
 
-$gg=NULL;
-$mm=NULL;
+$gg_nascita=NULL; $gg_inserimento=NULL;
+$mm_nascita=NULL; $mm_inserimento=NULL;
 /* Se passo id allora cerco il socio corrispondente */
 if(isset($_GET['id']))
 {
@@ -48,9 +48,16 @@ if(isset($_GET['id']))
     if ($member->data_nascita != NULL)
     {
         $data_nascita=$member->data_nascita;
-        $gg=substr($data_nascita, '0','2');
-        $mm=substr($data_nascita, '3','2');
-        $aaaa=substr($data_nascita, '6','4');
+        $gg_nascita=substr($data_nascita, '0','2');
+        $mm_nascita=substr($data_nascita, '3','2');
+        $aaaa_nascita=substr($data_nascita, '6','4');
+    }
+    
+    /* Se è socio, estraggo giorno e mese in cui è stato inserito */
+    if($member->tessera!=NULL) {
+    $data_inserimento=$member->data_tessera;
+    $gg_inserimento=substr($data_inserimento, '0','2');
+    $mm_inserimento=substr($data_inserimento, '3','2');
     }
 }
 ?>
@@ -178,13 +185,18 @@ $date_not_null=new DatesForSelect(NULL, NULL);
 if(isset($_GET['id']) && $member->tessera!=NULL)
 {    
     /* Estraggo le presenze del socio, se ve ne è più di una visualizzo la prima (quella di tesseramento) //TODO */
-    $membersobj=$dbh->query("SELECT DATE_FORMAT(presenze.data,'%d/%m/%Y') data FROM presenze WHERE member_id=".$_GET['id']); //riciclo $membersobj
-    $presence_dates=$membersobj->fetchColumn();
+    //$membersobj=$dbh->query("SELECT DATE_FORMAT(presenze.data,'%d/%m/%Y') data FROM presenze WHERE member_id=".$_GET['id']); //riciclo $membersobj
+    //$presence_dates=$membersobj->fetchColumn();
     printf("Con numero tessera");
     ?>
     <input id="card" name="tessera" type="text" size="1" value="<?php echo $member->tessera; ?>" />
     <?php
-    printf(" il giorno %s è stato registrato il socio", $presence_dates);
+    echo "in data <select class=date_ins style='width: 6%' name=gg_inserimento>";
+    $date_not_null->showDays($gg_inserimento);
+    echo "</select><select class=date_ins style='width: 6%' name=mm_inserimento>";
+    $date_not_null->showMonths($mm_inserimento);
+    echo "</select> è stato registrato il socio";
+    //printf(" il giorno %s e msese %s è stato registrato il socio", $gg_inserimento, $mm_inserimento);
 }
 /* Inserisco un nuovo socio oppure da identità diventa socio */
 else
@@ -218,16 +230,16 @@ data di nascita
 <select name="gg_nascita" tabindex="3" size="1" >
     <?php
     /* Popolo i giorni del mese */
-    $date->showDays($gg);
+    $date->showDays($gg_nascita);
     ?>
 </select>
 <select name="mm_nascita" tabindex="4">
     <?php
     /* Popolo i mesi dell'anno */
-    $date->showMonths($mm);
+    $date->showMonths($mm_nascita);
     ?>
 </select>
-<input name="aaaa_nascita" placeholder="AAAA" tabindex="5" size="2" type="text" maxlength="4" value="<?php if(isset($_GET['id']) && $member->data_nascita != NULL) echo $aaaa; ?>" />
+<input name="aaaa_nascita" placeholder="AAAA" tabindex="5" size="2" type="text" maxlength="4" value="<?php if(isset($_GET['id']) && $member->data_nascita != NULL) echo $aaaa_nascita; ?>" />
 <input id="luogo_nascita" name="luogo_nascita" placeholder="Luogo di nascita" size="20" tabindex="6" type="text" value="<?php if(isset($_GET['id'])) echo $member->luogo_nascita; ?>" />
 <!-- <img src="../img/_nascita_estero.png" height="60" width="100"> -->
 <input name="cf" placeholder="Codice Fiscale" tabindex="7" type="text" value="<?php if(isset($_GET['id'])) echo $member->codice_fiscale ?>" maxlength="16" />&nbsp;
@@ -343,7 +355,7 @@ $(document).ready(function(){
 
     /* Funzione visualizzazione tessere inserite nella sessione */
     $("a#view").click(function() {
-        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
     });
 });
 </script>

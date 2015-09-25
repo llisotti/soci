@@ -202,18 +202,16 @@ $date_drop_identity->modify(DROP_IDENTITY); //Data scadenza identità
   
 $member->scadenza_id=$date_drop_identity->format('Y-m-d');
 
-/* Gestione data inserimento tessera se inserisco un nuovo socio oppure da identità a socio oppure... */
-if(!isset($_GET['id']) || $member->tessera==NULL)
-{
-    $date_ins=DateTime::createFromFormat('Y-m-d', "$this_year-$_POST[mm_inserimento]-$_POST[gg_inserimento]");
+/* Gestione data tessera e data iscrizione */
+$date_ins=DateTime::createFromFormat('Y-m-d', "$this_year-$_POST[mm_inserimento]-$_POST[gg_inserimento]");
+if(!isset($_GET['id'])) { //Se inserisco un nuovo socio... 
     $member->data_tessera=$date_ins->format('Y-m-d');
     $member->data_iscrizione=$date_ins->format('Y-m-d');
+    $aaaa_iscrizione=$this_year;
 }
-/* ...se aggiorno un socio */
- else
-{
-    $date_ins=$date->format('Y-m-d');
-    $member->data_tessera=$date->format('Y-m-d');
+else { //...oppure da identità a socio oppure sto aggiornando un socio
+    $member->data_tessera=$date_ins->format('Y-m-d');; 
+    $aaaa_iscrizione=substr($member->data_iscrizione, '6','4');
 }
 
 /* Sentinella socio cambio tessera e da identità a socio */
@@ -310,6 +308,12 @@ if ($membersobj != FALSE)
     /* Sto aggiornando un socio oppure identità diventa socio */
     if (isset($_GET['id']))
     {
+        /* Gestione cambio data tessera */
+        if ($aaaa_iscrizione!=$this_year) //Se l'anno della prima iscrizione è diverso dall'anno corrente (era un'identità) aggiorno solo la data della tessera
+            $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
+        else //Se l'anno della prima iscrizione è uguale all'anno corrente aggiorno la data della tessera e la data di iscrizione
+            $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera', iscrizione='$member->data_tessera' WHERE member_id='$_GET[id]'");
+        
         /* La data di nascita non è stata definita nel form quindi la metto NULL */
         if ($_POST['gg_nascita']=="GG" || $_POST['mm_nascita']=="MM" || empty($_POST['aaaa_nascita']))
             $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita=NULL WHERE member_id='$_GET[id]'");
@@ -330,7 +334,7 @@ if ($membersobj != FALSE)
         {
             $last_member_id=$date_drop_identity->format('Y-m-d'); //RICICLO $last_member_id
             $membersobj=$dbh->query("UPDATE anagrafica SET scadenza='$last_member_id', tessera='$member->tessera' WHERE member_id='$_GET[id]'");
-            $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
+            //$membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
             $mylog->loginfo("Tentativo identità diventa socio (ID:".$_GET['id']." TESSERA:".$member->tessera.")");
         }
         
@@ -439,7 +443,7 @@ $(document).ready(function(){
     
     /* Funzione visualizzazione tessere inserite nella sessione */
     $("a#view").click(function() {
-        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
     });
 });
 </script>

@@ -125,7 +125,7 @@ if(!isset($_POST['title'])) {
 /* Se non ho inviato la newsletter richiedo le identità con email */
 
     /* Visualizzo le identità provviste di email */
-    $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.email!='' AND anagrafica.email IS NOT NULL ORDER BY anagrafica.tessera");
+    $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.email!='' AND anagrafica.email IS NOT NULL ORDER BY anagrafica.tessera");
     echo "<h1>ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER (".$members->rowCount().")</h1>";
 }
 else
@@ -184,20 +184,21 @@ $odd_tr=1;
         /* Creo l'oggetto socio e lo popolo con tutti i dati */
         $member=new Socio_Copernico($row['cognome'], $row['nome']);
         $member->id=($row['primary_id']); //Ho usato un alias nella query
-        //$member->data_nascita=($row['data_nascita']);
-        //$member->luogo_nascita=($row['luogo_nascita']);
-        //$member->sesso=($row['sesso']);
-        //$member->codice_fiscale=($row['cf']);
-        //$member->indirizzo=($row['indirizzo']);
-        //$member->cap=($row['cap']);
-        //$member->citta=($row['citta']);
-        //$member->provincia=($row['provincia']);
-        //$member->stato=($row['stato']);
-        //$member->telefono=($row['telefono']);
+        $member->data_nascita=($row['data_nascita']);
+        $member->luogo_nascita=($row['luogo_nascita']);
+        $member->sesso=($row['sesso']);
+        $member->codice_fiscale=($row['cf']);
+        $member->indirizzo=($row['indirizzo']);
+        $member->cap=($row['cap']);
+        $member->citta=($row['citta']);
+        $member->provincia=($row['provincia']);
+        $member->stato=($row['stato']);
+        $member->telefono=($row['telefono']);
         $member->email=($row['email']);
         $member->tessera=$row['tessera'];
-        //$member->scadenza_id=($row['scadenza']);
-        //$member->data_tessera=($row['data']); //Data del tesseramento
+        $member->scadenza_id=($row['scadenza']);
+        $member->data_tessera=($row['data']); //Data del tesseramento
+        $member->data_iscrizione=($row['iscrizione']);
 
         /* Lo aggiungo all'array che contiene gli oggetti soci */
         array_push($member_obj, $member);
@@ -368,7 +369,7 @@ $(document).ready(function(){
     
     /* Funzione visualizzazione tessere inserite nella sessione */
     $("a#view").click(function() {
-        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
     });
 });
 </script>
