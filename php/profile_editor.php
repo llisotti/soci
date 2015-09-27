@@ -92,7 +92,18 @@ if(isset($_GET['id']))
     <li><a id="esporta_soci" href="#">Esporta soci</a></li>
     <li><a id="esporta_identita" href="#">Esporta identità</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
-    <li class="last"><a href="#"></a></li>
+    <?php
+    if($_SESSION['update']) {
+        ?>
+        <li class="last"><a href="./root_functions.php?action=update">Aggiornamento sw (*)</a></li>
+        <?php
+    }
+    else {
+        ?>
+        <li class="last"><a href="#">Aggiornamento sw</a></li>
+        <?php
+    }
+    ?>
 </ul>
 <table class="counter">
     <tr>

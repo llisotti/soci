@@ -75,6 +75,14 @@ Nella cartella mysql sono presenti questi file:
 . XXXX-ELENCO_SOCI.csv: se esiste è l'estrazione dei soci per l'anno XXXX
 
 
+#################
+INSTALLAZIONE GIT
+#################
+E' indispensabile per il funzionamento degli aggiornamenti
+. Lanciare il file GitPortable_X.X.X.paf.exe (le X rappresentano il numero di versione) per installare la versione portabile di Git
+. Assicurarsi che il file venga scompattato nella directory del software (D:\dati\xampp\htdocs\soci\): verrà creata la cartella D:\dati\xampp\htdocs\soci\GitPortable
+
+
 ##############################################
 INIZIALIZZAZIONE DEL SISTEMA PER UN NUOVO ANNO
 ##############################################
@@ -129,6 +137,17 @@ Accedendo alla pagina Newsletter il layout si presenta in questo modo:
 . Nel campo area di testo è possibile inserire un messaggio personalizzato che apparirà subito prima dell'immagine che pubblicizza l'evento. Potrebbe essere utile nel caso si voglia inviare una nuova email che corregge un errore di un precedente invio
 . La tabella mostra le identità a cui sarà inviata la email. Tramite delle caselle di check si possono escludere o includere solo alcune identità
 
+######################
+AGGIORNAMENTI SOFTWARE
+######################
+Il software è in grado di verificare se ci sono aggiornamenti in maniera automatica. Sarà poi l'utente a decidere se e quando installarli.
+Per abilitare questa funzione sono necessari i seguenti requisiti:
+. L'installazione di GitPortable nella directory del software. Scaricare GitPortable da portableapps e scompattarlo in modo che si crei il path D:\dati\xampp\htdocs\soci\GitPortable
+. E' importante che la directory del programma sia un repository git valido e sia settato il repository remoto
+
+Il controllo degli aggiornamenti avviene al primo avvio del programma. Se vi è una connessione internet, dal ramo master locale viene fatto un fetch del ramo master remoto e successivamente vengono confrontate le due hash di HEAD: se sono diverse è segnalata la presenza di aggiornamenti disponibili mediante la presenza di un asterisco tra parentesi tonde alla voce "Aggiornamento sw" nell'elenco delle funzionalità.
+Cliccando su tale voce si aprirà un'altra pagina dove sarà presente un pulsante "Esegui" il quale darà inizio allo scaricamento degli aggiornamenti.
+Sia in caso di successo che di fallimento verrà richiesto di tornare alla pagina iniziale mediante un link. Non occorre alcun riavvio del programma.
 
 ####
 TODO

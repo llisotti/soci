@@ -236,9 +236,22 @@ else {
                     $mylog->logInfo("Tentativo di effettuare il ripristino soci riuscito");
                 }
             }
-            break;            
-        default:
-            break;
+        break;
+    case "update": //Aggiornamento software
+        $mylog->logInfo("Tentativo di aggiornamento software dalla versione ".VERSION);
+        exec(GITPORTABLE_PATH."git.exe pull origin master --dry-run", $return_value );
+        if($return_value==0) {
+            $mylog->logInfo("Tentativo riuscito: nuova versione: ".VERSION);
+            $_SESSION['update']=FALSE;
+            echo "Aggiornamento riuscito, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
+        }
+        else {
+            $mylog->logError("Tentativo fallito");
+            echo "Aggiornamento fallito!, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
+        }
+        break;
+    default:
+        break;
     }
 }
 ?>

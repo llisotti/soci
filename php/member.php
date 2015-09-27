@@ -30,7 +30,7 @@ define ("DROP_IDENTITY", "+5 years");
 /**
  * Versione del software
  */
-define ("VERSION", "GESTIONE SOCI 2.5");
+define ("VERSION", "GESTIONE SOCI 2.6");
 
 
 /**
@@ -63,6 +63,10 @@ define("LOGFILE_MAXSIZE", 1024);
 define("LOGFILE_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
 
 
+/**
+ * Percorso dove si trova l'eseguibile git
+ */
+define("GITPORTABLE_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\GitPortable\\\\App\\\\Git\\\\bin\\\\");
 
 
 /** @} */
