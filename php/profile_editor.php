@@ -303,12 +303,22 @@ else
 <script type="text/javascript">
 $(document).ready(function(){
     
+    /* Funzione che controlla se esiste la variabile $_GET[var_name] ed eventualmente ritorna il suo valore */
+    function get_var(var_name){
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == var_name){return pair[1];}
+       }
+       return(false);
+}
     /* Funzione di ricerca quando esco dal campo */
     $(function(){
-        $("#scr").blur(function() //function(e) se voglio sapere quale tasto premuto
+        var exist_id = get_var("id");
+        $("#scr").blur(function()
         {
-            //var code = e.keyCode || e.which; Catturo il tasto premuto
-            if($("#scr").val()=='') //Esco subito se campo vuoto
+            if($("#scr").val()=='' || exist_id) //Esco subito se campo vuoto oppure se sto aggiornando un socio o un'identità
                 return false;
             $("#searching").show(); //Mostro la gif animata di ricerca
             var dataString = $(this).val();

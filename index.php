@@ -5,7 +5,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 2.6
+ * 2.7
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -45,7 +45,7 @@ if(!isset($_SESSION['logger'])) {
     $local_commit = NULL;
     $remote_commit=NULL;
     system("ping -w 3 www.google.com > null", $local_commit);
-    system("ping -w 3 www.bettercodes.org > null", $remote_commit);
+    system("ping -w 3 www.bitbucket.org > null", $remote_commit);
     /* Se sono connesso ad internet controllo se ci sono aggiornamenti */
     if($local_commit == 0 && $remote_commit == 0) {
         $mylog->logInfo("Connessione ad internet e repository remoto ok, controllo se ci sono aggiornamenti");
