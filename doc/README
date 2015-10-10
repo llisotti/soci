@@ -67,13 +67,21 @@ MYSQL
 	.. mysql>CALL find_duplicates(TRUE); eliminà le identità duplicate che hanno member_id più alto trasferendfo numero tessera e data tessera in quelli con member_id più basso
 	.. Non è necessario il riavvio del server mysql.
 
-		
-Nella cartella mysql sono presenti questi file:
-. init_database.bat: se lanciato inizializza un nuovo database (tabelle e procedure)
-. reset_members.proc.bat: aggiorna la procedura "reset_members" in caso dovesse essere modificata
-. expire_identities.proc.bat: aggiorna la procedura "expire_identities" in caso dovesse essere modificata
-. XXXX-ELENCO_SOCI.csv: se esiste è l'estrazione dei soci per l'anno XXXX
 
+##########################
+INSTALLAZIONE DEL DATABASE
+##########################	
+Nella cartella mysql sono presenti questi file:
+. init_database.bat: se lanciato nel sistema Windows, inizializza un nuovo database (tabelle e procedure)
+. init_database.sh: se lanciato nel sistema Linux, inizializza un nuovo database (tabelle e procedure)
+. reset_members.proc.bat: se lanciato nel sistema Windows, aggiorna la procedura "reset_members" in caso dovesse essere modificata
+. reset_members.proc.sh: se lanciato nel sistema Linux, aggiorna la procedura "reset_members" in caso dovesse essere modificata
+. expire_identities.proc.bat: se lanciato nel sistema Windows, aggiorna la procedura "expire_identities" in caso dovesse essere modificata
+. expire_identities.proc.sh: se lanciato nel sistema Linux, aggiorna la procedura "expire_identities" in caso dovesse essere modificata
+. find_duplicates.proc.bat: se lanciato nel sistema Windows, aggiorna la procedura "find_duplicates" in caso dovesse essere modificata
+. find_duplicates.proc.sh: se lanciato nel sistema Linux, aggiorna la procedura "find_duplicates" in caso dovesse essere modificata
+
+Per installare il database lanciare semplicemente lo script init_database relativo al sistema operativo in uso
 
 #################
 INSTALLAZIONE GIT
