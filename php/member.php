@@ -48,7 +48,10 @@ define ("FROM_ADDRESS", "localhost@osservatoriocopernico");
 /**
  * Percorso per il backup del database
  */
-define("BACKUP_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
+if(PHP_OS=="Linux")
+    define ("BACKUP_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/");
+else
+    define("BACKUP_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
 
 
 /**
@@ -60,13 +63,37 @@ define("LOGFILE_MAXSIZE", 1024);
 /**
  * Percorso dove salvare il file di log
  */
+if(PHP_OS=="Linux")
+    define ("LOGFILE_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/");
+else
 define("LOGFILE_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
 
 
 /**
  * Percorso dove si trova l'eseguibile git
  */
-define("GITPORTABLE_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\GitPortable\\\\App\\\\Git\\\\bin\\\\");
+if(PHP_OS=="Linux")
+    define("GIT_EXECUTABLE", "git "); //Git installato in Debian, quindi il percorso dell'eseguibile e' nella variabile PATH
+else
+    define("GIT_EXECUTABLE", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\GitPortable\\\\App\\\\Git\\\\bin\\\\git.exe "); //Git portabile in Windows
+
+
+/**
+ * Percorso dove si trova il client eseguibile mysql
+ */
+if(PHP_OS=="Linux")
+    define("MYSQL_EXECUTABLE", "mysql "); //Mysql installato in Debian, quindi il percorso dell'eseguibile e' nella variabile PATH
+else
+    define("MYSQL_EXECUTABLE", "D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe ");
+
+
+/**
+ * Percorso dove si trova il client eseguibile mysqldump
+ */
+if(PHP_OS=="Linux")
+    define("MYSQLDUMP_EXECUTABLE", "mysqldump "); //Mysql installato in Debian, quindi il percorso dell'eseguibile e' nella variabile PATH
+else
+    define("MYSQLDUMP_EXECUTABLE", "D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysqldump.exe ");
 
 
 /** @} */
