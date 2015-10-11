@@ -128,7 +128,7 @@ else {
                     $members=$dbh->query(" SELECT cognome, nome, DATE_FORMAT(anagrafica.data_nascita, '%d/%m/%Y') data_nascita, tessera, DATE_FORMAT(presenze.data, '%d/%m/%Y') data FROM anagrafica "
                     ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.tessera IS NOT NULL "
                     ."ORDER BY anagrafica.cognome ASC "
-                    ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$data."_Elenco soci.csv' "
+                    ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco soci.csv' "
                     ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
                     break;
                 case "evening": //Esporto i soci inseriti in questa sessione
@@ -136,7 +136,7 @@ else {
                     $members=$dbh->query(" SELECT DATE_FORMAT(presenze.data, '%d/%m/%Y') data, cognome, nome, tessera FROM anagrafica " //ATTENZIONE alla SQL Injection con questa query !!
                     ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.tessera IN ($cards) "
                     ."ORDER BY anagrafica.tessera ASC "
-                    ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$data."_Elenco soci serata.csv' "
+                    ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco soci serata.csv' "
                     ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");                
                     break;
                 case "date": //Esporto i soci da una certa data ad una certa data
@@ -166,7 +166,7 @@ else {
                     $members=$dbh->query(" SELECT DATE_FORMAT(presenze.data, '%d/%m/%Y') data, cognome, nome, tessera FROM anagrafica " //ATTENZIONE alla SQL Injection con questa query !!
                     ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE presenze.data>='$start' AND presenze.data<='$end' "
                     ."ORDER BY anagrafica.tessera ASC "
-                    ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$data."_Elenco soci $namefile.csv' "
+                    ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco soci $namefile.csv' "
                     ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");                
                     break;
                 default:
@@ -196,7 +196,7 @@ else {
             $members=$dbh->query(" SELECT anagrafica.member_id, cognome, nome, DATE_FORMAT(anagrafica.data_nascita, '%d/%m/%Y') data_nascita, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica "
                     ."INNER JOIN presenze ON anagrafica.member_id = presenze.member_id "
                     ."ORDER BY anagrafica.cognome ASC "
-                    ."INTO OUTFILE 'D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\".$data."_Elenco identita\'.csv' "
+                    ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco identita\'.csv' "
                     ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
              if(!$members) {
                 echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
@@ -211,9 +211,9 @@ else {
             break;
         case "DB_functions": //Creazione backup database
             if($_POST['azione']=="backup") //Faccio il backup
-                system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysqldump.exe -u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+                system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
             else //Faccio il restore
-                system("D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe -u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
+                system(MYSQL_EXECUTABLE."-u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
             if($return_value!=0) {
                 echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
             if($_POST['azione']=="backup") {
@@ -239,7 +239,7 @@ else {
         break;
     case "update": //Aggiornamento software
         $mylog->logInfo("Tentativo di aggiornamento software dalla versione ".VERSION);
-        exec(GITPORTABLE_PATH."git.exe pull origin master", $return_value ); //Per eseguire delle prove aggiungere --dry-run al comando git
+        exec(GIT_PATH."git.exe pull origin master", $return_value ); //Per eseguire delle prove aggiungere --dry-run al comando git
         if($return_value==0) {
             $mylog->logInfo("Tentativo riuscito: nuova versione: ".VERSION);
             $_SESSION['update']=FALSE;

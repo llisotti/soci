@@ -1,11 +1,16 @@
 <?php
-require "php\member.php"; //OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE  !
+/* OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE! */
+if(PHP_OS=="Linux")
+    require "php/member.php";
+else
+    require "php\member.php";
+
 session_start();
 
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 2.7
+ * 2.8
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti
@@ -49,9 +54,9 @@ if(!isset($_SESSION['logger'])) {
     /* Se sono connesso ad internet controllo se ci sono aggiornamenti */
     if($local_commit == 0 && $remote_commit == 0) {
         $mylog->logInfo("Connessione ad internet e repository remoto ok, controllo se ci sono aggiornamenti");
-        exec(GITPORTABLE_PATH."git.exe fetch -v");
-        $local_commit=exec(GITPORTABLE_PATH."git.exe rev-parse @");
-        $remote_commit=exec(GITPORTABLE_PATH."git.exe rev-parse @{u}");
+        exec(GIT_EXECUTABLE."fetch -v");
+        $local_commit=exec(GIT_EXECUTABLE."rev-parse @");
+        $remote_commit=exec(GIT_EXECUTABLE."rev-parse @{u}");
         //echo "HASH LOCALE: $local_commit HASH REMOTO: $remote_commit";
         if($local_commit != $remote_commit) {
             $_SESSION['update']=TRUE; //Se ci sono aggiornamenti lo segnalo

@@ -86,10 +86,11 @@ Per installare il database lanciare semplicemente lo script init_database relati
 #################
 INSTALLAZIONE GIT
 #################
-E' indispensabile per il funzionamento degli aggiornamenti
+E' indispensabile per il funzionamento degli aggiornamenti.
+Su ambiente Windows installare la versione portabile eseguendo i seguenti punti:
 . Lanciare il file GitPortable_X.X.X.paf.exe (le X rappresentano il numero di versione) per installare la versione portabile di Git
 . Assicurarsi che il file venga scompattato nella directory del software (D:\dati\xampp\htdocs\soci\): verrà creata la cartella D:\dati\xampp\htdocs\soci\GitPortable
-
+Su ambiente Linux deve essere installato dal repository
 
 ##############################################
 INIZIALIZZAZIONE DEL SISTEMA PER UN NUOVO ANNO
@@ -98,7 +99,6 @@ Prima di cominciare un nuovo anno è necessario effettuare quanto segue:
 . Fare un backup del database: si veda la sezione BACKUP/RESTORE
 . Esportare in due file csv tutti i soci e tutte le identità tramite il programma stesso
 . Lanciare le procedure "reset_members" ed "expire_identities" il cui funzionamento è descritto alla sezione precedente
-
 
 ################
 BACKUP / RESTORE
@@ -150,17 +150,11 @@ AGGIORNAMENTI SOFTWARE
 ######################
 Il software è in grado di verificare se ci sono aggiornamenti in maniera automatica. Sarà poi l'utente a decidere se e quando installarli.
 Per abilitare questa funzione sono necessari i seguenti requisiti:
-. L'installazione di GitPortable nella directory del software. Scaricare GitPortable da portableapps e scompattarlo in modo che si crei il path D:\dati\xampp\htdocs\soci\GitPortable
+. La presenza di Git
 . E' importante che la directory del programma sia un repository git valido e sia settato il repository remoto
 
 Il controllo degli aggiornamenti avviene al primo avvio del programma. Se vi è una connessione internet, dal ramo master locale viene fatto un fetch del ramo master remoto e successivamente vengono confrontate le due hash di HEAD: se sono diverse è segnalata la presenza di aggiornamenti disponibili mediante la presenza di un asterisco tra parentesi tonde alla voce "Aggiornamento sw" nell'elenco delle funzionalità.
 Cliccando su tale voce si aprirà un'altra pagina dove sarà presente un pulsante "Esegui" il quale darà inizio allo scaricamento degli aggiornamenti.
-Sia in caso di successo che di fallimento verrà richiesto di tornare alla pagina iniziale mediante un link. Non occorre alcun riavvio del programma.
-
-####
-TODO
-####
-. Nella parte di inserimento nuovo socio
-    .. controllare che abbia l'età maggiore o uguale ad 8 anni
-. Log errori
-. Warning nelle query
+Sia in caso di successo che di fallimento verrà richiesto di tornare alla pagina iniziale mediante un link.
+E' sempre buona norma eseguire gli aggiornamenti all'inizio della sessione di lavoro ovvero prima di inserire/modificare dati.
+Al termine dell'installazione e' buona norma riavviare il browser
