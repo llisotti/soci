@@ -239,7 +239,7 @@ else {
         break;
     case "update": //Aggiornamento software
         $mylog->logInfo("Tentativo di aggiornamento software dalla versione ".VERSION);
-        exec(GIT_PATH."git.exe pull origin master", $return_value ); //Per eseguire delle prove aggiungere --dry-run al comando git
+        $return_value=exec(GIT_EXECUTABLE."pull --tags origin master"); //Per eseguire delle prove aggiungere --dry-run al comando git
         if($return_value==0) {
             $mylog->logInfo("Tentativo riuscito: nuova versione: ".VERSION);
             $_SESSION['update']=FALSE;
