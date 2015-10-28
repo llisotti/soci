@@ -135,7 +135,7 @@ catch (PDOException $exception) {
 /* Inizializzo un array di controllo tipo */
 $control_input=array("tessera" => "int", "cognome" => "stringchar",
                         "nome" => "stringchar", "aaaa_nascita" => "stringnum",
-                        "luogo_nascita" => "stringchar", "cap" => "stringnum",
+                        "luogo_nascita" => "stringchar",
                         "citta" => "stringchar", "provincia" => "stringchar",
                         "stato" => "stringchar", "telefono" => "stringnum");
 

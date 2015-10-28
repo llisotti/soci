@@ -277,7 +277,7 @@ else
 <li><label>RESIDENZA</label></li>
 </ol>
 <input name="indirizzo" placeholder="Indirizzo" tabindex="8" size="46" type="text" value="<?php if(isset($_GET['id'])) echo $member->indirizzo; ?>"/>
-<input name="cap" placeholder="Cap" tabindex="9" maxlength="5" size="4" type="text" value="<?php if(isset($_GET['id'])) echo $member->cap; ?>" />
+<input name="cap" placeholder="Cap" tabindex="9" maxlength="7" size="6" type="text" value="<?php if(isset($_GET['id'])) echo $member->cap; ?>" />
 <input name="citta" placeholder="Città" tabindex="10" type="text" size="22" value="<?php if(isset($_GET['id'])) echo $member->citta; ?>" />
 <input name="provincia" placeholder="Prov." tabindex="11" maxlength="2" size="2" type="text" value="<?php if(isset($_GET['id'])) echo $member->provincia; ?>" />
 <input name="stato" placeholder="Stato" tabindex="12" maxlength="20" size="5" type="text" value="<?php if(isset($_GET['id'])) echo $member->stato; ?>" />

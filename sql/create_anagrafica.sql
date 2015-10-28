@@ -23,7 +23,7 @@ CREATE TABLE anagrafica
   sesso			ENUM('M','F') NULL,
   cf			CHAR(16) NULL,	#codice fiscale sempre 16 cifre
   indirizzo		VARCHAR(50) NULL,
-  cap			CHAR(5) NULL,	#codice di avviamento postale sempre 5 cifre
+  cap			VARCHAR(7) NULL,	#codice di avviamento postale massimo 7 cifre
   citta			VARCHAR(40) NULL,
   provincia		CHAR(2) NULL, #provincia sempre 2 lettere
   stato			VARCHAR(20) NULL,
