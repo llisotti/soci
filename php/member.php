@@ -96,6 +96,15 @@ else
     define("MYSQLDUMP_EXECUTABLE", "D:\\\\dati\\\\xampp\\\\mysql\\\\bin\\\\mysqldump.exe ");
 
 
+/**
+ * Percorso dove si trova il client eseguibile mysqldump
+ */
+if(PHP_OS=="Linux")
+    define("RENAME_FILE", "cp "); //cp -p se voglio mantenere data e ora originali
+else
+    define("RENAME_FILE", "copy ");
+
+
 /** @} */
 
 

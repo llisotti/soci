@@ -17,6 +17,58 @@ ini_set('session.gc_maxlifetime',18000);
 <div class="container">
 <div class="form">		
 <?php
+/* 
+ * Controlla se le strutture del file di backup sono aggiornate
+ * $previous_fields Array di stringhe che rappresentano la riga precedente a quella da controllare
+ * $target_fields Array di stringhe che rappresentano la riga da controllare
+ * Le due Array devono avere la stessa lunghezza
+ * Se ritorna FALSE il file non e' aggiornato altrimenti ritorna TRUE
+ */
+function BackupFileStatus(array $previous_fields, array $target_fields) {
+    $fields=count($target_fields);
+    $found=0;
+    $file=new SplFileObject(BACKUP_PATH.$_POST['restorefile'], 'r+b');
+    foreach ($previous_fields as $previous_key => $previous_value) {
+        while (!$file->eof()) {
+            $current_line= $file->fgets();
+            if(strpos($current_line, $previous_value)==TRUE) { 
+                $next_line= $file->fgets();
+                if(strpos($next_line, $target_fields[$previous_key])==TRUE) { //Ho trovato un valore gia' aggiornato
+                    $found++;
+                    $file->rewind();
+                    unset($next_line);
+                    break;
+                }
+            }
+        }
+    }    
+    if($found < $fields)
+        $return_value=FALSE; //Occorre aggiornare il file di backup
+    else
+        $return_value=TRUE; //Il file di backup e' gia' aggiornato
+    
+    unset($file);
+    return $return_value;
+}    
+    
+
+/* 
+ * Modifica la struttura del file di backup
+ * $actual_fields Array di stringhe che rappresentano la riga da sostituire
+ * $new_fields Array di stringhe che rappresentano la nuova riga
+ * Le due Array devono avere la stessa lunghezza
+ * Ritorna quante occorrenze sono state sostituite (affinche' tutto bene devono essere tante quanti gli elementi degli array)
+ */
+function UpdateBackupFile(array $actual_fields, array $new_fields) {
+    $replaced=0;
+    $file_in_string= file_get_contents(BACKUP_PATH.$_POST['restorefile']);
+    $file_in_string_updated=  str_replace($actual_fields, $new_fields, $file_in_string, $replaced);
+    file_put_contents(BACKUP_PATH.$_POST['restorefile'], $file_in_string_updated);
+    return $replaced;
+}
+
+
+
 /* Se apro per la prima volta la pagina mostro il pulsante Esporta e termino lo script */
 if(!isset($_POST['export'])) {
     ?>
@@ -209,11 +261,52 @@ else {
                 $mylog->logInfo("Tentativo di esportare file identità riuscito");
             }
             break;
-        case "DB_functions": //Creazione backup database
+        case "DB_functions": //Gestione backup/restore database
             if($_POST['azione']=="backup") //Faccio il backup
                 system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
-            else //Faccio il restore
-                system(MYSQL_EXECUTABLE."-u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
+            else { //Faccio il restore
+                /* Verifico se il file di backup e' aggiornato */
+                $mylog->logInfo("Inizio ripristino database");
+                $previous_fields=array("`indirizzo` varchar(50)"); //Aggiungere altri campi all'array per ulteriori modifiche future
+                $target_fields=array("`cap` varchar(7)"); //Aggiungere altri campi all'array per ulteriori modifiche future
+                $status=  BackupFileStatus($previous_fields, $target_fields);
+                if($status) { //Il file di backup e' aggiornato, faccio il restore
+                    $mylog->logInfo("Il file di backup ".$_POST['restorefile']." e' gia' aggiornato");
+                    system(MYSQL_EXECUTABLE."-u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
+                }
+                else { //Il file di backup non e' aggiornato. Prima di aggiornarlo verifico se ne esiste un backup
+                    $mylog->logInfo("Il file di backup ".$_POST['restorefile']." non e' aggiornato");
+                    $bakfilename=$_POST['restorefile'].".bak";
+                    $bakfileexist=FALSE;
+                    $iterator=new DirectoryIterator(BACKUP_PATH);
+                    foreach ($iterator as $fileinfo) {
+                        if($fileinfo->getFilename()==$bakfilename) {
+                            $bakfileexist=TRUE; //Il backup del file di backup esiste gia'
+                            break; 
+                        }
+                    }
+                    if(!$bakfileexist) { //Se il backup del file di backup non esiste lo creo e aggiorno il file di backup corrente
+                        $mylog->logInfo("Il backup del file di backup non esiste, lo creo ora");
+                        system(RENAME_FILE.BACKUP_PATH.$_POST['restorefile']." ".BACKUP_PATH.$_POST['restorefile'].".bak");
+                    }
+                    // Esempio se voglio modificare un campo ed aggiungerne un altro. Ma attenzione perche' se aggiungo un campo nella tabella poi i dati non sono coerenti!!!
+                    // $actual_fields=array("`cap` char(5)", "`scadenza` date NOT NULL,");
+                    // $new_fields=array("`cap` varchar(7)", "`scadenza` date NOT NULL,".PHP_EOL."  `iurgensen` smallint(5) unsigned DEFAULT NULL,");
+                    $actual_fields=array("`cap` char(5)"); //Aggiungere altri campi all'array per ulteriori modifiche future
+                    $new_fields=array("`cap` varchar(7)"); //Aggiungere altri campi all'array per ulteriori modifiche future
+                    $fields_to_replace=count($new_fields);
+                    $status=  UpdateBackupFile($actual_fields, $new_fields);
+                    if($status==$fields_to_replace) {
+                        $mylog->logInfo("Il file di backup e' stato aggiornato");
+                        system(MYSQL_EXECUTABLE."-u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
+                    }
+                    else {
+                        $mylog->logError("Tentativo di aggiornare il file di backup fallito (UpdateBackupFile status: ".$status.", fields_to_replace: ".$fields_to_replace."): il ripristino non sara' eseguito!");
+                        $return_value=-100;
+                    }
+                }
+            }
+            
             if($return_value!=0) {
                 echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
             if($_POST['azione']=="backup") {
