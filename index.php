@@ -58,7 +58,7 @@ if(!isset($_SESSION['logger'])) {
         $local_commit=exec(GIT_EXECUTABLE."rev-parse @");
         $remote_commit=exec(GIT_EXECUTABLE."rev-parse @{u}");
         //echo "HASH LOCALE: $local_commit HASH REMOTO: $remote_commit";
-        if($local_commit != $remote_commit) {
+        if($local_commit != $remote_commit && $remote_commit!="") {
             $_SESSION['update']=TRUE; //Se ci sono aggiornamenti lo segnalo
             $mylog->logInfo("Sono presenti aggiornamenti software");
         }
