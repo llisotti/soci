@@ -56,6 +56,7 @@ if(!isset($_SESSION['logger'])) {
         $mylog->logInfo("Connessione ad internet e repository remoto ok, controllo se ci sono aggiornamenti");
         exec(GIT_EXECUTABLE."fetch -v");
         $local_commit=exec(GIT_EXECUTABLE."rev-parse @");
+        $_SESSION['local_commit_hash']=$local_commit;
         $remote_commit=exec(GIT_EXECUTABLE."rev-parse @{u}");
         //echo "HASH LOCALE: $local_commit HASH REMOTO: $remote_commit";
         if($local_commit != $remote_commit && $remote_commit!="") {
@@ -86,7 +87,7 @@ catch (PDOException $exception) {
 <div id="main">
 <div id="header">
 <a class="logo"><img src="img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
-<a class="version"><?php echo VERSION; ?></a>
+<a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
     <li class="active"><span><span><a href="<?php echo $_SERVER['PHP_SELF']; ?>">Home</a></span></span></li>
     <li><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>

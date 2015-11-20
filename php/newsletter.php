@@ -30,7 +30,7 @@ catch (PDOException $exception) {
 <div id="main">
 <div id="header">
 <a class="logo"><img src="../img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
-<a class="version"><?php echo VERSION; ?></a>
+<a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
     <li><span><span><a href= 'http://localhost/soci/index.php'>Home</a></span></span></li>
     <li><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>
