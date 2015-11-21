@@ -81,8 +81,8 @@ if(!isset($_POST['export'])) {
             case "DB_functions":
                 ?>
                 <table>
-                    <tr><td style="text-align: left"><input name="azione" value="backup" type="radio" checked="" />Backup database</td></tr>
-                    <tr><td style="text-align: left"><input name="azione" value="restore" type="radio" />Ripristino database</td><td><input type="file" name="restorefile" accept=".sql" /></td></tr>
+                    <tr><td style="text-align: left"><input id="backup" name="azione" value="backup" type="radio" checked="" />Backup database</td></tr>
+                    <tr><td style="text-align: left"><input id="restore" name="azione" value="restore" type="radio" />Ripristino database</td><td><input type="file" name="restorefile" accept=".sql" /></td></tr>
                 </table>
                 <?php
                 break;
@@ -350,5 +350,30 @@ else {
 ?>
 </div>
 </div>
+<script type="text/javascript" src="../js/jquery-1.11.1.js"> </script>
+<script type="text/javascript">
+$(document).ready(function(){
+    
+    $("#backup").change(function() {
+        $('input[type="submit"]').attr('disabled', false);
+    });
+    
+    $("#restore").change(function() {
+        if($('input[type=file]').val()=="") {
+            $('input[type="submit"]').attr('disabled', true);
+        }
+        else {
+            $('input[type="submit"]').attr('disabled', false);
+        }    
+    });
+    
+    $('input[type=file]').change(function () {
+        if($(this).val()!="") {
+           $('input[type="submit"]').attr('disabled', false); 
+        }
+    });
+
+});
+</script>
 </body> 
 </html>
