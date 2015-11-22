@@ -45,7 +45,7 @@ session_start();
 <?php
 $member_obj=array(); //Array per oggetti socio
 
-/* Inizializzo il logger e controllo gli aggiornamenti*/
+/* Inizializzo il logger, pulisco i vecchi file di sessione e controllo gli aggiornamenti*/
 if(!isset($_SESSION['logger'])) {
     try {
         $mylog=new Logger(LOGFILE_PATH, LOGFILE_MAXSIZE);   
@@ -53,6 +53,26 @@ if(!isset($_SESSION['logger'])) {
     } catch (MyException $ex) {
         die($ex->show());
     }
+    
+    /* Faccio pulizia dei file delle vecchie sessioni */
+    $iterator=new DirectoryIterator(LOGFILE_PATH);
+    $session_files=array();
+    foreach ($iterator as $fileinfo) {
+        $namefile=$fileinfo->getFilename();
+        if(substr($namefile, 0, 4 ) === "sess") { //Se è un file di sessione
+            $accessed = $fileinfo->getAtime();
+            $session_files[$accessed]=$namefile;
+
+        }
+    }
+    krsort($session_files);
+    $index=0;
+    foreach ($session_files as $key => $value) {
+        if($index!=0) //Il primo elemento e' il file di sessione corrente quindi non lo devo cancellare
+            unlink(LOGFILE_PATH.$session_files[$key]);
+        $index++;
+    }
+    
     /* Controllo se c'è connessione internet */
     $_SESSION['update']=FALSE; //La prima volta suppongo che non ci siano aggiornamenti disponibili
     $local_commit = NULL;
