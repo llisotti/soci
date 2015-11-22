@@ -264,8 +264,9 @@ $odd_tr=1;
         <th style="width: 167px">Cognome e Nome</th>
         <th>Data di nascita</th>
         <th>N° Tessera</th>
-        <th colspan="4">Azioni</th>
-        <th class="last">Stato</th>
+        <th>Data Tessera</th>
+        <th colspan="3">Azioni</th>
+        <th class="last">Prima Iscrizione</th>
     </tr>
     <?php
     foreach($rows as $row)
@@ -304,11 +305,11 @@ $odd_tr=1;
             <?php } else { ?><td><?php echo $member->cognome." ".$member->nome ?></td> <?php } ?>
             <td><?php echo $member->data_nascita ?></td>
             <td><?php echo $member->tessera ?></td>
+            <td><?php echo $member->data_tessera ?></td>
             <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="img/login-icon.gif" width="16" height="16" /></a></td>
             <td class="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="img/edit-icon.gif" width="16" height="16" /></a></td>
-            <td class="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="img/add-icon.gif" width="16" height="16" /></a></td>
             <td class="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="img/not_linked.png" width="16" height="16" /></a></td>
-            <td></td>
+            <td><?php echo $member->data_iscrizione=$row['iscrizione']; ?></td>
             <!--
             <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
             <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>
