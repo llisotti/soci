@@ -343,14 +343,14 @@ else {
         break;
     case "update": //Aggiornamento software
         $mylog->logInfo("Tentativo di aggiornamento software dalla versione ".VERSION);
-        $return_value=exec(GIT_EXECUTABLE."pull --tags origin master"); //Per eseguire delle prove aggiungere --dry-run al comando git
+        system(GIT_EXECUTABLE."pull --tags origin master", $return_value); //Per eseguire delle prove aggiungere --dry-run al comando git
         if($return_value==0) {
             $mylog->logInfo("Tentativo riuscito: nuova versione: ".VERSION);
             $_SESSION['update']=FALSE;
             echo "Aggiornamento riuscito, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
         }
         else {
-            $mylog->logError("Tentativo fallito");
+            $mylog->logError("Tentativo fallito (system return value: ".$return_value.")");
             echo "Aggiornamento fallito!, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
         }
         break;
