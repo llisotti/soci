@@ -82,7 +82,7 @@ if(!isset($_SESSION['logger'])) {
     /* Se sono connesso ad internet controllo se ci sono aggiornamenti */
     if($local_commit == 0 && $remote_commit == 0) {
         $mylog->logInfo("Connessione ad internet e repository remoto ok, controllo se ci sono aggiornamenti");
-        exec(GIT_EXECUTABLE."fetch -v");
+        exec(GIT_EXECUTABLE."fetch -v -t");
         $local_commit=exec(GIT_EXECUTABLE."rev-parse @");
         $_SESSION['local_commit_hash']=$local_commit;
         $remote_commit=exec(GIT_EXECUTABLE."rev-parse @{u}");
