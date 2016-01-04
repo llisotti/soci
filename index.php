@@ -94,8 +94,11 @@ if(!isset($_SESSION['logger'])) {
         else
             $mylog->logInfo("Non sono presenti aggiornamenti software");
     }
-    else
+    else {
+        $local_commit=exec(GIT_EXECUTABLE."rev-parse @");
+        $_SESSION['local_commit_hash']=$local_commit;
         $mylog->logInfo("Nessuna connessione ad internet disponibile oppure repository remoto non raggiungibile");
+    }
 }
 else
     $mylog=$_SESSION['logger'];
