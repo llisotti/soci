@@ -83,6 +83,21 @@ foreach($rows as $row)
 {
     $member=new Socio_Copernico($row['cognome'], $row['nome']);
     $member->id=($row['primary_id']); //Ho usato un alias nella query
+    $member->data_nascita=($row['data_nascita']);
+    $member->luogo_nascita=($row['luogo_nascita']);
+    $member->sesso=($row['sesso']);
+    $member->codice_fiscale=($row['cf']);
+    $member->indirizzo=($row['indirizzo']);
+    $member->cap=($row['cap']);
+    $member->citta=($row['citta']);
+    $member->provincia=($row['provincia']);
+    $member->stato=($row['stato']);
+    $member->telefono=($row['telefono']);
+    $member->email=($row['email']);
+    $member->tessera=$row['tessera'];
+    $member->data_iscrizione=$row['iscrizione'];
+    $member->scadenza_id=($row['scadenza']);
+    $member->data_tessera=($row['data']); //Data del tesseramento
     array_push($members_arr, $member);
 }
 $_SESSION['members']=$members_arr;
