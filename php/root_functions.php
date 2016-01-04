@@ -347,10 +347,16 @@ else {
         if($return_value==0) {
             $mylog->logInfo("Tentativo riuscito: nuova versione: ".VERSION);
             $_SESSION['update']=FALSE;
-            echo "Aggiornamento riuscito, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
+            ?>
+            <br/><br/>
+            <?php
+            echo "Aggiornamento riuscito. Chiudere completamente il browser ed aprirlo nuovamente per rendere attive le modifiche</a>";
         }
         else {
             $mylog->logError("Tentativo fallito (system return value: ".$return_value.")");
+            ?>
+            <br/><br/>
+            <?php
             echo "Aggiornamento fallito!, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
         }
         break;
