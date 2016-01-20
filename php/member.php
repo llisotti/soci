@@ -66,7 +66,7 @@ define("LOGFILE_MAXSIZE", 1024);
 if(PHP_OS=="Linux")
     define ("LOGFILE_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/");
 else
-define("LOGFILE_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
+define("LOGFILE_PATH", 'D:\\dati\\xampp\\htdocs\\soci\\doc\\');
 
 
 /**

@@ -401,7 +401,7 @@ if ($membersobj != FALSE)
     if(!isset($_GET['id']) || $id_to_member) {
         //$_SESSION['members_evening']++;
         array_push($_SESSION['members_evening'], $member->tessera);
-        $mylog->logInfo("Soci inseriti per questa sessione: ".$maxkey);
+        $mylog->logInfo("Soci inseriti per questa sessione: ".++$maxkey);
     }
 }
 else {
