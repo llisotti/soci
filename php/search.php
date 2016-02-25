@@ -53,6 +53,9 @@ $odd_tr=1;
     <th class="last" colspan="2">Azioni</th>
 </tr>
 <?php
+unset($_SESSION['members']); //Evita il memory leak
+$members_arr=array();
+
 foreach($rows as $row)
 {
     $odd_tr++;
@@ -74,13 +77,6 @@ foreach($rows as $row)
     -->
 </tr>
 <?php
-}
-unset($_SESSION['members']); //Evita il memory leak
-$members_arr=array();
-$members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id");
-$rows=$members->fetchAll();
-foreach($rows as $row)
-{
     $member=new Socio_Copernico($row['cognome'], $row['nome']);
     $member->id=($row['primary_id']); //Ho usato un alias nella query
     $member->data_nascita=($row['data_nascita']);
