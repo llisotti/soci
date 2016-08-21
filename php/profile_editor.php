@@ -210,7 +210,7 @@ if(isset($_GET['id']) && $member->tessera!=NULL)
     //$presence_dates=$membersobj->fetchColumn();
     printf("Con numero tessera");
     ?>
-    <input id="card" name="tessera" type="text" size="1" value="<?php echo $member->tessera; ?>" />
+    <input id="card" name="tessera" type="text" size="3" value="<?php echo $member->tessera; ?>" />
     <?php
     echo "in data <select class=date_ins style='width: 6%' name=gg_inserimento>";
     $date_not_null->showDays($gg_inserimento);
@@ -232,7 +232,7 @@ else
     echo "</select>";
     //echo "</select> <input id=card name=aaaa_inserimento placeholder=AAAA size=2 type=text maxlength=4 value=$time[year]> ";
     $maxnumcard++;
-    echo " $time[year]"." con numero tessera <input id=card required name=tessera type=text size=1 value= $maxnumcard /> verrà aggiunto il socio";
+    echo " $time[year]"." con numero tessera <input id=card required name=tessera type=text size=3 value= $maxnumcard /> verrà aggiunto il socio";
     //echo"</div>";
     
 }
