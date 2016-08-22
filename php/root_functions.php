@@ -149,6 +149,12 @@ if(!isset($_POST['export'])) {
                     echo $key."^<sup>a</sup> tessera inserita: ".$value."<br/>";
                 }
                 die();
+            case "view_drop_cards":
+                echo "I numeri di tessera seguenti risultano mancanti:<br/><br/>";
+                foreach ($_SESSION['breakCards'] as $breakCards) {
+                    echo $breakCards."<br/>";
+                }
+                die();
             case "identities_export":
                 ?>
                 <table>

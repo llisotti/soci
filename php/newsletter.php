@@ -110,9 +110,10 @@ catch (PDOException $exception) {
     <tr>
     <?php
     /* Conto i soci ovvero le righe di anagrafica che hanno la tessera per l'anno corrente */
-    $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");					
+    $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");
+    $counter=$members->fetchColumn();
     ?>
-        <td style="width: 137px; text-align: center" colspan="2"><h1><span style="color: #F70"><?php echo $members->fetchColumn(); ?></span></h1></td>
+        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href="#"><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
     </tr>
     <tr>
         <td colspan="2"><br/><br/><br/><br/></td>
@@ -393,6 +394,13 @@ $(document).ready(function(){
     $("a#view").click(function() {
         window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
     });
+            
+    
+    /* Funzione visualizzazione numeri di tessera mancanti */
+    $("td#view_drop_cards").click(function() {
+        window.open('../php/root_functions.php?action=view_drop_cards','', "height=190,width=580,scrollbars=1");
+    });
+   
 });
 </script>
 </body>
