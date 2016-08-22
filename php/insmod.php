@@ -82,7 +82,7 @@ catch (PDOException $exception) {
     <?php
     if($_SESSION['update']) {
         ?>
-        <li class="last"><a href="./root_functions.php?action=update">Aggiornamento sw (*)</a></li>
+        <li class="last"><a href="./root_functions.php?action=update">Aggiornamento sw *</a></li>
         <?php
     }
     else {
@@ -168,7 +168,7 @@ try {
 }
 
 /* Inizializzo un array di formattazione */
-$format_input=array("cognome" => "FUC", "nome" => "FUC", "cf" => "UC", "citta" => "FUC");
+$format_input=array("cognome" => "FUC", "nome" => "FUC", "cf" => "UC", "citta" => "FUC", "email" => "LC");
 /* Formatto i dati provenienti da $_POST */
 $formatter= new InputFormat($format_input);
 $formatter->format($_POST);

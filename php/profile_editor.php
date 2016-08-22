@@ -105,7 +105,7 @@ if(isset($_GET['id']))
     <?php
     if($_SESSION['update']) {
         ?>
-        <li class="last"><a href="./root_functions.php?action=update">Aggiornamento sw (*)</a></li>
+        <li class="last"><a href="./root_functions.php?action=update">Aggiornamento sw *</a></li>
         <?php
     }
     else {
