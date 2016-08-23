@@ -474,6 +474,14 @@ $(document).ready(function(){
         window.open('../php/root_functions.php?action=view_drop_cards','', "height=190,width=580,scrollbars=1");
     });
     
+    
+    /* Funzione per ritornare alla pagina di inserimento nuovo socio premendo il tasto Enter */
+    $(document).keydown( function(e) {
+    if (e.keyCode === 13) {
+        window.location.href='http://localhost/soci/php/profile_editor.php';
+    }
+    });
+    
 });
 </script>
 </body>
