@@ -207,11 +207,21 @@ catch (PDOException $exception) {
     for ($index=0; $index < $counter; $index++) {
         $internal_index=$index;
         $difference=1;
-        while($numCards[$internal_index]-$difference!=($numCards[$internal_index+1])) {
+        if($index!=$counter-1) {
+            while($numCards[$internal_index]-$difference!=($numCards[$internal_index+1])) {
             array_push($breakCards, $numCards[$internal_index]-$difference);
             $difference++;
+            }
+        }
+        else { //Qui controllo se la tessera piu' bassa vale 1. Se non lo e' cerco la piu' bassa. Le mancanti da quest'ultima alla 1 le aggiungo all'array dei mancanti
+            $difference=1;
+            while($numCards[$index]!=$difference) {
+                array_push($breakCards, $difference);
+                $difference++;
+            }
         }
     }
+    rsort($breakCards);
     $_SESSION['breakCards']=$breakCards;
     ?>
         <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href="#"><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
