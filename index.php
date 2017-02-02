@@ -255,7 +255,12 @@ else
         case "Cerca": //Visualizzo le identità (persone in anagrafica + soci= TUTTI) cercate
             $fullname_trimmed=trim($_GET['fullname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
             $param=$dbh->quote('%'.$fullname_trimmed.'%');
-            $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
+            if(ctype_digit($_GET['fullname'])) { //Se inserisco un numero nel campo ricerca allora cerco per numero tessera
+                $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.tessera = $_GET[fullname]");
+            }
+            else { //altrimenti cerco per Cognome e per Nome
+                $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica LEFT JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
+            }            
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
             $mylog->logInfo("Ricerca (".$fullname_trimmed.") tra le identità");
             break;
@@ -279,7 +284,7 @@ else
 <br />
 <div class="select-bar">
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-<input id="ricerca" autocomplete="off" type="text" name="fullname" placeholder="Cognome o Nome"/>
+<input id="ricerca" autocomplete="off" type="text" name="fullname" placeholder="Cognome, Nome o Tessera"/>
 <input type="submit" name="show" value="Cerca" />
 <!-- <input type="hidden" name="nonserve" value="true"/>  Barbatrucco per passare variabile in GET dopo $_SERVER['PHP_SELF'] -->
 </form>
