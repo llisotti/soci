@@ -148,7 +148,7 @@ if(!isset($_POST['title'])) {
 /* Se non ho inviato la newsletter richiedo le identità con email */
 
     /* Visualizzo le identità provviste di email */
-    $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.email!='' AND anagrafica.email IS NOT NULL ORDER BY anagrafica.tessera");
+    $members=$dbh->query("SELECT *, anagrafica.member_id AS primary_id, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(anagrafica.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(presenze.data,'%d/%m/%Y') data, DATE_FORMAT(presenze.iscrizione,'%d/%m/%Y') iscrizione FROM anagrafica INNER JOIN presenze ON anagrafica.member_id = presenze.member_id WHERE anagrafica.email!='' AND anagrafica.email IS NOT NULL ORDER BY anagrafica.cognome");
     echo "<h1>ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER (".$members->rowCount().")</h1>";
 }
 else
@@ -259,12 +259,17 @@ else {
     
     /* Configuro server SMTP */
     $mail->IsSMTP();
-    $mail->Host = "smtp.gmail.com";
+    $mail->Sender= FROM_ADDRESS;
+    //$mail->Host = "smtp.gmail.com";
+    $mail->Host = "smtp.osservatoriocopernico.it";
     $mail->SMTPAuth = TRUE;
-    $mail->SMTPSecure = "ssl";
-    $mail->Username = "luca.lisotti@gmail.com";
+    //$mail->SMTPSecure = "ssl";
+    $mail->addReplyTo("lisotti.l@osservatoriocopernico.it");
+    //$mail->Username = "luca.lisotti@gmail.com";
+    $mail->Username = FROM_ADDRESS;
     $mail->Password = $_POST['psw'];
-    $mail->Port = "465";
+    //$mail->Port = "465";
+    $mail->Port = "25";
     
     /* Setto le codifiche e i campi della email */
     $mail->IsHTML(TRUE);
@@ -274,7 +279,7 @@ else {
         foreach ($_SESSION['members'] as $member) {
             if($member->id!=$id_checked)
                 continue;
-            $mail->AddAddress($member->email, $member->nome);
+            $mail->addBCC($member->email, $member->nome);
         }         
     }
     $mail->Subject  = $_POST['title'];

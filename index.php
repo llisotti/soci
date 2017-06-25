@@ -22,7 +22,7 @@ session_start();
 /**
  * @mainpage GESTIONE SOCI
  * @section Versione
- * 2.6
+ * 2.9
  * @section Descrizione
  * Gestione soci Osservatorio Copernico
  * @section Requisiti

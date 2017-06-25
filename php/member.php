@@ -30,7 +30,7 @@ define ("DROP_IDENTITY", "+5 years");
 /**
  * Versione del software
  */
-define ("VERSION", "GESTIONE SOCI 2.8");
+define ("VERSION", "GESTIONE SOCI 2.9");
 
 
 /**
@@ -42,7 +42,7 @@ define ("FROM_NAME", "Osservatorio Copernico");
 /**
  * Indirizzo che appare nel campo from della newsletter
  */
-define ("FROM_ADDRESS", "localhost@osservatoriocopernico");
+define ("FROM_ADDRESS", "info@osservatoriocopernico.it");
 
 
 /**
