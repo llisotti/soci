@@ -76,9 +76,9 @@ if(isset($_GET['id']))
 <a class="logo"><img src="../img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
 <a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
-    <li><span><span><a href= 'http://localhost/soci/index.php'>Home</a></span></span></li>
-    <li class="active"><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>
-    <li><span><span><a href="http://localhost/soci/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href= 'http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php'>Home</a></span></span></li>
+    <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php">Profilo</a></span></span></li>
+    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
@@ -94,11 +94,11 @@ if(isset($_GET['id']))
 <ul class="nav">
     <?php
     if(!isset($_GET['allmembers']) || $_GET['allmembers']!="true")
-            echo "<li><a href='http://localhost/soci/index.php?allmembers=true'>Visualizza elenco soci completo</a></li>";
+            echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php?allmembers=true'>Visualizza elenco soci completo</a></li>";
     elseif($_GET['allmembers']=="true")
-            echo "<li><a href='http://localhost/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
+            echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
     ?>
-    <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
+    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta soci</a></li>
     <li><a id="esporta_identita" href="#">Esporta identità</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
@@ -193,14 +193,14 @@ if(isset($_GET['id']))
 if(isset($_GET['id']))
 {
     ?>
-<form action=<?php echo "'http://localhost/soci/php/insmod.php?id="."$_GET[id]'"; ?> method="post"><input type="hidden" name="" value=""/>
+<form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php?id="."$_GET[id]'"; ?> method="post"><input type="hidden" name="" value=""/>
     <?php
 }
 /* altrimenti sto INSERENDO un nuovo socio */
 else
 {
     ?>
-    <form action=<?php echo "'http://localhost/soci/php/insmod.php'"; ?> method="post"><input type="hidden" name="" value=""/>
+    <form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php'"; ?> method="post"><input type="hidden" name="" value=""/>
     <?php
 }?>
 <div id="center-column">
