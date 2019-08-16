@@ -4,7 +4,7 @@ body{
 
 
 .form{
-	background:#f1f1f1; width:550px; margin:0 auto; padding-left:0px; padding-top:0px;
+	background:#f1f1f1; width:700px; margin:0 auto; padding-left:0px; padding-top:0px;
 }
 
 .form input{
@@ -17,11 +17,11 @@ body{
 }
 
 .form input#sesso{
-	width: 15px;
+	width: 20px;
 }
 
 .form input#residenza{
-	width: 384px;
+	width: 410px;
 }
 
 table td{

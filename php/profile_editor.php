@@ -242,9 +242,9 @@ if(isset($_GET['id']) && $member->tessera!=NULL)
     ?>
     <input id="card" name="tessera" type="text" size="3" value="<?php echo $member->tessera; ?>" />
     <?php
-    echo "in data <select class=date_ins style='width: 6%' name=gg_inserimento>";
+    echo "in data <select class=date_ins style='width: 10%' name=gg_inserimento>";
     $date_not_null->showDays($gg_inserimento);
-    echo "</select><select class=date_ins style='width: 6%' name=mm_inserimento>";
+    echo "</select><select class=date_ins style='width: 10%' name=mm_inserimento>";
     $date_not_null->showMonths($mm_inserimento);
     echo "</select> è stato registrato il socio";
     //printf(" il giorno %s e msese %s è stato registrato il socio", $gg_inserimento, $mm_inserimento);
@@ -255,9 +255,9 @@ else
     $gg_inserimento=$time['mday'];
     $mm_inserimento=$time['mon'];
     $aaaa_inserimento=$time['year'];
-    echo "Oggi <select class=date_ins style='width: 6%' name=gg_inserimento>";
+    echo "Oggi <select class=date_ins style='width: 10%' name=gg_inserimento>";
     $date_not_null->showDays($time['mday']);
-    echo "</select><select class=date_ins style='width: 6%' name=mm_inserimento>";
+    echo "</select><select class=date_ins style='width: 10%' name=mm_inserimento>";
     $date_not_null->showMonths($time['mon']);
     echo "</select>";
     //echo "</select> <input id=card name=aaaa_inserimento placeholder=AAAA size=2 type=text maxlength=4 value=$time[year]> ";

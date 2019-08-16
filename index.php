@@ -397,7 +397,7 @@ $(document).ready(function(){
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
         var member_id = $(this).siblings(":first").text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_viewer.php"
-        window.open('./php/profile_viewer.php?id='+member_id,'', "height=190,width=580");
+        window.open('./php/profile_viewer.php?id='+member_id,'', "height=300,width=800");
     });
 
 
