@@ -15,6 +15,9 @@
 !/img/*.*
 !/js/
 !/js/*.js
+!/js/libs/
+!/js/libs/*.js
+!/js/libs/*.swf
 !/php/
 !/php/*.php
 !/sql/
