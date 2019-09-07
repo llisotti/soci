@@ -1,11 +1,14 @@
 *
 !.gitignore
-!index.php
+!i*.php
+!i*.html
 !README
 !/css/
 !/css/*.css
 !/css/.gitkeep
 !/doc/
+!/doc/firme/
+!/doc/firme/.gitkeep
 !/doc/Doxyfile
 !/doc/doc_generation.bat
 !/doc/README

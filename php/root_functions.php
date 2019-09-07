@@ -99,7 +99,7 @@ if(!isset($_POST['export'])) {
                 break;
             case "members_export":
                 $time=getdate();
-                $date=new DatesForSelect();
+                $date=new DataForSelect();
                 ?>
                 <table>
                     <tr><td style="text-align: left"><input name="azione" value="all" type="radio" checked="" />Esporta tutti i soci</td></tr>

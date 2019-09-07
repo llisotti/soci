@@ -226,8 +226,8 @@ $membersobj=$dbh->query("SELECT MAX(tessera) FROM anagrafica"); //riciclo $membe
 $maxnumcard= $membersobj->fetchColumn();
 
 $time=getdate();
-$date=new DatesForSelect(); //Oggetto per riemprire select
-$date_not_null=new DatesForSelect(NULL, NULL);
+$date=new DataForSelect(); //Oggetto per riemprire select
+$date_not_null=new DataForSelect(NULL, NULL);
 
 
 

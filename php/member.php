@@ -9,10 +9,10 @@ include "classes.inc.php";
 
 
 /**
- * Parametri di connessione al database soci
+ * Parametri di connessione al database soci e ad un eventuale database di prova
  */
 define ("SOCI_DBCONNECTION", "mysql:host=localhost;dbname=soci;charset=utf8");
-//define ("SOCI_DBCONNECTION", "mysql:host=localhost;dbname=prova;charset=utf8"); //Per agire sul database di prova
+define ("SOCI_PROVA_DBCONNECTION", "mysql:host=localhost;dbname=soci_nuovo;charset=utf8"); //Per agire sul database di prova
 
 
 /**
@@ -25,6 +25,12 @@ define ("MEMBERS_RECENT_MAX", 20);
  * Numero di anni consecutivi dopo i quali viene rimossa l'identità dal database
  */
 define ("DROP_IDENTITY", "+5 years");
+
+
+/**
+ * Numero di anni consecutivi dopo i quali viene rimossa l'identità dal database (Stile MYSQL)
+ */
+define ("DROP_IDENTITY_MYSQL", "INTERVAL 5 YEAR");
 
 
 /**
@@ -104,6 +110,10 @@ if(PHP_OS=="Linux")
 else
     define("RENAME_FILE", "copy ");
 
+/**
+ * Percorso dove salvo le immagini della firma
+ */
+define ("SIGNATURE_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/firme/");
 
 /** @} */
 
