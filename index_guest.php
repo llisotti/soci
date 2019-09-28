@@ -494,6 +494,12 @@ $(document).ready(function(){
             }
     	});
     });
+
+    $("#segnalazione").click(function(e) {
+        e.preventDefault();
+        window.open('./php/helpdesk.php','', "height=700,width=580,scrollbars=1");
+    });
+
 });
 </script>
 </body>
