@@ -33,7 +33,7 @@ require "member.php";
             		<img src="../img/check_ko.png" height="256" width="256">
         		</div>
         		<?php
-        		errorMessage();
+        		errorMessage($e);
         		die();
             }
             
@@ -98,7 +98,7 @@ require "member.php";
             		<img src="../img/check_ko.png" height="256" width="256">
         		</div>
         		<?php
-                errorMessage();
+        		errorMessage($e);
         		die();
             }
             
@@ -113,7 +113,7 @@ require "member.php";
             		<img src="../img/check_ko.png" height="256" width="256">
         		</div>
         		<?php 
-        		errorMessage();
+        		errorMessage($e);
         		die();
             }
             
@@ -144,7 +144,7 @@ require "member.php";
         		$prepared=$dbh->prepare("DELETE FROM anagrafica WHERE cf=?");
         		$prepared->execute([$_POST['cf']]);
         		
-        		errorMessage();
+        		errorMessage($e);
         		die();
             }
             ?>
@@ -159,13 +159,10 @@ require "member.php";
 </div>
 </div>
 <?php 
-function errorMessage() {
-    echo "<ul style='font-family: Arial; font-size:15px'>";
-    echo "OPS, C'e' stato un errore nella procedura di iscrizione. Ti consigliamo di eseguire le seguenti verifiche:";
-    echo "<li>Torna alla pagina di registrazione e verifica di non essere gia' iscritto.</li>";
-    echo "<li>Torna alla pagina di registrazione e verifica i dati inseriti nei campi.</li>";
-    echo "<li>In caso l'errore persista invia una segnalazione cliccando sull'apposito link nella pagina di registrazione.</li>";
-    echo "</ul>";
+function errorMessage(PDOException $ex) {
+    echo "La procedura di iscrizione e' fallita con codice errore: ".$ex->errorInfo[1];
+    echo "<p>Torna alla pagina di registrazione e verifica di non essere gia' iscritto. Verifica inoltre i dati immessi nei campi.</p>";
+    echo "<p>Se l'errore persiste invia una segnalazione cliccando sull'apposito link nella pagina di registrazione.</p>";
 }
 
 function successMessage() {

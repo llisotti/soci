@@ -106,7 +106,7 @@ require "php/member.php";
     				</div>
 				</div>
             </div>
-            <span id="nascosto_1" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se nato all'estero selezionare solo il menu' dello Stato</span>
+            <span id="nascosto_1" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se nato all'estero selezionare solo lo Stato</span>
 			<div class="row row-space">
 				<div class="col-3">
                 	<div class="input-group">
@@ -138,7 +138,7 @@ require "php/member.php";
 				</div>
         	</div>
 			<h6 style="text-align:center">- DATI DI RESIDENZA -</h6>
-			<h6 style="text-align:center; font-style:italic">(se residente all'estero selezionare solo il menu' dello Stato)</h6>
+			<h6 style="text-align:center; font-style:italic">(se residente all'estero selezionare solo lo Stato)</h6>
 			<br>
 			<div class="row row-space">
                 <div class="col-2">
@@ -266,7 +266,7 @@ $(document).ready(function(){
                     		alert("Firma validata correttamente. Ora e' possibile iscriversi");
                     	}
                     	else {
-                    		alert("Errore validazione: ripetere nuovamente la firma assicurandosi che occupi quasi l'intero spazio");
+                    		alert("Errore validazione: ripetere nuovamente la firma assicurandosi che occupi quanto piu' spazio possibile");
                     	}
                     }
             	});
@@ -275,7 +275,7 @@ $(document).ready(function(){
         		alert("Prima di validare la firma e' necessario riempire almeno i campi obbligatori");
         }
         else
-        	alert("Errore validazione: cancellare e ripetere nuovamente la firma. E' necessario che la firma occupi quasi l'intero spazio");
+        	alert("Errore validazione: cancellare e ripetere nuovamente la firma. E' necessario che la firma occupi quanto piu' spazio possibile");
     });
      
     /* Funzione per validare o meno una firma */
