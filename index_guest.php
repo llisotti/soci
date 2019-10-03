@@ -181,6 +181,7 @@ require "php/member.php";
 			    	</div>                  
 			</div>
 		</div>
+		<input id="etaconsenso" name="etaconsenso" type="hidden">
 			<h6 style="text-align:center">- CONTATTI -</h6>
 			<br>
 			<div class="row row-space">
@@ -377,11 +378,13 @@ $(document).ready(function(){
     		$("#firma").text("FIRMA DEL GENITORE (obbligatoria)"); //Cambio l'intestazione della firma
     		$("#info").attr("href", "/soci/doc/Informativa e consenso per i soci minorenni.pdf"); //Cambio l'informativa con quella per minorenni...
     		$("#info").text("nell'informativa per minorenni "); //...ed il testo
+    		$("#etaconsenso").val("minorenne");
     	}
     	else {
     		$("#firma").text("FIRMA DEL RICHIEDENTE (obbligatoria)");
     		$("#info").attr("href", "/soci/doc/INFORMATIVA-E-CONSENSO-PER-SOCI-2018-1.pdf"); //Cambio l'informativa con quella per maggiorenni...
     		$("#info").text("nell'informativa "); //...ed il testo
+    		$("#etaconsenso").val("maggiorenne");
     	}
 	});
 
