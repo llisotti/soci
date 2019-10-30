@@ -169,9 +169,8 @@ function errorMessage(PDOException $ex) {
 function successMessage() {
     echo "<br><ul style='font-family: Arial; font-size:15px'>";
     echo "COMPLIMENTI, la Tua iscrizione e' andata a buon fine.";
-    echo "<li>Ora puoi recarti in Osservatorio nei giorni di apertura e, previo il versamento della quota associativa di 5€, Ti sara' rilasciata subito la tessera.</li>";
-    echo "<li>La tessera e' valida un anno solare (sino al 31/12 dell'anno in corso)</li>";
-    echo "<li>I tuoi dati di iscrizione saranno automaticamente cancellati dal nostro archivio dopo cinque anni consecutivi in cui non rinnovi la tessera. Puoi comunque richiedere la cancellazione dei tuoi dati inviando una segnalazione alla pagina di registrazione.</li>";
+    echo "<li>Ora puoi recarti in Osservatorio nei giorni di apertura. Dopo il versamento della quota associativa di 5€ Ti sara' rilasciata subito la tessera.</li>";
+    echo "<li>La tessera e' valida sino al 31/12 dell'anno in cui e' stata rilasciata</li>";
     echo "</ul><br>";
 }
 ?>

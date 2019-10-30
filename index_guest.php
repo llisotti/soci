@@ -260,16 +260,19 @@ $(document).ready(function(){
                     data: {firma: datapair[1], cognome: cognome, nome: nome, birthday: birthday},
                     dataType: 'html',
                     /* ritorno un messaggio e visualizzo il popup */
-                    success: function (response) {
+                    success: function (response) {	
                     	if(response=="ok") {
                     		$('.clear-button').hide(); //Una volta inserita correttamente la firma evito che sia cancellata
                     		$('.submit-button').hide(); //Una volta inserita correttamente la firma evito che sia inserita nuovamente
                     		alert("Firma validata correttamente. Ora e' possibile iscriversi");
                     	}
+                    	else if (response=="0") {
+                    		alert("Errore validazione: la firma e' gia' presente nel nostro database");
+                    	}
                     	else {
                     		alert("Errore validazione: ripetere nuovamente la firma assicurandosi che occupi quanto piu' spazio possibile");
-                    	}
-                    }
+                        }
+            		}
             	});
         	}
         	else
