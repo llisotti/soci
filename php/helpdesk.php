@@ -71,7 +71,7 @@
 			<div class="row row-space">
 		    	<div class="col-2">
                 	<div class="input-group">
-                         <textarea id="messaggio" rows="6" cols="68" style="resize:none; " placeholder="Testo segnalazione"></textarea> 
+                         <textarea id="messaggio" class="area" rows="6" cols="68" style="resize:none; " placeholder="segnalazione"></textarea> 
 					</div>
 				</div>
 			</div>

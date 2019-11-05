@@ -311,7 +311,7 @@ a:active {
 /* ==========================================================================
    #FORM
    ========================================================================== */
-input {
+input, textarea {
   outline: none;
   margin: 0;
   /*border: none;*/
@@ -347,16 +347,28 @@ input {
   cursor: pointer;
 }
 
-.input--style-1 {
+.input--style-1, .area{
   padding: 9px 0;
   color: #666;
 }
 
-.input--style-1::-webkit-input-placeholder {
+.area{
+  padding: 9px 9px 9px 9px;
+  color: #666;
+}
+
+.input--style-1::-webkit-input-placeholder, .area::-webkit-input-placeholder{
   /* WebKit, Blink, Edge */
   color: #555;
   font-style: oblique;
 }
+
+.input--style-1::-webkit-input-placeholder, .area::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: #555;
+  font-style: oblique;
+}
+
 
 .input--style-1:-moz-col-3
 {
@@ -366,20 +378,20 @@ input {
   opacity: 1;
 }
 
-.input--style-1::-moz-placeholder {
+.input--style-1::-moz-placeholder, .area::-moz-placeholder {
   /* Mozilla Firefox 19+ */
   color: #555;
   font-style: oblique;
   opacity: 1;
 }
 
-.input--style-1:-ms-input-placeholder {
+.input--style-1:-ms-input-placeholder, .area::-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #555;
   font-style: oblique;
 }
 
-.input--style-1:-ms-input-placeholder {
+.input--style-1:-ms-input-placeholder, .area::-ms-input-placeholder {
   /* Microsoft Edge */
   color: #555;
   font-style: oblique;

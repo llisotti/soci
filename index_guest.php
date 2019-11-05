@@ -323,16 +323,24 @@ $(document).ready(function(){
         	alert("Attenzione: controllare che il nome immesso sia corretto");
 	});
 	
-    /* Validazione codice fiscale */
-	$("#cf").blur(function() {
+    /* Validazione codice fiscale (lo controllo quando entro nel campo comune) */
+	$("#comune").focus(function() {
     	// http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/
     	var pattern = /^(?:[A-Z][AEIOU][AEIOUX]|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i;
-    	if(!$(this).val().match(pattern))
+    	if(!$("#cf").val().match(pattern))
         	alert("Attenzione: controllare che il codice fiscale immesso sia corretto");
     });
 
-    /* Validazione data nascita */
+    /* Validazione data nascita
     $("#birthday").blur(function() {
+    	var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
+    	if(!value.test($('#birthday').val())) {
+        	alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
+    	}
+    }); */
+
+    /* Validazione data nascita (la controllo quando entro nel campo codice fiscale) */
+    $("#cf").focus(function() {
     	var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
     	if(!value.test($('#birthday').val())) {
         	alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
