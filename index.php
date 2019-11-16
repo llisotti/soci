@@ -121,8 +121,8 @@ catch (PDOException $exception) {
 <a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
     <li class="active"><span><span><a href="<?php echo $_SERVER['PHP_SELF']; ?>">Home</a></span></span></li>
-    <li><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>
-    <li><span><span><a href="http://localhost/soci/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php">Profilo</a></span></span></li>
+    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
@@ -139,12 +139,12 @@ catch (PDOException $exception) {
     <?php
     /* Se sto visualizzando i soci più recenti, nel menù delle funzionalità propongo la visualizzazione di tutti i soci */
     if(!isset($_GET['show']) || empty($_GET) || $_GET['show']=="recentmembers")
-        echo "<li><a href='http://localhost/soci/index.php?show=allmembers'>Visualizza elenco soci completo</a></li>";
+        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php?show=allmembers'>Visualizza elenco soci completo</a></li>";
     /* Altrimenti propongo la visualizzazione dei soci più recenti */
     else
-        echo "<li><a href='http://localhost/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
+        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
     ?>
-    <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
+    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta soci</a></li>
     <li><a id="esporta_identita" href="#">Esporta identità</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
@@ -240,7 +240,7 @@ catch (PDOException $exception) {
 </table>
 </div>
 <div id="center-column">
-<div class="top-bar"> <a href="http://localhost/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
+<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
 <?php
 /* Se non passo nulla in GET visualizzo i soci più recenti */
 if(empty($_GET) || !isset($_GET['show']))
@@ -397,7 +397,7 @@ $(document).ready(function(){
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
         var member_id = $(this).siblings(":first").text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_viewer.php"
-        window.open('./php/profile_viewer.php?id='+member_id,'', "height=190,width=580");
+        window.open('./php/profile_viewer.php?id='+member_id,'', "height=300,width=800");
     });
 
 

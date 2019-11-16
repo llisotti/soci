@@ -32,9 +32,9 @@ $mylog=$_SESSION['logger'];
 /* Se nel form di profile_editor è stato cliccato annulla torno alla pagina precedente */
 if(!empty($_POST['clean'])) {
     if(!empty($_GET['id']))
-        header("Location: http://localhost/soci/php/profile_editor.php?id=$_GET[id]"); //Con id
+        header("Location: http://{$_SERVER['HTTP_HOST']}/soci/php/profile_editor.php?id=$_GET[id]"); //Con id
     else
-        header("Location: http://localhost/soci/php/profile_editor.php"); //Senza id
+        header("Location: http://{$_SERVER['HTTP_HOST']}/soci/php/profile_editor.php"); //Senza id
     die(); //Fondamentale, altrimenti lo script continua
 }
 
@@ -53,9 +53,9 @@ catch (PDOException $exception) {
 <a class="logo"><img src="../img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
 <a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
-    <li><span><span><a href= 'http://localhost/soci/index.php'>Home</a></span></span></li>
-    <li class="active"><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>
-    <li><span><span><a href="http://localhost/soci/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href= 'http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php'>Home</a></span></span></li>
+    <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php">Profilo</a></span></span></li>
+    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
@@ -71,11 +71,11 @@ catch (PDOException $exception) {
 <ul class="nav">
     <?php
     if(!isset($_GET['allmembers']) || $_GET['allmembers']!="true")
-            echo "<li><a href='http://localhost/soci/index.php?allmembers=true'>Visualizza elenco soci completo</a></li>";
+            echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php?allmembers=true'>Visualizza elenco soci completo</a></li>";
     elseif($_GET['allmembers']=="true")
-            echo "<li><a href='http://localhost/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
+            echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
     ?>
-    <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
+    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta elenco soci completo</a></li>
     <li><a id="esporta_identita" href="#">Esporta elenco identità completo</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
@@ -415,12 +415,12 @@ else {
 
 //unset($_SESSION['socio']);
 ?>
-<form action="http://localhost/soci/php/profile_editor.php" method="get" > 
+<form action="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php" method="get" > 
 <span style="margin-left: 270px">
 <input name="insert_member" value="Inserisci altro socio" type="submit" style="display: inline" >    
 </span>
 </form>
-<form action="http://localhost/soci/index.php" method="get" style="display: inline"> 
+<form action="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php" method="get" style="display: inline"> 
 <input name="home" value="Home" type="submit" >
 </form>
 
@@ -475,13 +475,13 @@ $(document).ready(function(){
     });
     
     
-    /* Funzione per ritornare alla pagina di inserimento nuovo socio premendo il tasto Enter */
+    /* Funzione per ritornare alla pagina di inserimento nuovo socio premendo il tasto Enter
     $(document).keydown( function(e) {
     if (e.keyCode === 13) {
-        window.location.href='http://localhost/soci/php/profile_editor.php';
+        window.location.href='http://192.168.1.4/soci/php/profile_editor.php';
     }
     });
-    
+    */
 });
 </script>
 </body>

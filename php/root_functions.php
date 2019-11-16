@@ -99,7 +99,7 @@ if(!isset($_POST['export'])) {
                 break;
             case "members_export":
                 $time=getdate();
-                $date=new DatesForSelect();
+                $date=new DataForSelect();
                 ?>
                 <table>
                     <tr><td style="text-align: left"><input name="azione" value="all" type="radio" checked="" />Esporta tutti i soci</td></tr>
@@ -250,13 +250,13 @@ else {
             else {
                 echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
                 if($_POST['azione']=="all") { //Link al file di tutti i soci
-                    echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco soci.csv";?>"><?php echo $data."_Elenco soci ";?></a><?php echo "CREATO CORRETTAMENTE";
+                    echo "<br/>FILE "?><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/doc/<?php echo $data."_Elenco soci.csv";?>"><?php echo $data."_Elenco soci ";?></a><?php echo "CREATO CORRETTAMENTE";
                 }
                 elseif ($_POST['azione']=="evening") { //Link al file di tutti i soci
-                    echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco soci serata.csv";?>"><?php echo $data."_Elenco soci serata ";?></a><?php echo "CREATO CORRETTAMENTE";
+                    echo "<br/>FILE "?><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/doc/<?php echo $data."_Elenco soci serata.csv";?>"><?php echo $data."_Elenco soci serata ";?></a><?php echo "CREATO CORRETTAMENTE";
                 }
                 else {
-                    echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco soci $namefile.csv";?>"><?php echo $data."_Elenco soci $namefile.csv ";?></a><?php echo "CREATO CORRETTAMENTE";
+                    echo "<br/>FILE "?><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/doc/<?php echo $data."_Elenco soci $namefile.csv";?>"><?php echo $data."_Elenco soci $namefile.csv ";?></a><?php echo "CREATO CORRETTAMENTE";
                 }
                 $mylog->logInfo("Tentativo di esportare file soci riuscito");
             }
@@ -274,7 +274,7 @@ else {
             }
             else {
                 echo '<img src="../img/check_ok.png" height="100" width="100" alt="check_ok">';
-                echo "<br/>FILE "?><a href="http://localhost/soci/doc/<?php echo $data."_Elenco identita'.csv";?>"><?php echo $data."_Elenco identità ";?></a><?php echo "CREATO CORRETTAMENTE";
+                echo "<br/>FILE "?><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/doc/<?php echo $data."_Elenco identita'.csv";?>"><?php echo $data."_Elenco identità ";?></a><?php echo "CREATO CORRETTAMENTE";
                 $mylog->logInfo("Tentativo di esportare file identità riuscito");
             }
             break;
@@ -363,7 +363,7 @@ else {
             ?>
             <br/><br/>
             <?php
-            echo "Aggiornamento fallito!, <a href=http://localhost/soci/index.php>Torna alla Pagina iniziale</a>";
+            echo "Aggiornamento fallito!, <a href=http://{$_SERVER['HTTP_HOST']}/soci/index.php>Torna alla Pagina iniziale</a>";
         }
         break;
     default:

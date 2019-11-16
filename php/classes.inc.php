@@ -507,19 +507,21 @@ abstract class Person {
 
 
 /**
- * @class DatesForSelect
- * @brief Popola i campi <select> con i giorni e i mesi dell'anno
+ * @class DataForSelect
+ * @brief Classe per popolare i campi <select>
  */
-class DatesForSelect {
+class DataForSelect {
     private $days; /**< Giorni del mese */
     private $months; /**< Mesi dell'anno */
+    private $province; /**< Province italiane */
+    private $states; /**< Stati nel mondo */
     private $day_not_set; /**< Valore del giorno quando non settato */
     private $month_not_set; /**< Valore del mese quando non settato */
     
     
     /** 
      * @brief Costruttore
-     * @details Inizializza i giorni ed i mesi
+     * @details Inizializza giorni, mesi, province e stati
      * @param[in] string $d_not_set Valore del giorno selezionato
      * @param[in] string $m_not_set Valore del mese selezionato
      * @note Se $d_not_set vale NULL nel menù a discesa non appare la stringa GG
@@ -536,6 +538,360 @@ class DatesForSelect {
         $this->months=range(1, 12);
         $this->day_not_set=$d_not_set;
         $this->month_not_set=$m_not_set;
+    	$this->province = array (
+    	"Agrigento" => "AG",
+    	"Alessandria" => "AL",
+    	"Ancona" => "AN",
+    	"Aosta" => "AO",
+    	"Arezzo" => "AR",
+    	"Ascoli Piceno" => "AP",
+    	"Asti" => "AT",
+    	"Avellino" => "AV",
+    	"Bari" => "BA",
+    	"Barletta-Andria-Trani" => "BT",
+    	"Belluno" => "BL",
+    	"Benevento" => "BN",
+    	"Bergamo" => "BG",
+    	"Biella" => "BI",
+    	"Bologna" => "BO",
+    	"Bolzano" => "BZ",
+    	"Brescia" => "BS",
+    	"Brindisi" => "BR",
+    	"Cagliari" => "CA",
+    	"Caltanissetta" => "CL",
+    	"Campobasso" => "CB",
+    	"Carbonia-Iglesias" => "CI",
+    	"Caserta" => "CE",
+    	"Catania" => "CT",
+    	"Catanzaro" => "CZ",
+    	"Chieti" => "CH",
+    	"Como" => "CO",
+    	"Cosenza" => "CS",
+    	"Cremona" => "CR",
+    	"Crotone" => "KR",
+    	"Cuneo" => "CN",
+    	"Enna" => "EN",
+    	"Fermo" => "FM",
+    	"Ferrara" => "FE",
+    	"Firenze" => "FI",
+    	"Foggia" => "FG",
+    	"Forlì-Cesena" => "FC",
+    	"Frosinone" => "FR",
+    	"Genova" => "GE",
+    	"Gorizia" => "GO",
+    	"Grosseto" => "GR",
+    	"Imperia" => "IM",
+    	"Isernia" => "IS",
+    	"L'Aquila" => "AQ",
+    	"La Spezia" => "SP",
+    	"Latina" => "LT",
+    	"Lecce" => "LE",
+    	"Lecco" => "LC",
+    	"Livorno" => "LI",
+    	"Lodi" => "LO",
+    	"Lucca" => "LU",
+    	"Macerata" => "MC",
+    	"Mantova" => "MN",
+    	"Massa-Carrara" => "MS",
+    	"Matera" => "MT",
+    	"Medio Campidano" => "VS",
+    	"Messina" => "ME",
+    	"Milano" => "MI",
+    	"Modena" => "MO",
+    	"Monza e della Brianza" => "MB",
+    	"Napoli" => "NA",
+    	"Novara" => "NO",
+    	"Nuoro" => "NU",
+    	"Ogliastra" => "OG",
+    	"Olbia-Tempio" => "OT",
+    	"Oristano" => "OR",
+    	"Padova" => "PD",
+    	"Palermo" => "PA",
+    	"Parma" => "PR",
+    	"Pavia" => "PV",
+    	"Perugia" => "PG",
+    	"Pesaro e Urbino" => "PU",
+    	"Pescara" => "PE",
+    	"Piacenza" => "PC",
+    	"Pisa" => "PI",
+    	"Pistoia" => "PT",
+    	"Pordenone" => "PN",
+    	"Potenza" => "PZ",
+    	"Prato" => "PO",
+    	"Ragusa" => "RG",
+    	"Ravenna" => "RA",
+    	"Reggio Calabria" => "RC",
+    	"Reggio Emilia" => "RE",
+    	"Rieti" => "RI",
+    	"Rimini" => "RN",
+    	"Roma" => "RM",
+    	"Rovigo" => "RO",
+    	"Salerno" => "SA",
+    	"Sassari" => "SS",
+    	"Savona" => "SV",
+    	"Siena" => "SI",
+    	"Siracusa" => "SR",
+    	"Sondrio" => "SO",
+    	"Taranto" => "TA",
+    	"Teramo" => "TE",
+    	"Terni" => "TR",
+    	"Torino" => "TO",
+    	"Trapani" => "TP",
+    	"Trento" => "TN",
+    	"Treviso" => "TV",
+    	"Trieste" => "TS",
+    	"Udine" => "UD",
+    	"Varese" => "VA",
+    	"Venezia" => "VE",
+    	"Verbano-Cusio-Ossola" => "VB",
+    	"Vercelli" => "VC",
+    	"Verona" => "VR",
+    	"Vibo Valentia" => "VV",
+    	"Vicenza" => "VI",
+    	"Viterbo" => "VT"
+    	   );
+    	
+    	$this->states = array(
+    	    'US'	=>	'United States',
+    	    'AF'	=>	'Afghanistan',
+    	    'AL'	=>	'Albania',
+    	    'DZ'	=>	'Algeria',
+    	    'AS'	=>	'American Samoa',
+    	    'AD'	=>	'Andorra',
+    	    'AO'	=>	'Angola',
+    	    'AI'	=>	'Anguilla',
+    	    'AQ'	=>	'Antarctica',
+    	    'AG'	=>	'Antigua And Barbuda',
+    	    'AR'	=>	'Argentina',
+    	    'AM'	=>	'Armenia',
+    	    'AW'	=>	'Aruba',
+    	    'AU'	=>	'Australia',
+    	    'AT'	=>	'Austria',
+    	    'AZ'	=>	'Azerbaijan',
+    	    'BS'	=>	'Bahamas',
+    	    'BH'	=>	'Bahrain',
+    	    'BD'	=>	'Bangladesh',
+    	    'BB'	=>	'Barbados',
+    	    'BY'	=>	'Belarus',
+    	    'BE'	=>	'Belgium',
+    	    'BZ'	=>	'Belize',
+    	    'BJ'	=>	'Benin',
+    	    'BM'	=>	'Bermuda',
+    	    'BT'	=>	'Bhutan',
+    	    'BO'	=>	'Bolivia',
+    	    'BA'	=>	'Bosnia And Herzegowina',
+    	    'BW'	=>	'Botswana',
+    	    'BV'	=>	'Bouvet Island',
+    	    'BR'	=>	'Brazil',
+    	    'IO'	=>	'British Indian Ocean Territory',
+    	    'BN'	=>	'Brunei Darussalam',
+    	    'BG'	=>	'Bulgaria',
+    	    'BF'	=>	'Burkina Faso',
+    	    'BI'	=>	'Burundi',
+    	    'KH'	=>	'Cambodia',
+    	    'CM'	=>	'Cameroon',
+    	    'CA'	=>	'Canada',
+    	    'CV'	=>	'Cape Verde',
+    	    'KY'	=>	'Cayman Islands',
+    	    'CF'	=>	'Central African Republic',
+    	    'TD'	=>	'Chad',
+    	    'CL'	=>	'Chile',
+    	    'CN'	=>	'China',
+    	    'CX'	=>	'Christmas Island',
+    	    'CC'	=>	'Cocos (Keeling) Islands',
+    	    'CO'	=>	'Colombia',
+    	    'KM'	=>	'Comoros',
+    	    'CG'	=>	'Congo',
+    	    'CD'	=>	'Congo, The Democratic Republic Of The',
+    	    'CK'	=>	'Cook Islands',
+    	    'CR'	=>	'Costa Rica',
+    	    'CI'	=>	'Cote D\'Ivoire',
+    	    'HR'	=>	'Croatia (Local Name: Hrvatska)',
+    	    'CU'	=>	'Cuba',
+    	    'CY'	=>	'Cyprus',
+    	    'CZ'	=>	'Czech Republic',
+    	    'DK'	=>	'Denmark',
+    	    'DJ'	=>	'Djibouti',
+    	    'DM'	=>	'Dominica',
+    	    'DO'	=>	'Dominican Republic',
+    	    'TP'	=>	'East Timor',
+    	    'EC'	=>	'Ecuador',
+    	    'EG'	=>	'Egypt',
+    	    'SV'	=>	'El Salvador',
+    	    'GQ'	=>	'Equatorial Guinea',
+    	    'ER'	=>	'Eritrea',
+    	    'EE'	=>	'Estonia',
+    	    'ET'	=>	'Ethiopia',
+    	    'FK'	=>	'Falkland Islands (Malvinas)',
+    	    'FO'	=>	'Faroe Islands',
+    	    'FJ'	=>	'Fiji',
+    	    'FI'	=>	'Finland',
+    	    'FR'	=>	'France',
+    	    'FX'	=>	'France, Metropolitan',
+    	    'GF'	=>	'French Guiana',
+    	    'PF'	=>	'French Polynesia',
+    	    'TF'	=>	'French Southern Territories',
+    	    'GA'	=>	'Gabon',
+    	    'GM'	=>	'Gambia',
+    	    'GE'	=>	'Georgia',
+    	    'DE'	=>	'Germany',
+    	    'GH'	=>	'Ghana',
+    	    'GI'	=>	'Gibraltar',
+    	    'GR'	=>	'Greece',
+    	    'GL'	=>	'Greenland',
+    	    'GD'	=>	'Grenada',
+    	    'GP'	=>	'Guadeloupe',
+    	    'GU'	=>	'Guam',
+    	    'GT'	=>	'Guatemala',
+    	    'GN'	=>	'Guinea',
+    	    'GW'	=>	'Guinea-Bissau',
+    	    'GY'	=>	'Guyana',
+    	    'HT'	=>	'Haiti',
+    	    'HM'	=>	'Heard And Mc Donald Islands',
+    	    'HN'	=>	'Honduras',
+    	    'HK'	=>	'Hong Kong',
+    	    'HU'	=>	'Hungary',
+    	    'IS'	=>	'Iceland',
+    	    'IN'	=>	'India',
+    	    'ID'	=>	'Indonesia',
+    	    'IR'	=>	'Iran (Islamic Republic Of)',
+    	    'IQ'	=>	'Iraq',
+    	    'IE'	=>	'Ireland',
+    	    'IL'	=>	'Israel',
+    	    'IT'	=>	'Italia',
+    	    'JM'	=>	'Jamaica',
+    	    'JP'	=>	'Japan',
+    	    'JO'	=>	'Jordan',
+    	    'KZ'	=>	'Kazakhstan',
+    	    'KE'	=>	'Kenya',
+    	    'KI'	=>	'Kiribati',
+    	    'KP'	=>	'Korea, Democratic People\'S Republic Of',
+    	    'KR'	=>	'Korea, Republic Of',
+    	    'KW'	=>	'Kuwait',
+    	    'KG'	=>	'Kyrgyzstan',
+    	    'LA'	=>	'Lao People\'S Democratic Republic',
+    	    'LV'	=>	'Latvia',
+    	    'LB'	=>	'Lebanon',
+    	    'LS'	=>	'Lesotho',
+    	    'LR'	=>	'Liberia',
+    	    'LY'	=>	'Libyan Arab Jamahiriya',
+    	    'LI'	=>	'Liechtenstein',
+    	    'LT'	=>	'Lithuania',
+    	    'LU'	=>	'Luxembourg',
+    	    'MO'	=>	'Macau',
+    	    'MK'	=>	'Macedonia, Former Yugoslav Republic Of',
+    	    'MG'	=>	'Madagascar',
+    	    'MW'	=>	'Malawi',
+    	    'MY'	=>	'Malaysia',
+    	    'MV'	=>	'Maldives',
+    	    'ML'	=>	'Mali',
+    	    'MT'	=>	'Malta',
+    	    'MH'	=>	'Marshall Islands, Republic of the',
+    	    'MQ'	=>	'Martinique',
+    	    'MR'	=>	'Mauritania',
+    	    'MU'	=>	'Mauritius',
+    	    'YT'	=>	'Mayotte',
+    	    'MX'	=>	'Mexico',
+    	    'FM'	=>	'Micronesia, Federated States Of',
+    	    'MD'	=>	'Moldova, Republic Of',
+    	    'MC'	=>	'Monaco',
+    	    'MN'	=>	'Mongolia',
+    	    'MS'	=>	'Montserrat',
+    	    'MA'	=>	'Morocco',
+    	    'MZ'	=>	'Mozambique',
+    	    'MM'	=>	'Myanmar',
+    	    'NA'	=>	'Namibia',
+    	    'NR'	=>	'Nauru',
+    	    'NP'	=>	'Nepal',
+    	    'NL'	=>	'Netherlands',
+    	    'AN'	=>	'Netherlands Antilles',
+    	    'NC'	=>	'New Caledonia',
+    	    'NZ'	=>	'New Zealand',
+    	    'NI'	=>	'Nicaragua',
+    	    'NE'	=>	'Niger',
+    	    'NG'	=>	'Nigeria',
+    	    'NU'	=>	'Niue',
+    	    'NF'	=>	'Norfolk Island',
+    	    'MP'	=>	'Northern Mariana Islands, Commonwealth of the',
+    	    'NO'	=>	'Norway',
+    	    'OM'	=>	'Oman',
+    	    'PK'	=>	'Pakistan',
+    	    'PW'	=>	'Palau, Republic of',
+    	    'PA'	=>	'Panama',
+    	    'PG'	=>	'Papua New Guinea',
+    	    'PY'	=>	'Paraguay',
+    	    'PE'	=>	'Peru',
+    	    'PH'	=>	'Philippines',
+    	    'PN'	=>	'Pitcairn',
+    	    'PL'	=>	'Poland',
+    	    'PT'	=>	'Portugal',
+    	    'PR'	=>	'Puerto Rico',
+    	    'QA'	=>	'Qatar',
+    	    'RE'	=>	'Reunion',
+    	    'RO'	=>	'Romania',
+    	    'RU'	=>	'Russian Federation',
+    	    'RW'	=>	'Rwanda',
+    	    'KN'	=>	'Saint Kitts And Nevis',
+    	    'LC'	=>	'Saint Lucia',
+    	    'VC'	=>	'Saint Vincent And The Grenadines',
+    	    'WS'	=>	'Samoa',
+    	    'SM'	=>	'San Marino',
+    	    'ST'	=>	'Sao Tome And Principe',
+    	    'SA'	=>	'Saudi Arabia',
+    	    'SN'	=>	'Senegal',
+    	    'SC'	=>	'Seychelles',
+    	    'SL'	=>	'Sierra Leone',
+    	    'SG'	=>	'Singapore',
+    	    'SK'	=>	'Slovakia (Slovak Republic)',
+    	    'SI'	=>	'Slovenia',
+    	    'SB'	=>	'Solomon Islands',
+    	    'SO'	=>	'Somalia',
+    	    'ZA'	=>	'South Africa',
+    	    'GS'	=>	'South Georgia, South Sandwich Islands',
+    	    'ES'	=>	'Spain',
+    	    'LK'	=>	'Sri Lanka',
+    	    'SH'	=>	'St. Helena',
+    	    'PM'	=>	'St. Pierre And Miquelon',
+    	    'SD'	=>	'Sudan',
+    	    'SR'	=>	'Suriname',
+    	    'SJ'	=>	'Svalbard And Jan Mayen Islands',
+    	    'SZ'	=>	'Swaziland',
+    	    'SE'	=>	'Sweden',
+    	    'CH'	=>	'Switzerland',
+    	    'SY'	=>	'Syrian Arab Republic',
+    	    'TW'	=>	'Taiwan',
+    	    'TJ'	=>	'Tajikistan',
+    	    'TZ'	=>	'Tanzania, United Republic Of',
+    	    'TH'	=>	'Thailand',
+    	    'TG'	=>	'Togo',
+    	    'TK'	=>	'Tokelau',
+    	    'TO'	=>	'Tonga',
+    	    'TT'	=>	'Trinidad And Tobago',
+    	    'TN'	=>	'Tunisia',
+    	    'TR'	=>	'Turkey',
+    	    'TM'	=>	'Turkmenistan',
+    	    'TC'	=>	'Turks And Caicos Islands',
+    	    'TV'	=>	'Tuvalu',
+    	    'UG'	=>	'Uganda',
+    	    'UA'	=>	'Ukraine',
+    	    'AE'	=>	'United Arab Emirates',
+    	    'GB'	=>	'United Kingdom',
+    	    'UM'	=>	'United States Minor Outlying Islands',
+    	    'UY'	=>	'Uruguay',
+    	    'UZ'	=>	'Uzbekistan',
+    	    'VU'	=>	'Vanuatu',
+    	    'VA'	=>	'Vatican City, State of the',
+    	    'VE'	=>	'Venezuela',
+    	    'VN'	=>	'Viet Nam',
+    	    'VG'	=>	'Virgin Islands (British)',
+    	    'VI'	=>	'Virgin Islands (U.S.)',
+    	    'WF'	=>	'Wallis And Futuna Islands',
+    	    'EH'	=>	'Western Sahara',
+    	    'YE'	=>	'Yemen',
+    	    'YU'	=>	'Yugoslavia',
+    	    'ZM'	=>	'Zambia',
+    	    'ZW'	=>	'Zimbabwe'
+    	);
     }
 
     /** 
@@ -590,6 +946,44 @@ class DatesForSelect {
             else
                 echo "<option value=$month selected=selected>$month</option>";
         } 
-    }   
+    }
+
+    /** 
+     * @brief Mostra province italiane
+     * @details Riempie le option con tutte le province italiane
+     */
+    public function showProvince() {
+        foreach ($this->province as $key => $value)         
+		echo "<option value=$value>$key</option>"; 
+    }
+    
+    /**
+     * @brief Mostra Stati
+     * @details Riempie le option con tutti gli stati del mondo
+     * @param[in] string $selected_state Stato selezionato
+     * @note Se alla funzione non viene passato nulla allora di default seleziono "Italia".
+     * @n E' necessario passare il nome esatto dello stato come appare nella lista 
+     * @code
+     * //Nel menù a discesa di default sarà selezionato Italia
+     * $object->showStates();
+     * //Nel menù a discesa sarà selezionata la Repubblica di Guinea-Bissau
+     * $object->showState("Guinea-Bissau");
+     * //Nel menù a discesa sarà selezionata la Repubblica della Moldova
+     * $date->showMonths("Moldova, Republic Of");
+     * @endcode
+     */
+    public function showStates($selected_state="Italia") {
+        if($selected_state=="Italia")
+            echo "<option value=IT selected=selected>Italia</option>";
+        else {
+            foreach ($this->states as $key => $value)
+                if(!strcmp($selected_state, $value)) {
+                    echo "<option value=$key selected=selected>$value</option>";
+                    break;
+                }
+        }
+        foreach ($this->states as $key => $value)
+            echo "<option value=$key>$value</option>";
+    } 
 }
 ?>

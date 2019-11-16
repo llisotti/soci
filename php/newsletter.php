@@ -43,9 +43,9 @@ catch (PDOException $exception) {
 <a class="logo"><img src="../img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
 <a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
-    <li><span><span><a href= 'http://localhost/soci/index.php'>Home</a></span></span></li>
-    <li><span><span><a href="http://localhost/soci/php/profile_editor.php">Profilo</a></span></span></li>
-    <li class="active"><span><span><a href="http://localhost/soci/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href= 'http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php'>Home</a></span></span></li>
+    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php">Profilo</a></span></span></li>
+    <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
@@ -62,12 +62,12 @@ catch (PDOException $exception) {
     <?php
     /* Se sto visualizzando i soci più recenti, nel menù delle funzionalità propongo la visualizzazione di tutti i soci */
     if(!isset($_GET['show']) || empty($_GET) || $_GET['show']=="recentmembers")
-        echo "<li><a href='http://localhost/soci/index.php?show=allmembers'>Visualizza elenco soci completo</a></li>";
+        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php?show=allmembers'>Visualizza elenco soci completo</a></li>";
     /* Altrimenti propongo la visualizzazione dei soci più recenti */
     else
-        echo "<li><a href='http://localhost/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
+        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
     ?>
-    <li><a href="http://localhost/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
+    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta soci</a></li>
     <li><a id="esporta_identita" href="#">Esporta identità</a></li>
     <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
@@ -286,7 +286,7 @@ else {
     
     /* Costruisco il corpo della mail */
     $message= $_POST['body_message'];
-    $message .= file_get_contents('http://localhost/soci/html/newsletter_template.html');
+    $message .= file_get_contents('http://'.$_SERVER['HTTP_HOST'].'/soci/html/newsletter_template.html');
     $mail->msgHTML($message);
 
     /* Invio email */
