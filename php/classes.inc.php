@@ -474,9 +474,18 @@ abstract class Person {
     protected $cognome; /**< Cognome di una persona */
     protected $nome; /**< Nome di una persona */
     protected $data_nascita; /**< Data di nascita di una persona */
-    protected $luogo_nascita; /**< Luogo di nascita di una persona */
-    protected $sesso; /**< Sesso di una persona */
     protected $codice_fiscale; /**< Codice fiscale di una persona */
+    protected $comune_nascita; /**< Comune di nascita di una persona */
+    protected $provincia_nascita; /**< Provincia di nascita di una persona */
+    protected $stato_nascita; /**< Stato di nascita di una persona */
+    protected $sesso; /**< Sesso di una persona */
+    protected $indirizzo; /**< Indirizzo di residenza di una persona */
+    protected $citta; /**< Citta' di residenza di una persona */
+    protected $cap; /**< CAP di residenza  di una persona */
+    protected $provincia; /**< Provincia di residenza di una persona */
+    protected $stato; /**< Stato di residenza di una persona */
+    protected $telefono; /**< Recapito telefonico di una persona */
+    protected $email; /**< indirizzo email di una persona */
     
     /** 
      * @brief Costruttore
@@ -534,8 +543,12 @@ class DataForSelect {
      * @endcode
      */
     public function __construct($d_not_set="GG", $m_not_set="MM") {
-        $this->days=range(1, 31);
-        $this->months=range(1, 12);
+        $this->days = array (
+        "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+        "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+        "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31");
+        $this->months = array (
+        "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
         $this->day_not_set=$d_not_set;
         $this->month_not_set=$m_not_set;
     	$this->province = array (

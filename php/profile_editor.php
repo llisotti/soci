@@ -26,7 +26,7 @@ session_cache_limiter('private,must-revalidate');
 </head>
 <body>
 <?php
-/* RIchiedo il logger */
+/* Richiedo il logger */
 $mylog=$_SESSION['logger'];
 
 /* Mi connetto al database */
@@ -42,34 +42,31 @@ catch (PDOException $exception) {
 
 $gg_nascita=NULL; $gg_inserimento=NULL;
 $mm_nascita=NULL; $mm_inserimento=NULL;
-/* Se passo id allora cerco il socio corrispondente */
-if(isset($_GET['id']))
-{
-    foreach($_SESSION['members'] as $member)
-    {
-        if($member->id==(int)$_GET['id'])
-            break; //Ho trovato il socio (variabile $member) con id passato in GET
-    }
 
-    /* Salvo il socio nella sessione: mi serve in insmod.php */
-    $_SESSION['member']=$member;
-    
-    /* Estraggo giorno, mese e anno di nascita per riempire i campi data di nascita */
-    if ($member->data_nascita != NULL)
-    {
-        $data_nascita=$member->data_nascita;
-        $gg_nascita=substr($data_nascita, '0','2');
-        $mm_nascita=substr($data_nascita, '3','2');
-        $aaaa_nascita=substr($data_nascita, '6','4');
-    }
-    
-    /* Se è socio, estraggo giorno e mese in cui è stato inserito */
-    if($member->tessera!=NULL) {
+/* Cerco il socio corrispondente */
+foreach($_SESSION['members'] as $member) {
+    if($member->codice_fiscale==$_GET['cf'])
+        break; //Ho trovato il socio (variabile $member) con cf passato in GET
+}
+
+/* Salvo il socio nella sessione: mi serve in insmod.php */
+$_SESSION['member']=$member;
+
+/* Estraggo giorno, mese e anno di nascita per riempire i campi data di nascita */
+if ($member->data_nascita != NULL) {
+    $data_nascita=$member->data_nascita;
+    $gg_nascita=substr($data_nascita, '0','2');
+    $mm_nascita=substr($data_nascita, '3','2');
+    $aaaa_nascita=substr($data_nascita, '6','4');
+}
+
+/* Se è socio, estraggo giorno e mese in cui è stato inserito */
+if($member->tessera!=NULL) {
     $data_inserimento=$member->data_tessera;
     $gg_inserimento=substr($data_inserimento, '0','2');
     $mm_inserimento=substr($data_inserimento, '3','2');
-    }
 }
+
 ?>
 <div id="main">
 <div id="header">
@@ -93,15 +90,13 @@ if(isset($_GET['id']))
 <h3>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Funzionalità</h3>
 <ul class="nav">
     <?php
-    if(!isset($_GET['allmembers']) || $_GET['allmembers']!="true")
-            echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php?allmembers=true'>Visualizza elenco soci completo</a></li>";
-    elseif($_GET['allmembers']=="true")
-            echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco ultimi"." ".MEMBERS_RECENT_MAX. " "."soci</a></li>";
+        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
-    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco identità completo</a></li>
+    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
     <li><a id="esporta_soci" href="#">Esporta soci</a></li>
     <li><a id="esporta_identita" href="#">Esporta identità</a></li>
-    <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a id="DB_functions" href="#">Operazioni su database</a></li>
     <?php
     if($_SESSION['update']) {
         ?>
@@ -141,7 +136,7 @@ if(isset($_GET['id']))
     <tr>
     <?php
     /* Conto i soci ovvero le righe di anagrafica che hanno la tessera per l'anno corrente */
-    $members=$dbh->query("SELECT COUNT(*) FROM anagrafica WHERE tessera IS NOT NULL");
+    $members=$dbh->query("SELECT COUNT(*) FROM socio WHERE numero_tessera IS NOT NULL");
     $counter=$members->fetchColumn();
     
     if(isset($_SESSION['breakCards'])) {
@@ -150,7 +145,7 @@ if(isset($_GET['id']))
     
     /* Calcolo eventuali buchi di tessere */
     $breakCards=array();
-    $cards=$dbh->query("SELECT tessera FROM anagrafica WHERE tessera IS NOT NULL ORDER BY anagrafica.tessera DESC");
+    $cards=$dbh->query("SELECT numero_tessera FROM socio WHERE numero_tessera IS NOT NULL ORDER BY socio.numero_tessera DESC");
     $numCards=$cards->fetchAll(PDO::FETCH_COLUMN, 0);
     
     for ($index=0; $index < $counter; $index++) {
@@ -188,56 +183,28 @@ if(isset($_GET['id']))
     </tr>
 </table>
 </div>
-    <?php
-/* Se passo id allora sto MODIFICANDO il socio */
-if(isset($_GET['id']))
-{
-    ?>
-<form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php?id="."$_GET[id]'"; ?> method="post"><input type="hidden" name="" value=""/>
-    <?php
-}
-/* altrimenti sto INSERENDO un nuovo socio */
-else
-{
-    ?>
-    <form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php'"; ?> method="post"><input type="hidden" name="" value=""/>
-    <?php
-}?>
+
+<form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php?cf="."$_GET[cf]'"; ?> method="post"><input type="hidden" name="" value=""/>
+
 <div id="center-column">
-<div class="top-bar">
-<h1>
-<?php
-/* Verifico se voglio modificare un socio, un'identità o inserire un nuovo socio */
-if(isset($_GET['id']) && $member->tessera!=NULL) //E' un socio
-    echo "MODIFICA SOCIO";
-elseif(isset($_GET['id']) && $member->tessera==NULL) //E' un'identità
-    echo "MODIFICA IDENTITA'";
-else //Non ancora esistente a database, inserisco un nuovo socio
-    echo "INSERIMENTO NUOVO SOCIO";
-?>
-</h1>
+<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
+<h1>MODIFICA PROFILO</h1>
 <br/>
 </div>
 <br/>
 <div class="select-bar">
 <?php
 /* Chiedo a MySQL il numero di tessera più alto (come controprova, deve essere uguale al numero di righe che ho contato sopra) */
-$membersobj=$dbh->query("SELECT MAX(tessera) FROM anagrafica"); //riciclo $membersobj
-$maxnumcard= $membersobj->fetchColumn();
+//$membersobj=$dbh->query("SELECT MAX(numero_tessera) FROM socio"); //riciclo $membersobj
+//$maxnumcard= $membersobj->fetchColumn();
 
 $time=getdate();
-$date=new DataForSelect(); //Oggetto per riemprire select
+/* Oggetto per riempire i select */
+$date=new DataForSelect();
 $date_not_null=new DataForSelect(NULL, NULL);
 
-
-
-
-
-if(isset($_GET['id']) && $member->tessera!=NULL)
-{    
-    /* Estraggo le presenze del socio, se ve ne è più di una visualizzo la prima (quella di tesseramento) //TODO */
-    //$membersobj=$dbh->query("SELECT DATE_FORMAT(presenze.data,'%d/%m/%Y') data FROM presenze WHERE member_id=".$_GET['id']); //riciclo $membersobj
-    //$presence_dates=$membersobj->fetchColumn();
+/* Intestazione se socio o identita' */
+if($member->tessera!=NULL) { //Modifico un socio
     printf("Con numero tessera");
     ?>
     <input id="card" name="tessera" type="text" size="3" value="<?php echo $member->tessera; ?>" />
@@ -246,25 +213,19 @@ if(isset($_GET['id']) && $member->tessera!=NULL)
     $date_not_null->showDays($gg_inserimento);
     echo "</select><select class=date_ins style='width: 10%' name=mm_inserimento>";
     $date_not_null->showMonths($mm_inserimento);
-    echo "</select> è stato registrato il socio";
-    //printf(" il giorno %s e msese %s è stato registrato il socio", $gg_inserimento, $mm_inserimento);
+    echo "</select><span id=socio_ident> è stato registrato il socio</span>";
 }
-/* Inserisco un nuovo socio oppure da identità diventa socio */
-else
-{
+else { //Modifico un'identita' o da identita' diventa socio
     $gg_inserimento=$time['mday'];
     $mm_inserimento=$time['mon'];
-    $aaaa_inserimento=$time['year'];
+    //$aaaa_inserimento=$time['year'];
     echo "Oggi <select class=date_ins style='width: 10%' name=gg_inserimento>";
     $date_not_null->showDays($time['mday']);
     echo "</select><select class=date_ins style='width: 10%' name=mm_inserimento>";
     $date_not_null->showMonths($time['mon']);
     echo "</select>";
-    //echo "</select> <input id=card name=aaaa_inserimento placeholder=AAAA size=2 type=text maxlength=4 value=$time[year]> ";
-    $maxnumcard++;
-    echo " $time[year]"." con numero tessera <input id=card required name=tessera type=text size=3 value= $maxnumcard /> verrà aggiunto il socio";
-    //echo"</div>";
-    
+    //$maxnumcard++;
+    echo " $time[year]"." con numero tessera <input id=card name=tessera type=text size=3 autofocus/><span id=socio_ident> verrà aggiunto il socio</span>";   
 }
 ?>
 </div>
@@ -272,30 +233,49 @@ else
 <ol class="contact" style="padding-left: 15px">
     <li><label>GENERALITA'</label>&nbsp;&nbsp;<img style="margin-right: 400px; float: right;" id="searching" hidden="hidden" src="../img/ajax-loader.gif" ></li>
 </ol>
-<input id="scr" name="cognome" placeholder="Cognome" autofocus required tabindex="1" type="text" value="<?php if(isset($_GET['id'])) echo $member->cognome; ?>"/>  
-<input name="nome" placeholder="Nome" required tabindex="2" type="text" value="<?php if(isset($_GET['id'])) echo $member->nome; ?>"/>
-
-<br><br>
-data di nascita
-<br>
-<select name="gg_nascita" tabindex="3" size="1" >
+<table>
+<tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+</tr>
+<tr>
+<td>Cognome: </td>
+<td><input id="scr" name="cognome" type="text" value="<?php echo $member->cognome; ?>"/></td>
+<td>Nome: </td>  
+<td colspan="3"><input name="nome" type="text" value="<?php echo $member->nome; ?>"/></td>
+</tr>
+<tr>
+<td>Nato/a il: </td>
+<td><select name="gg_nascita" size="1">
     <?php
     /* Popolo i giorni del mese */
     $date->showDays($gg_nascita);
     ?>
 </select>
-<select name="mm_nascita" tabindex="4">
+<select name="mm_nascita">
     <?php
     /* Popolo i mesi dell'anno */
     $date->showMonths($mm_nascita);
     ?>
-</select>
-<input name="aaaa_nascita" placeholder="AAAA" tabindex="5" size="2" type="text" maxlength="4" value="<?php if(isset($_GET['id']) && $member->data_nascita != NULL) echo $aaaa_nascita; ?>" />
-<input id="luogo_nascita" name="luogo_nascita" placeholder="Luogo di nascita" size="20" tabindex="6" type="text" value="<?php if(isset($_GET['id'])) echo $member->luogo_nascita; ?>" />
+</select>&nbsp;&nbsp;
+<input name="aaaa_nascita" size="2" type="text" value="<?php echo $aaaa_nascita; ?>" /></td>
+<td style="text-align:right">a: </td>
+<td><input id="comune_nascita" name="luogo_nascita" size="20" type="text" value="<?php if($member->stato_nascita=="IT") echo $member->comune_nascita ?>" /></td> 
+<td style="text-align:right">Provincia: </td>
+<td><input id="provincia_nascita" name="provincia_nascita" size="1" type="text" value="<?php if($member->stato_nascita=="IT") echo $member->provincia_nascita ?>"/></td>
+<td style="text-align:right">Stato: </td>
+<td><input id="stato_nascita" name="stato_nascita" size="1" type="text" value="<?php echo $member->stato_nascita ?>"/></td>
 <!-- <img src="../img/_nascita_estero.png" height="60" width="100"> -->
-<input name="cf" placeholder="Codice Fiscale" tabindex="7" type="text" value="<?php if(isset($_GET['id'])) echo $member->codice_fiscale ?>" maxlength="16" />&nbsp;
-<?php
-if (isset($_GET['id']))
+</tr>
+<tr>
+<td>Codice fiscale: </td>
+<td><input name="cf" type="text" value="<?php echo $member->codice_fiscale ?>" /></td>
+</table><?php /*
+if (isset($_GET['cf']))
 {
 ?>
     M<input name="sesso" value="M" type="radio" <?php if($member->sesso == "M") echo "checked"; ?> />
@@ -308,25 +288,84 @@ else
     M<input name="sesso" value="M" type="radio" />
     F<input name="sesso" value="F" type="radio" />
 <?php
-}
+} */
 ?>
-<br>
 <span id="message" hidden="hidden" style="padding-left:140px; color: red; font-size: smaller ">Se straniero inserire lo stato (esempio: Romania)</span>
 <br><br><br>
 <ol class="contact" start="2" style="padding-left: 15px">
 <li><label>RESIDENZA</label></li>
 </ol>
-<input name="indirizzo" placeholder="Indirizzo" tabindex="8" size="46" type="text" value="<?php if(isset($_GET['id'])) echo $member->indirizzo; ?>"/>
-<input name="cap" placeholder="Cap" tabindex="9" maxlength="7" size="6" type="text" value="<?php if(isset($_GET['id'])) echo $member->cap; ?>" />
-<input name="citta" placeholder="Città" tabindex="10" type="text" size="22" value="<?php if(isset($_GET['id'])) echo $member->citta; ?>" />
-<input name="provincia" placeholder="Prov." tabindex="11" maxlength="2" size="2" type="text" value="<?php if(isset($_GET['id'])) echo $member->provincia; ?>" />
-<input name="stato" placeholder="Stato" tabindex="12" maxlength="20" size="5" type="text" value="<?php if(isset($_GET['id'])) echo $member->stato; ?>" />
-<br><br><br><br>
+<table>
+<tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+</tr>
+<tr>
+<td>Indirizzo: </td>
+<td><input name="indirizzo" size="46" type="text" value="<?php echo $member->indirizzo; ?>"/></td>
+<td style="text-align:right">Cap: </td>
+<td><input name="cap" size="9" type="text" value="<?php echo $member->cap; ?>" /></td>
+</tr>
+<tr>
+<td style="text-align:right">Citta': </td>
+<td><input name="citta" type="text" size="46" value="<?php echo $member->citta; ?>" /></td>
+<td style="text-align:right">Provincia: </td>
+<td><input name="provincia" size="1" type="text" value="<?php echo $member->provincia; ?>" /></td>
+<td style="text-align:right">Stato: </td>
+<td><input name="stato" size="1" type="text" value="<?php echo $member->stato; ?>" /><td>
+</tr>
+</table><br><br><br>
 <ol class="contact" start="3" style="padding-left: 15px">
 <li><label>CONTATTI</label></li>
 </ol>
-<input name="phone" placeholder="Telefono" tabindex="13" type="text" value="<?php if(isset($_GET['id'])) echo $member->telefono; ?>" />
-<input name="email" placeholder="Email" tabindex="14" type="email" value="<?php if(isset($_GET['id'])) echo $member->email; ?>" size="30" />
+<table>
+<tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+</tr>
+<tr>
+<td>Telefono: </td>
+<td><input name="telefono" type="text" value="<?php echo $member->telefono; ?>" /></td>
+<td>Email: </td>
+<td><input name="email" tabindex="14" type="email" value="<?php echo $member->email; ?>" size="30" /></td>
+</tr>
+<tr>
+<?php $adesioni=pack('C', $member->flags) ?>
+<td colspan="6"><input id="privacy" type="checkbox" name="diffusione_nominativo" value="acconsento" <?php echo ($adesioni & 1 ? 'checked' : '') ?>><span style="font-size:13px; font-family: Arial Narrow">Acconsento alla diffusione del mio nome e cognome, della mia immagine o di video che mi riprendono nel sito istituzionale, nei social network (es. Facebook, Instagram, Youtube) e sul materiale informativo cartaceo dell'Associazione per soli fini di descrizione e promozione dell'attivita' istituzionale, nel rispetto delle disposizione del GDPR e del D. Lgs. n. 196/03 e delle autorizzazioni/indicazioni della commissione UE e del Garante per la Protezione dei Dati Personali.</span></td>
+</tr>
+<tr>
+<td colspan="6"><input id="news" type="checkbox" name="newsletter" value="iscritto" <?php echo ($adesioni & 2 ? 'checked' : '')?>><span style="font-size:13px; font-family: Arial Narrow">Desidero iscrivermi alla newsletter per rimanere informato su novita' ed eventi.</span></td>
+</tr>
+<!-- <div style="background-color:#BBD9EE;"> -->
+</table><br><br>
+<div>
+<ol class="contact" start="4" style="padding-left: 15px">
+<li><label>
+<?php
+$current_year=date("Y");
+if((($current_year-$aaaa_nascita) >=18) && ($adesioni & 4)) //Se e' maggiorenne ma risulta iscritto come minorenne chiedo che venga rifatta la firma o l'intera iscrizione
+    echo "FIRMA DEL GENITORE: <br><span style='color:red'> ATTENZIONE: sembra che al momento dell' iscrizione la persona fosse minorenne mentre ora ha raggiunto la maggiore eta'. E' necessario aggiornare la firma o eseguire una nuova iscrizione</span>";
+elseif ((($current_year-$aaaa_nascita) < 18) && ($adesioni & 4)) //Se e' minorenne e risulta iscritto come minorenne allora ok: firma del genitore
+    echo "FIRMA DEL GENITORE:";
+else //Se e' maggiorenne firma propria
+    echo "FIRMA:";
+?>
+</label></li>
+</ol>
+<?php
+$string=base64_encode(file_get_contents(str_replace(" ", "", SIGNATURE_IMAGE_PATH.$member->firma)))
+?>
+<img src="data:image/svg+xml;base64,<?php echo $string ?>" />
+</div>
 <br><br><br>
 <span style="padding-left: 300px; padding-bottom: 0px; padding-top: 20px"></span>
 <input name="submit"  value="Salva" type="submit" /><input name="clean" value="Annulla" type="submit" formnovalidate />
@@ -342,8 +381,28 @@ else
 <script type="text/javascript" src="../js/jquery-1.11.1.js"> </script>
 <script type="text/javascript">
 $(document).ready(function(){
+
+	/* Variabile che mi serve a definire appena si apre la pagina se la persona e' socio o identita' (identita' di default) */
+	var erasocio = false;
+
+	/* Se apro la pagina ed il valore della tessera contiene il numero tessera allora e' socio */
+	if( $("#card").val() )
+		erasocio=true;
+	
+	/* Funzione che mi cambia l'intestazione se aggiungo socio (campo tessera con numero) o aggiorno un'identita' */
+	$("#card").blur(function()
+    {
+		if((!$(this).val()) && erasocio) //Se non ho il numero tessera ed era socio => da socio a identita'
+	    	$("#socio_ident").text(" sara' cancellata la tessera al socio");
+		else if (($(this).val()) && erasocio) //Se ho il numero tessera ed era socio => modifico il profilo del socio
+			$("#socio_ident").text(" verrà modificato il profilo del socio");
+		else if ((!$(this).val()) && !erasocio) //Se non ho il numero tessera ed non era socio => modifico il profilo dell'identita' 
+			$("#socio_ident").text(" verrà modificato il profilo di");
+		else //Se ho il numero tessera e non era socio => da identita' a socio
+			$("#socio_ident").text(" sara' aggiunto il socio");
+    });
     
-    /* Funzione che controlla se esiste la variabile $_GET[var_name] ed eventualmente ritorna il suo valore */
+    /* Funzione che controlla se esiste la variabile $_GET[var_name] ed eventualmente ritorna il suo valore
     function get_var(var_name){
        var query = window.location.search.substring(1);
        var vars = query.split("&");
@@ -352,8 +411,9 @@ $(document).ready(function(){
                if(pair[0] == var_name){return pair[1];}
        }
        return(false);
-}
-    /* Funzione di ricerca quando esco dal campo */
+	}
+	*/
+    /* Funzione di ricerca quando esco dal campo
     $(function(){
         var exist_id = get_var("id");
         $("#scr").blur(function()
@@ -384,7 +444,7 @@ $(document).ready(function(){
         }return false;
         });
     });
-    
+    */    
 
     /* Funzione gestione messaggio "luogo nascita se inserimento straniero" */
     $("#luogo_nascita").focus(function(){

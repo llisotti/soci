@@ -138,24 +138,20 @@ class Message extends Messages {
  */
 class Socio_Copernico extends Person {
     const EXCEPTION_MESSAGE="Errore socio copernico";
-    private $id; /**< Identificatore univoco di un'identità */
-    private $indirizzo; /**< Indirizzo di residenza */
-    private $cap; /**< Codoce di Avviamento Postale di residenza */
-    private $citta; /**< Città di residenza */
-    private $provincia; /**< Provincia di residenza */
-    private $stato; /**< Stato di residenza */
-    private $telefono; /**< Numero di telefono */
-    private $email; /**< Indirizzo email: obbligatorio per iscrizione alla Newsletter */
     private $tessera; /**< Numero tessera socio per l'anno corrente */
     private $data_tessera; /**< Data in cui è stata effettuata la tessera */
-    private $data_iscrizione; /**< Data di iscrizione per la prima volta ovvero nuova identità */
-    private $scadenza_id; /**< Scadenza identità: cancellazione dal database */
+    private $scadenza; /**< Data di iscrizione per la prima volta ovvero nuova identità */
+    private $adesioni; /**< Scadenza identità: cancellazione dal database */
+    private $firma; /**< Nome del file immagine della firma */
+    private $flags; /**< Flags di adesione */
 
     /* Array di controllo per l'esistenza del campo */
     private $fields=array("cognome",
                                     "nome",
                                     "data_nascita",
-                                    "luogo_nascita",
+                                    "comune_nascita",
+                                    "provincia_nascita",
+                                    "stato_nascita",
                                     "sesso",
                                     "codice_fiscale",
                                     "id",
@@ -168,8 +164,10 @@ class Socio_Copernico extends Person {
                                     "email",
                                     "tessera",
                                     "data_tessera",
-                                    "data_iscrizione",
-                                    "scadenza_id"
+                                    "scadenza",
+                                    "adesioni",
+                                    "firma",
+                                    "flags"
                         );
 	
 	

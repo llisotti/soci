@@ -64,6 +64,23 @@ require "php/member.php";
                 </div>
     <div class="card-body" style="font-size: 17px; font-family: Times new Roman">
         <h2 class="title">Benvenuto nella pagina di gestione soci dell' Osservatorio Copernico</h2>
+        <div style="padding: 5px; background-color: lightgrey">
+        	<br>
+        	<table>
+        	<tr>
+        		<td><h6>Username:&nbsp</h6></td>
+        		<td><input class="input--style-1" name="username" type="text"></td>
+        		<td align="right"><h6>&nbsp;&nbsp;Password:</h6></td>
+        		<td align="right"><input class="input--style-1" name="username" type="password"></td>
+        	</tr>
+        	<tr>
+        	</tr>
+        	<tr>
+        		<td colspan="3"></td>
+        		<td align="right"><a style="color:blue; font-size:12px;" href="<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index.php"; ?>">Area riservata</a></td>
+        	</tr>
+        	</table>
+        </div><br>
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
         	<li>Puoi controllare lo stato della Tua iscrizione e la validita' della tessera per l'anno in corso cliccando <a style="color:blue" href="" id="cerca">qui</a>.</li>
     	</ul>
@@ -77,31 +94,31 @@ require "php/member.php";
         </ul>
     	<br><br>
         <h3 class="title">Modulo di registrazione</h3><br>
-		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">campi obbligatori</span>) -</h6>
+		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">sezione obbligatoria</span>) -</h6>
 		<br>
         <form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/php/insmod_guest.php"; ?> method="POST">
 		    <div class="row row-space">
 		    	<div class="col-2">
             		<div class="input-group">
-                        <input id="cognome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Cognome" name="cognome" required>
+                        <input id="cognome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Cognome *" name="cognome" required>
 					</div>
 				</div>
 				<div class="col-2">
 					<div class="input-group">
-                        <input id="nome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Nome" name="nome" required>
+                        <input id="nome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Nome *" name="nome" required>
                     </div>
 				</div>
 			</div>
             <div class="row row-space">
                 <div class="col-2">
                     <div class="input-group">
-                        <input id="birthday" class="input--style-1 js-datepicker" type="text" placeholder="Data di Nascita" name="data_nascita" required>
+                        <input id="birthday" class="input--style-1 js-datepicker" type="text" placeholder="Data di Nascita *" name="data_nascita" required>
                         <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                     </div>
                 </div>
                 <div class="col-2">
     				<div class="input-group">
-    					<input id="cf" class="input--style-1" style="width:80%" type="text" placeholder="Codice Fiscale" name="cf"  maxlength="16" required style="background-image: url(img/credit-card.png); no-repeat; text-indent: 20px">&nbsp;&nbsp;&nbsp;&nbsp;
+    					<input id="cf" class="input--style-1" style="width:80%" type="text" placeholder="Codice Fiscale *" name="cf"  maxlength="16" required style="background-image: url(img/credit-card.png); no-repeat; text-indent: 20px">&nbsp;&nbsp;&nbsp;&nbsp;
     					<a target="_blank" rel="noopener noreferrer" href="https://www.codicefiscale.com/"><img src="img/credit-card.png" align="right" title="Calcola codice fiscale online" alt="Calcola codice fiscale online" style="margin-right:5px"></img></a>
     				</div>
 				</div>
@@ -110,7 +127,7 @@ require "php/member.php";
 			<div class="row row-space">
 				<div class="col-3">
                 	<div class="input-group">
-                        <input id="comune" type="text" pattern="^[a-zA-Z\s]*$" id="cm" class="input--style-1" type="text" placeholder="Comune di nascita" name="comune_nascita" required>
+                        <input id="comune" type="text" pattern="^[a-zA-Z\s]*$" id="cm" class="input--style-1" type="text" placeholder="Comune di nascita *" name="comune_nascita" required>
                     </div>
                 </div>
                 <div class="col-3">
@@ -138,8 +155,9 @@ require "php/member.php";
 				</div>
         	</div>
 			<h6 style="text-align:center">- DATI DI RESIDENZA -</h6>
-			<h6 style="text-align:center; font-style:italic">(se residente all'estero selezionare solo lo Stato)</h6>
+			<!-- <h6 style="text-align:center; font-style:italic">(se residente all'estero selezionare solo lo Stato)</h6>  -->
 			<br>
+			<span id="nascosto_2" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se residente all'estero selezionare solo lo Stato</span>
 			<div class="row row-space">
                 <div class="col-2">
                     <div class="input-group">
@@ -477,12 +495,12 @@ $(document).ready(function(){
     });
     
     /* Faccio apparire la scritta di compilazione alcuni campi solo se resisdente in Italia */
-    $("#cap").focus(function() {
+    $("#indirizzo").focus(function() {
     	$("#nascosto_2").css("visibility","visible");
     });
     
     /* Faccio scomparire la scritta di compilazione alcuni campi solo se resisdente in Italia */
-    $("#cap").blur(function() {
+    $("#indirizzo").blur(function() {
     	$("#nascosto_2").css("visibility","hidden");
     });
         

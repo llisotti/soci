@@ -170,7 +170,7 @@ function successMessage() {
     echo "<br><ul style='font-family: Arial; font-size:15px'>";
     echo "COMPLIMENTI, la Tua iscrizione e' andata a buon fine.";
     echo "<li>Ora puoi recarti in Osservatorio nei giorni di apertura. Dopo il versamento della quota associativa di 5€ Ti sara' rilasciata subito la tessera.</li>";
-    echo "<li>La tessera e' valida sino al 31/12 dell'anno in cui e' stata rilasciata</li>";
+    echo "<li>La tessera e' valida sino al 31 Dicembre</li>";
     echo "</ul><br>";
 }
 ?>
