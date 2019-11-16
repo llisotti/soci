@@ -1,0 +1,209 @@
+<h1 style="text-align: center"> - DESCRIZIONE DEL PROGETTO - </h1>
+<h4>Si e' realizzato un database per archiviare le iscrizioni online. E' stata fatta la seguente distinzione logica:</h4>
+<dl>
+<dt>Ogni persona che si iscrive diventa un' identita'</dt>
+<dt>Se, successivamente un'identita' fara' la tessera, allora diventera' socio</dt>
+<dt>Quindi un socio e' sicuramente un'identita' mentre un'identita' non e' detto che sia un socio</dt>
+<dt>Il diritto di socio (tessera) scade dopo un anno solare (31/12) mentre l'essere un'identita' scade dopo 5 anni consecutivi di mancato rinnovo della tessera</dt>
+</dl>
+<h4>Il database e' realizzato in mysql ed e' nominato "soci". E' composto dalle seguenti parti:</h4>
+<dl>
+<dt>La tabella "anagrafica": contiene le classiche informazioni anagrafiche di qualsiasi persona</dt>
+<dt>La tabella "socio": contiene tutte le informazioni che puo' avere un socio o un'identita' del copernico</dt>
+<dt>La procedura "reset_members" che elimina tutti i soci. La chiamata <i>mysql>CALL reset_members()</i> come azione:</dt>
+<dd> - Mette NULL nel campo "data" della tabella "presenze"</dd>
+<dd> - Mette NULL nel campo "tessera" della tabella "anagrafica"</dd>
+<dd> - Questo file deve essere lanciato assolutamente prima dell'inserimento del primo socio nel nuovo anno</dd>
+<dd> - Non è necessario il riavvio del server mysql ma occorre chiudere e riaprire firefox per azzerare i contatori soci</dd>
+<dt>La procedura "expire_identities" che elimina definitivamente dal database le identita' che non diventano più soci per 5 anni consecutivi.</dt>
+<dd> - La chiamata mysql><i>CALL expire_identities(FALSE)</i>; mostra quali identità vengono eliminate definitivamente dal database, ma non elimina nulla. </dd>
+<dd> - La chiamata mysql><i>CALL expire_identities(TRUE);</i> eliminà tali identità !</dd>
+<dd> - Dopo l'eliminazione è necessario riavviare il server mysql ed occorre chiudere e riaprire firefox per azzerare i contatori soci</dd>
+</dl>
+<h5>Le tabelle sono implementate nel seguente modo:</h5>
+<dl>
+<dt>anagrafica:</dt>
+  <dd>cognome		VARCHAR(30) NOT NULL,</dd>
+  <dd>nome			VARCHAR(30) NOT NULL,</dd>
+  <dd>data_nascita		DATE NOT NULL,			#data nel formato YYYY-MM-GG</dd>
+  <dd>cf				CHAR(16) NOT NULL,		#codice fiscale sempre 16 cifre</dd>
+  <dd>comune_nascita	VARCHAR(40) NULL,		#puo essere nullo se nato all estero</dd>
+  <dd>provincia_nascita	CHAR(2) NULL,			#puo essere nullo se nato all estero</dd>
+  <dd>stato_nascita		CHAR(2) NOT NULL,		#stato nascita sempre 2 lettere (IT, US, ecc)</dd>
+  <dd>sesso			ENUM('M','F') NULL,</dd>
+  <dd>indirizzo			VARCHAR(100) NULL,</dd>
+  <dd>citta			VARCHAR(40) NULL,</dd>
+  <dd>cap			VARCHAR(7) NULL,		#codice di avviamento postale massimo 7 cifre</dd>
+  <dd>provincia		CHAR(2) NULL, 			#provincia sempre 2 lettere</dd>
+  <dd>stato			CHAR(2) NULL,			#stato sempre 2 lettere (IT, MD, ecc)</dd>
+  <dd>telefono			VARCHAR(15) NULL, 		#anche se e' un numero lo tratto come testo (formato E.164 vuole 15 digit)</dd>
+  <dd>email      		VARCHAR(40) NULL,</dd>
+  <dd>PRIMARY KEY (cf)</dd>
+  <dd>ENGINE=INNODB;</dd>
+<dt>socio:</dt>
+  <dd>cf				CHAR(16) NOT NULL,		#codice fiscale sempre 16 cifre</dd>
+  <dd>scadenza		DATE NOT NULL,			#Data della scadenza iscrizione dataabase (+ DROP_IDENTITY anni da ultima data_tessera)</dd>
+  <dd>data_tessera		DATE,					#Data del tesseramento per anno corrente</dd>
+  <dd>numero_tessera	SMALLINT UNSIGNED NULL,</dd>
+  <dd>adesioni			BIT(8) NOT NULL,			#Campo bit che contiene i flag di adesione ed eventualmente altro</dd>
+  <dd>firma			VARCHAR(100) NOT NULL,	#CognomeNome-datanascita</dd>
+<dd>PRIMARY KEY (cf)</dd>
+<dd>ENGINE=INNODB;</dd>
+<br>
+<dd>/**Configurazione bit adesioni</dd>
+<dd>BIT 0: accettazione diffusione Nome e Cognome (0: non accettato; 1: accettato)</dd>
+<dd>BIT 1: iscrizione newletter (0: non iscritto; 1: iscritto)</dd>
+<dd>BIT 2: disponibile</dd>
+<dd>BIT 3: disponibile</dd>
+<dd>BIT 4: disponibile</dd>
+<dd>BIT 5: disponibile</dd>
+<dd>BIT 6: disponibile</dd>
+<dd>BIT 7: disponibile</dd>
+<dd>*/</dd>
+
+
+</dl>
+
+<h5>Le procedure sono implementate nel seguente modo:</h5>
+<dl>
+<dt>reset_members:</dt>
+<dd>USE soci;</dd>
+<dd>#USE prova;</dd>
+<dd>DELIMITER $$</dd>
+<dd>DROP PROCEDURE IF EXISTS reset_members;</dd>
+<dd>CREATE PROCEDURE reset_members()</dd>
+<dd>BEGIN</dd>
+<dd>UPDATE presenze SET data=NULL;</dd>
+<dd>UPDATE anagrafica SET tessera=NULL;</dd>
+<dd>END$$</dd>
+<dd>DELIMITER ;</dd>
+<br>
+<dt>expire_identities:</dt>
+<dd>USE soci;</dd>
+<dd>#USE prova;</dd>
+<dd>DELIMITER $$</dd>
+<dd>DROP PROCEDURE IF EXISTS expire_identities;</dd>
+<dd>CREATE PROCEDURE expire_identities(IN action BOOLEAN)</dd>
+<dd>BEGIN</dd>
+<dd>DECLARE member INT DEFAULT 0;</dd>
+<dd>DECLARE identities_expired INT DEFAULT 0;</dd>
+<dd>SET @message='OCCORRE RIAVVIARE IL SERVER MYSQL !';</dd>
+<dd>SET @years_to_expire=5;</dd>
+<dd>SET @date_expire_identities=STR_TO_DATE(CONCAT(31,12,YEAR(CURDATE())-@years_to_expire), '%d%m%Y');</dd>
+<dd>SET @num_identities=(SELECT COUNT(*) FROM anagrafica);</dd>
+<dd>WHILE (member != @num_identities) DO</dd>
+<dd>SET @drop_date=(SELECT scadenza FROM anagrafica LIMIT member, 1);</dd>
+<dd>SET @member_id=(SELECT member_id FROM anagrafica LIMIT member, 1);</dd>
+<dd>IF (@drop_date <= @date_expire_identities) THEN</dd>
+<dd>IF action THEN</dd>
+<dd>DELETE FROM anagrafica WHERE member_id=@member_id;</dd>
+<dd>DELETE FROM presenze WHERE member_id=@member_id;</dd>
+<dd>SET identities_expired = identities_expired+1;</dd>
+<dd>ELSE</dd>
+<dd>SELECT member_id, cognome, nome, scadenza FROM anagrafica LIMIT member, 1;</dd>
+<dd>END IF;</dd>
+<dd>END IF;</dd>
+<dd>SET member = member+1;</dd>
+<dd>END WHILE;</dd>
+<dd>IF action THEN</dd>
+<dd>SELECT identities_expired, @message;</dd>
+<dd>END IF;</dd>
+<dd>END$$</dd>
+<dd>DELIMITER ;</dd>
+</dl>
+<h4>L'interfaccia per la  gestione del database e' scritta in php e gira esclusivamente su server Linux</h4>
+<h4>I codici di errore registrazione sono i seguenti:</h4>
+<dt>1062: il codice fiscale esiste gia' nel database</dt>
+. Si vuole una stampa di tutti i soci nell'anno corrente in un foglio elettronico
+. Alla fine di ogni anno solare verrà meno il diritto di socio ma non verrà cancellata la sua anagrafica dal database
+. I soci devono poter essere collegati (ad esempio da legami di parentela)
+
+##########################
+INSTALLAZIONE DEL DATABASE
+##########################	
+Nella cartella mysql sono presenti questi file:
+. init_database.bat: se lanciato nel sistema Windows, inizializza un nuovo database (tabelle e procedure)
+. init_database.sh: se lanciato nel sistema Linux, inizializza un nuovo database (tabelle e procedure)
+. reset_members.proc.bat: se lanciato nel sistema Windows, aggiorna la procedura "reset_members" in caso dovesse essere modificata
+. reset_members.proc.sh: se lanciato nel sistema Linux, aggiorna la procedura "reset_members" in caso dovesse essere modificata
+. expire_identities.proc.bat: se lanciato nel sistema Windows, aggiorna la procedura "expire_identities" in caso dovesse essere modificata
+. expire_identities.proc.sh: se lanciato nel sistema Linux, aggiorna la procedura "expire_identities" in caso dovesse essere modificata
+. find_duplicates.proc.bat: se lanciato nel sistema Windows, aggiorna la procedura "find_duplicates" in caso dovesse essere modificata
+. find_duplicates.proc.sh: se lanciato nel sistema Linux, aggiorna la procedura "find_duplicates" in caso dovesse essere modificata
+
+Per installare il database lanciare semplicemente lo script init_database relativo al sistema operativo in uso
+
+#################
+INSTALLAZIONE GIT
+#################
+E' indispensabile per il funzionamento degli aggiornamenti.
+Su ambiente Windows installare la versione portabile eseguendo i seguenti punti:
+. Lanciare il file GitPortable_X.X.X.paf.exe (le X rappresentano il numero di versione) per installare la versione portabile di Git
+. Assicurarsi che il file venga scompattato nella directory del software (D:\dati\xampp\htdocs\soci\): verrà creata la cartella D:\dati\xampp\htdocs\soci\GitPortable
+Su ambiente Linux deve essere installato dal repository
+
+##############################################
+INIZIALIZZAZIONE DEL SISTEMA PER UN NUOVO ANNO
+##############################################
+Prima di cominciare un nuovo anno è necessario effettuare quanto segue:
+. Fare un backup del database: si veda la sezione BACKUP/RESTORE
+. Esportare in due file csv tutti i soci e tutte le identità tramite il programma stesso
+. Lanciare le procedure "reset_members" ed "expire_identities" il cui funzionamento è descritto alla sezione precedente
+
+################
+BACKUP / RESTORE
+################
+Per fare il backup di tutto il database, comprese procedure e trigger è possibile agire in due modi:
+1. MANUALMENTE:
+Portarsi dentro la cartella dei binari mysql e lanciare: mysqldump.exe -u copernico --routines soci > AAAAMMDD_Backup.sql (con AAAA che indica l'anno, MM il mese e GG il giorno in cui si effettua il backup).
+Verrà creato il file AAAAMMDD_Backup.sql nella stessa directory dei binari mysql.
+Spostare tale file nella cartella doc del software dove sono anche presenti i file csv
+2. AUTOMATICAMENTE:
+Dal programma cliccare sulla funzionalità "Operazioni sul DB".
+Nella finestra che si apre scegliere "Backup database" (selezionato di default)
+Cliccare su "Esegui"
+Quando apparirà l'cona che conferma il successo dell'operazione significa che il file AAAAMMDD_Backup.sql (con AAAA che indica l'anno, MM il mese e GG il giorno in cui si effettua il backup) è stato creato nella cartella doc del software dove sono anche presenti i file csv
+
+Per fare il restore di tutto il database, comprese procedure e trigger è possibile agire in due modi:
+1. MANUALMENTE:
+. Assicurarsi che il file di backup (XXXX-backup.sql) sia nella stessa directory dei binari di mysql
+. Connettersi a mysql con l'utente che avrà i permessi su quel database: mysql.exe -u copernico
+. Nel caso non esistesse, creare il database (senza le tabelle!): create database copernico;
+Nel caso non esistesse l'utente copernico occorre consultare la sezione di inizializzazione mysql nel file "Sviluppo web.odt" 
+. Fare il logout da mysql, portarsi dentro la cartella dei binari mysql e lanciare il programma:
+mysql -u copernico soci < XXXX-backup.sql (con XXXX che indica l'anno in cui si è effettuato il backup).
+2. AUTOMATICAMENTE:
+Dal programma cliccare sulla funzionalità "Operazioni sul DB".
+Nella finestra che si apre scegliere "Ripristino database"
+Dal pulsante a fianco "Sfoglia" scegliere un backup che si vuole ripristinare
+Cliccare su "Esegui"
+Quando apparirà l'cona che conferma il successo dell'operazione ricaricare nuovamente la pagina Home
+
+###################
+GESTIONE NEWSLETTER
+###################
+Il funzionamento della Newsletter è il seguente:
+. Per essere iscritti alla newsletter basta inserire un indirizzo email. Viceversa per cancellarsi alla newsletter basterà cancellare l'indirizzo email
+. L'invio della email avviene tramite protocollo SMTP autenticato da password con connessione SSL/TSL
+. Il corpo della email è una pagina web in html salvata nella cartella html del sito. In essa è contenuta un'immagine con il nome evento.jpg. E' proprio quest'ultima che rappresenta la locandina dell'evento da pubblicizzare viene letta nella cartella doc del sito. Pertanto ad ogni nuovo evento occorre creare un'immagine con il nome evento.jpg e metterla nella cartella doc del sito. A quel punto automaticamente essa viene inserita nel corpo della email
+ 
+Accedendo alla pagina Newsletter il layout si presenta in questo modo:
+. Accanto alla scritta ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER, dentro le parentesi tonde, viene mostrato il numero di identità che sono iscritti alla newsletter
+. A fianco sulla destra cliccando sulla busta gialla si invia la newsletter
+. Nel campo oggetto dovrà obbligatoriamente essere scritto quello che apparirà come oggetto nella email.
+. Nel campo password dovrà obbligatoriamente essere scritta la password per la connessione al server SMTP per l'invio della email. Il lucchetto a lato indica se, al momento in cui si sta digitando la password, quest'ultima appare criptata durante la digitazione(lucchetto chiuso, come di default) oppure la password è visibile(lucchetto aperto). Il lucchetto si apre e si chiude cliccandoci sopra
+. Nel campo area di testo è possibile inserire un messaggio personalizzato che apparirà subito prima dell'immagine che pubblicizza l'evento. Potrebbe essere utile nel caso si voglia inviare una nuova email che corregge un errore di un precedente invio
+. La tabella mostra le identità a cui sarà inviata la email. Tramite delle caselle di check si possono escludere o includere solo alcune identità
+
+<h4>Aggiornamenti</h4>
+Il software è in grado di verificare se ci sono aggiornamenti in maniera automatica. Sarà poi l'utente a decidere se e quando installarli.<br>
+<dl>
+<dt>Per abilitare questa funzione sono necessari i seguenti requisiti:</dt>
+<dd>La presenza di Git</dd>
+<dd>La directory del programma deve essere un repository locale git valido e sia settato il corretto repository remoto</dd>
+</dl>
+Il controllo degli aggiornamenti avviene al primo avvio del programma. Se vi è una connessione internet, dal ramo master locale viene fatto un fetch del ramo master remoto e successivamente vengono confrontate le due hash di HEAD: se sono diverse è segnalata la presenza di aggiornamenti disponibili mediante la presenza di un asterisco tra parentesi tonde alla voce "Aggiornamento sw" nell'elenco delle funzionalità.
+Cliccando su tale voce si aprirà un'altra pagina dove sarà presente un pulsante "Esegui" il quale darà inizio allo scaricamento degli aggiornamenti.
+Sia in caso di successo che di fallimento verrà richiesto di tornare alla pagina iniziale mediante un link.
+E' sempre buona norma eseguire gli aggiornamenti all'inizio della sessione di lavoro ovvero prima di inserire/modificare dati.
+Al termine dell'installazione e' buona norma riavviare il browser

@@ -146,7 +146,7 @@ if(!isset($_POST['export'])) {
                 foreach (array_reverse($_SESSION['members_evening'], TRUE) as $key => $value) {
                     if($key==0)
                         continue;
-                    echo $key."^<sup>a</sup> tessera inserita: ".$value."<br/>";
+                    echo $key."<sup>a</sup> tessera inserita: ".$value."<br/>";
                 }
                 die();
             case "view_drop_cards":

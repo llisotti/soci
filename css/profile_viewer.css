@@ -12,21 +12,23 @@ body{
 	
 }
 
-.form input#email{
-	width: 150px;
+label {
+	display: block;
+	 width: 80px;
 }
 
-.form input#sesso{
-	width: 20px;
+
+.form input#nascita{
+	width: 340px;
 }
 
 .form input#residenza{
-	width: 410px;
+	width: 407px;
 }
 
 table td{
 	font-size:12px;
-        text-align: right;
+    text-align: left;
 }
 
 
