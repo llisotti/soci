@@ -185,27 +185,7 @@ if($member->tessera!=NULL) {
     </tr>
 </table>
 </div>
-<<<<<<< HEAD
-    <?php
-/* Se passo id allora sto MODIFICANDO il socio */
-if(isset($_GET['id']))
-{
-    ?>
-<form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php?id="."$_GET[id]'"; ?> method="post"><input type="hidden" name="" value=""/>
-    <?php
-}
-/* altrimenti sto INSERENDO un nuovo socio */
-else
-{
-    ?>
-    <form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php'"; ?> method="post"><input type="hidden" name="" value=""/>
-    <?php
-}?>
-=======
-
 <form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php?cf="."$_GET[cf]'"; ?> method="post"><input type="hidden" name="" value=""/>
-
->>>>>>> update
 <div id="center-column">
 <div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
 <h1>MODIFICA PROFILO</h1>
@@ -287,7 +267,7 @@ else { //Modifico un'identita' o da identita' diventa socio
 </select>&nbsp;&nbsp;
 <input name="aaaa_nascita" size="2" type="text" value="<?php echo $aaaa_nascita; ?>" /></td>
 <td style="text-align:right">a: </td>
-<td><input id="comune_nascita" name="luogo_nascita" size="20" type="text" value="<?php if($member->stato_nascita=="IT") echo $member->comune_nascita ?>" /></td> 
+<td><input id="comune_nascita" name="comune_nascita" size="20" type="text" value="<?php if($member->stato_nascita=="IT") echo $member->comune_nascita ?>" /></td> 
 <td style="text-align:right">Provincia: </td>
 <td><input id="provincia_nascita" name="provincia_nascita" size="1" type="text" value="<?php if($member->stato_nascita=="IT") echo $member->provincia_nascita ?>"/></td>
 <td style="text-align:right">Stato: </td>
