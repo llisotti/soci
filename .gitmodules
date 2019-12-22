@@ -1,3 +1,6 @@
 [submodule "php/TCPDF"]
 	path = php/TCPDF
 	url = https://github.com/tecnickcom/TCPDF.git
+[submodule "php/PHPMailer"]
+	path = php/PHPMailer
+	url = https://github.com/PHPMailer/PHPMailer.git
