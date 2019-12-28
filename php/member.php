@@ -115,8 +115,13 @@ else
  */
 define ("SIGNATURE_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/firme/");
 
-/** @} */
 
+/**
+ * Percorso dove salvo i moduli di adesione
+ */
+define ("PDF_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/moduli_adesione/");
+
+/** @} */
 
 
 /**

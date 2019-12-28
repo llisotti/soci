@@ -371,7 +371,7 @@ $string=base64_encode(file_get_contents(str_replace(" ", "", SIGNATURE_IMAGE_PAT
 </div>
 <br><br><br>
 <span style="padding-left: 300px; padding-bottom: 0px; padding-top: 20px"></span>
-<input name="submit"  value="Salva" type="submit" /><input name="clean" value="Annulla" type="submit" formnovalidate />
+<input name="submit"  value="Salva" type="submit" /><input id="pdf" value="Stampa PDF" type="button"/>
 <div class="select-bar_bottom">
 </div>
 </div>
@@ -487,6 +487,13 @@ $(document).ready(function(){
     $("td#view_drop_cards").click(function() {
         window.open('../php/root_functions.php?action=view_drop_cards','', "height=190,width=580,scrollbars=1");
     });
+
+    
+    /* Funzione per la generazione del PDF */
+    $("#pdf").click(function() {
+        var tessera = $("#card").val();
+        window.open('../php/pdfgen.php?tessera='+tessera,'', "height=600,width=900,scrollbars=1");
+    })
     
 });
 </script>

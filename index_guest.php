@@ -265,7 +265,7 @@ $(document).ready(function(){
     $('.submit-button').on('click', function(e) {
         e.preventDefault();
         if(isValidSignature()) {
-        	var datapair = $(".signature-panel").jSignature("getData", "svgbase64");
+        	var datapair = $(".signature-panel").jSignature("getData", "image");
     		var i = new Image();
         	i.src = "data:" + datapair[0] + "," + datapair[1];
         	var cognome = $("#cognome").val();
@@ -419,7 +419,7 @@ $(document).ready(function(){
 
     /* Controllo che nel caso si voglia iscriversi alla newsletter sia riempito il campo email */
     $("#news").change( function(){
-       if( $(this).is(':checked') && $("#mail").val() == "") {
+       if( $(this).is(':checked') && $("#email").val() == "") {
     	alert("Per isciversi alla newsletter e' necessario un indirizzo email valido");
     	$(this).prop( "checked", false );
     	}

@@ -6,3 +6,5 @@ null
 /doc/*.log
 /doc/firme/*.png
 /doc/sess*
+/doc/evento.jpg
+/doc/moduli_adesione/*.pdf
