@@ -58,11 +58,11 @@ catch (PDOException $exception) {
     <li><span><span><a href="">Profilo</a></span></span></li>
     <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
-    <li><span><span><a href="#">Statistiche</a></span></span></li>
-    <li><span><span><a href="#">Opzioni</a></span></span></li>
-    <li><span><span><a href="#">Statistics</a></span></span></li>
-    <li><span><span><a href="#">Design</a></span></span></li>
-    <li><span><span><a href="#">Contents</a></span></span></li>
+    <li><span><span><a href="">Statistiche</a></span></span></li>
+    <li><span><span><a href="">Opzioni</a></span></span></li>
+    <li><span><span><a href="">Statistics</a></span></span></li>
+    <li><span><span><a href="">Design</a></span></span></li>
+    <li><span><span><a href="">Contents</a></span></span></li>
     -->
 </ul>
 </div>
@@ -79,10 +79,10 @@ catch (PDOException $exception) {
         echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
     <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
-    <li><a id="esporta_soci" href="#">Esporta soci</a></li>
-    <li><a id="esporta_identita" href="#">Esporta identità</a></li>
+    <li><a id="esporta_soci" href="">Esporta soci</a></li>
+    <li><a id="esporta_identita" href="">Esporta identità</a></li>
     <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
-    <li><a id="DB_functions" href="#">Operazioni sul DB</a></li>
+    <li><a id="DB_functions" href="">Operazioni sul DB</a></li>
     <?php
     if($_SESSION['update']) {
         ?>
@@ -91,7 +91,7 @@ catch (PDOException $exception) {
     }
     else {
         ?>
-        <li class="last"><a href="#">Aggiornamento sw</a></li>
+        <li class="last"><a href="">Aggiornamento sw</a></li>
         <?php
     }
     ?>
@@ -107,7 +107,7 @@ catch (PDOException $exception) {
         <?php
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
         $maxkey=max(array_keys($_SESSION['members_evening']));
-        echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
+        echo "<a id='view' href='' style='color:#F70'/>$maxkey</a>";
         ?>
         </span>
         </h1>
@@ -126,7 +126,7 @@ catch (PDOException $exception) {
     $counter=$members->fetchColumn();
    
     ?>
-        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href="#"><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
+        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href=""><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
     </tr>
     <tr>
         <td colspan="2"><br/><br/><br/><br/></td>
@@ -302,13 +302,13 @@ if(!isset($_POST['title'])) {
             <td><?php if(!isset($_GET['custom_list'])) echo $member->tessera ?></td> <!-- Nella tabella customList non c'e' il numero tessera -->
             <td><?php echo $member->codice_fiscale ?></td>
             <!-- 
-            <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="../img/login-icon.gif" width="16" height="16" /></a></td>
-            <td class="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="../img/edit-icon.gif" width="16" height="16" /></a></td>
-            <td class="add_presence"><a href="#" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="../img/add-icon.gif" width="16" height="16" /></a></td>
-            <td class="link_profile"><a href="#"><img alt="Collega profilo" title="Collega profilo" src="../img/not_linked.png" width="16" height="16" /></a></td>
+            <td class="see_profile"><a href="" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="../img/login-icon.gif" width="16" height="16" /></a></td>
+            <td class="edit_profile"><a href="" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="../img/edit-icon.gif" width="16" height="16" /></a></td>
+            <td class="add_presence"><a href="" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="../img/add-icon.gif" width="16" height="16" /></a></td>
+            <td class="link_profile"><a href=""><img alt="Collega profilo" title="Collega profilo" src="../img/not_linked.png" width="16" height="16" /></a></td>
             -->
             <td><input class="member_checkbox" name="checklist[]" type="checkbox" value="<?php echo $member->codice_fiscale; ?>" checked /></td>
-            <!-- <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
+            <!-- <td id="cancel_profile"><a href=""><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
             <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td> -->
         </tr>
         
