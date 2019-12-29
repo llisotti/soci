@@ -533,13 +533,17 @@ if ($membersobj != FALSE)
         }
     }
 
-    /* Aggiorno il contatore di soci inseriti nella serata 
-    if(!isset($_GET['id']) || $id_to_member) {
-        //$_SESSION['members_evening']++;
-        array_push($_SESSION['members_evening'], $member->tessera);
-        $mylog->logInfo("Soci inseriti per questa sessione: ".++$maxkey);
-    }
-}
+    /* Aggiorno il contatore di soci inseriti nella serata */
+        if($_POST['aggiuntoSocio'] == 'aggiungi')
+            array_push($_SESSION['members_evening'], $_POST['tessera']);
+        else if($_POST['aggiuntoSocio'] == 'cancella') {
+            if (($key = array_search( $_POST['tessera'], $_SESSION['members_evening'])) !== false) { //se e' stato inserito in questa sessione devo conteggiare un socio in meno nella sessione stessa
+                unset($_SESSION['members_evening'][$key]);
+                $_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
+            }
+        }
+        //$mylog->logInfo("Soci inseriti per questa sessione: ".++$maxkey);
+/*}
 else {
     echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
     if(isset($_GET['id']))

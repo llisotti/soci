@@ -228,9 +228,10 @@ else { //Modifico un'identita' o da identita' diventa socio
     $date_not_null->showMonths($time['mon']);
     echo "</select>";
     //$maxnumcard++;
-    echo " $time[year]"." con numero tessera <input id=card name=tessera type=text size=3 autofocus/><span id=socio_ident> verrà aggiunto il socio</span>";   
+    echo " $time[year]"." con numero tessera <input id=card name=tessera type=text size=3 autofocus/><span id=socio_ident> verrà aggiunto il socio</span>";
 }
 ?>
+<input id="aggiuntoSocio" type="hidden" name="aggiuntoSocio" value="nonfarenulla"> <!-- Serve solo per inviare in POST se aggiungere un socio o meno alla variabile si sessione $_SESSION['members_evening'] -->
 </div>
 <div class="table">
 <ol class="contact" style="padding-left: 15px">
@@ -391,18 +392,32 @@ $(document).ready(function(){
 	/* Se apro la pagina ed il valore della tessera contiene il numero tessera allora e' socio */
 	if( $("#card").val() )
 		erasocio=true;
+
+	/* Se apro la pagina ed il valore della tessera e' vuoto disabilito la stampa del PDF */
+	if( !$("#card").val() )
+		$('#pdf').prop("disabled",true);
 	
 	/* Funzione che mi cambia l'intestazione se aggiungo socio (campo tessera con numero) o aggiorno un'identita' */
 	$("#card").blur(function()
     {
-		if((!$(this).val()) && erasocio) //Se non ho il numero tessera ed era socio => da socio a identita'
+		if((!$(this).val()) && erasocio) { //Se non ho il numero tessera ed era socio => da socio a identita'
 	    	$("#socio_ident").text(" sara' cancellata la tessera al socio");
-		else if (($(this).val()) && erasocio) //Se ho il numero tessera ed era socio => modifico il profilo del socio
+	    	$('#pdf').prop("disabled",true);
+	    	$('#aggiuntoSocio').val("cancella");
+		}
+		else if (($(this).val()) && erasocio) { //Se ho il numero tessera ed era socio => modifico il profilo del socio
 			$("#socio_ident").text(" verrà modificato il profilo del socio");
-		else if ((!$(this).val()) && !erasocio) //Se non ho il numero tessera ed non era socio => modifico il profilo dell'identita' 
+			$('#pdf').prop("disabled",false);
+		}
+		else if ((!$(this).val()) && !erasocio) { //Se non ho il numero tessera ed non era socio => modifico il profilo dell'identita' 
 			$("#socio_ident").text(" verrà modificato il profilo di");
-		else //Se ho il numero tessera e non era socio => da identita' a socio
+			$('#pdf').prop("disabled",true);
+		}
+		else { //Se ho il numero tessera e non era socio => da identita' a socio
 			$("#socio_ident").text(" sara' aggiunto il socio");
+			$('#pdf').prop("disabled",false);
+			$('#aggiuntoSocio').val("aggiungi");
+		}
     });
     
     /* Funzione che controlla se esiste la variabile $_GET[var_name] ed eventualmente ritorna il suo valore
