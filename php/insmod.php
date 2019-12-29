@@ -324,7 +324,6 @@ catch (PDOException $e) {
 $adesioni=pack('C', $prepared->fetch(PDO::FETCH_COLUMN));                                      
 isset($_POST['diffusione_nominativo']) ? $adesioni|=1 : $adesioni&=254;
 isset($_POST['newsletter']) ? $adesioni|=2 : $adesioni&=253;
-$_POST['etaconsenso'] == "minorenne" ?  $adesioni|=4 : $adesioni&=251;
 
 /* Inserisco i dati in socio */
 try {
