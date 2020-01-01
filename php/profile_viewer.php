@@ -72,8 +72,8 @@ if(isset($_SESSION['members']))
             <td style="text-align:right"><label>TELEFONO:</label></td>
             <td><input readonly value="<?php echo $member->telefono; ?>"></td>
             <td style="text-align:right"><label>EMAIL:</label></td> 
-            <td><input readonly id=email value="<?php echo $member->email; ?>"></td>
-            <td colspan="2"></td>
+            <td colspan="3"><input readonly id=email value="<?php echo $member->email; ?>"></td>
+            
         </tr>
         <tr>
             <td colspan="6"></td>

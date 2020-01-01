@@ -19,11 +19,17 @@ label {
 
 
 .form input#nascita{
-	width: 340px;
+	width: 335px;
 }
 
+
+.form input#email{
+	width: 335px;
+}
+
+
 .form input#residenza{
-	width: 407px;
+	width: 595px;
 }
 
 table td{
