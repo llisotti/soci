@@ -33,11 +33,17 @@ elseif (isset($_POST['tessera'])){ //Se passo il numero tessera oppure tessera=0
     /* Inizio sessione */
     session_start();
     
-    $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
+    $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "",[PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     
     if($_POST['tessera']) { //Se passo un numero di tessera (quindi diverso da 0) significa che voglio inserire una tessera
-        $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?");
-        $prepared->execute([$_POST['tessera'], date("Y-m-d"), $_POST['cf']]);
+        try {
+            $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?");
+            $prepared->execute([$_POST['tessera'], date("Y-m-d"), $_POST['cf']]);
+            $esito=$prepared->rowCount();
+        }catch(Exception $e) {
+            if($e->errorInfo[1]===1062)
+                $esito=-2;
+        }
     }
     else { //Se cancello il numero tessera, lo richiedo per sapere quale sia...
         $prepared=$dbh->prepare("SELECT numero_tessera FROM socio WHERE cf=?");
@@ -49,10 +55,16 @@ elseif (isset($_POST['tessera'])){ //Se passo il numero tessera oppure tessera=0
         }
         $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?"); //Metto NULL il numero tessera e la data tessera
         $prepared->execute([NULL, NULL, $_POST['cf']]);
+        $esito=$prepared->rowCount();
     }
+    
+    
         
-    switch ($prepared->rowCount())
+    switch ($esito)
     {
+        case -2:
+            echo "duplicato"; //Se ho tentato di inserire una tessera che gi' esiste lo segnalo chiaramente (sara' un errore comune)
+            break;
         case -1: //Se la query restituisce -1...
         case 0: //...oppure le righe affette dalla quesry sono 0 (impossibile)...
             echo "ko"; //...allora errore

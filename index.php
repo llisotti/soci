@@ -427,6 +427,8 @@ $(document).ready(function(){
             success: function (response) {
             	if(response=="ko")
             		alert("Operazione Fallita !");
+            	else if (response=="duplicato")
+            		alert("Operazione Fallita: tessera gia' esistente");
             	else
             		alert("Operazione conclusa correttamente");
         		

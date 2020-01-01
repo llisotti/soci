@@ -164,14 +164,6 @@ $format_input=array("cognome" => "FUC",
 $formatter= new InputFormat($format_input);
 $formatter->format($_POST);
 
-/* Prelevo i numeri di tessera ed i member_id
-$results=$dbh->query("SELECT member_id, tessera FROM anagrafica");
-$rows=$results->fetchAll();*/
-
-/* Inserisco i dati in anagrafica
- * ATTENZIONE: con REPLACE se la primary key (codice fiscale) gia' esiste allora aggiorno la riga
- * altrimenti creo una riga nuova. In pratica se cambio il codice fiscale creo una nuova riga
- * => devo cancellare la vecchia riga */
 /**
  * Aggiorno i dati in anagrafica
  * ATTENZIONE: con REPLACE se la primary key (codice fiscale) gia' esiste allora aggiorno la riga
@@ -224,40 +216,6 @@ catch (PDOException $e) {
 	errorMessage($e);
 	die();
 }
-/* Sto aggiornando i dati di un socio oppure da identità diventa socio
-if (isset($_POST['tessera']) && $_POST['tessera'] != NULL) //Se ha la tessera aggiorno i dati del socio o aggiorno il numero tessera
-{   
-    $member->cognome=$dbh->quote($_POST['cognome']); //Quoto il cognome
-    $member->nome=$_POST['nome'];
-}
-/* Sto inserendo un nuovo socio
-else //Se non ha la tessera aggiorno i dati di una identita'
-{
-    try
-    {
-        $member=new Socio_Copernico($_POST['cognome'], $_POST['nome']); 
-    } catch (MyException $ex) {
-        die($ex->show());
-    }
-    
-    $member->cognome=$dbh->quote($_POST['cognome']); //Quoto il cognome
-}
-*/
-/* Sia che aggiorno sia che inserisco un nuovo socio popolo il socio con i campi passati in POST da profile_editor dopo aver eseguito gli opportuni controlli
-$member->luogo_nascita=$_POST['luogo_nascita'];
-if (isset($_POST['sesso']))
-    $member->sesso=$_POST['sesso'];
-else
-    $member->sesso="";      
-$member->codice_fiscale=$_POST['cf'];
-$member->indirizzo=$dbh->quote($_POST['indirizzo']); //Quoto l'indirizzo
-$member->cap=$_POST['cap'];
-$member->citta=$dbh->quote($_POST['citta']); //Quoto la città
-$member->provincia=$_POST['provincia'];
-$member->stato=$_POST['stato'];
-$member->telefono=$_POST['phone'];
-$member->email=$_POST['email'];
-*/
 
 /* Creazione data di scadenza identità (anno corrente+5 - 12 - 31) */
 $data=new DateTime(); //Data attuale (riciclo cariabile $data)
@@ -266,45 +224,6 @@ $date_drop_identity=new DateTime();
 $date_drop_identity->setDate($data->format('Y'), '12', '31');
 $date_drop_identity->modify(DROP_IDENTITY); //Data scadenza identità
   
-//$member->scadenza_id=$date_drop_identity->format('Y-m-d');
-
-/* Gestione data tessera e data iscrizione
-$date_ins=DateTime::createFromFormat('Y-m-d', "$this_year-$_POST[mm_inserimento]-$_POST[gg_inserimento]");
-if(!isset($_GET['id'])) { //Se inserisco un nuovo socio... 
-    $member->data_tessera=$date_ins->format('Y-m-d');
-    $member->data_iscrizione=$date_ins->format('Y-m-d');
-    $aaaa_iscrizione=$this_year;
-}
-else { //...oppure da identità a socio oppure sto aggiornando un socio
-    $member->data_tessera=$date_ins->format('Y-m-d');; 
-    $aaaa_iscrizione=substr($member->data_iscrizione, '6','4');
-}
-
-/* Sentinella socio cambio tessera e da identità a socio
-$update_card=FALSE;
-$id_to_member=FALSE;
-if($member->tessera!=NULL && $member->tessera!=$_POST['tessera']) //Un socio cambia numero di tessera
-    $update_card=TRUE;
-elseif($member->tessera==NULL && $_POST['tessera']!=NULL) //Un' identità vuole diventare socio
-    $id_to_member=TRUE;
-
-
-/* Controllo che in caso di cambio tessera o inserimento nuovo socio il numero tessera già non esista
-if($update_card || $id_to_member) {
-    foreach ($rows as $card) {
-        if($_POST['tessera']==$card['tessera'] && $member->id!=$card['member_id']) {  //Se la tessera è uguale e il socio non è lo stesso
-            if(isset($_GET['id']))
-                $mylog->logError("Tentativo di aggiornamento socio fallito (ID:".$_GET['id']."), numero di tessera già esistente (TESSERA:".$_POST['tessera'].")");
-            else
-                $mylog->logError("Tentativo inserimento nuovo socio fallito (COGNOME:".$_POST['cognome']." NOME:".$_POST['nome']."), numero di tessera già esistente (TESSERA:".$_POST['tessera'].")");
-            die("Numero di tessera già esistente");
-        }
-    }
-}
-
-$vecchia_tessera=$member->tessera; //Prima di sovrascrivere recupero la vecchia tessera per il log
-$member->tessera=$_POST['tessera'];
-*/
 /* Leggo i flag di adesione */
 try {
     $prepared=$dbh->prepare("SELECT CAST(adesioni AS unsigned integer) FROM socio WHERE cf=?");
@@ -325,31 +244,22 @@ $adesioni=pack('C', $prepared->fetch(PDO::FETCH_COLUMN));
 isset($_POST['diffusione_nominativo']) ? $adesioni|=1 : $adesioni&=254;
 isset($_POST['newsletter']) ? $adesioni|=2 : $adesioni&=253;
 
-/* Inserisco i dati in socio */
-try {
-    //$dbh->query("UPDATE socio SET cf='$_POST[cf]', adesioni='$adesioni' WHERE cf='$member->codice_fiscale'");                
-//$_POST['cognome'].$_POST['nome']."-".str_replace("/", "", $_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita']).".png
-    }
-catch (PDOException $e) {               
-    ?>
-    <div style="display: flex;">
-		<img src="../img/check_ko.png" height="256" width="256">
-	</div>
-	<?php
-	/* Se ho inserito correttamente i dati in anagrafica li devo cancellare */
-	$prepared=$dbh->prepare("DELETE FROM anagrafica WHERE cf=?");
-	$prepared->execute([$_POST['cf']]);
-	errorMessage($e);
-	die();
-}
-
 try {
     /**
-     * Se era gia' un socio (ha la tessera) allora ne aggiorno i dati
-     * Se da identita' diventa socio (scrivo io la tessera) aggiungo la tessera, la data tessera ed eventualmente aggiorno i dati
-     * ATTENZIONE: se aggiorno il nome oppure il cognome oppure la data di nascita nella tabella anagrafica
-     * devo aggiornare anche il nome della firma tramite file manager altrimenti non mi carica la firma in profile_editor
+     * Se passo la tessera allora:
+     * 1 - E' gia' un socio allora ne aggiorno solo i dati
+     * 2 - Da identita' diventa socio aggiungendo la tessera, la data tessera. Eventualmente aggiorno anche i dati
      */
+    
+    /* Per prima cosa controllo se esiste gia' quel numero tessera */
+    $prepared=$dbh->prepare("SELECT COUNT(*) FROM socio WHERE numero_tessera=?");
+    $prepared->execute([$_POST['tessera']]);
+    $counter=$prepared->fetch(PDO::FETCH_COLUMN);
+    if($counter) { //Se esiste gia' la tessera lancio l'eccezione
+        throw new Exception("Tessera gia' esistente");
+    }
+    
+    /* Se la tessera non esiste posso proseguire l'operazione */
     if($_POST['tessera'] != NULL) {
         $prepared=$dbh->prepare("REPLACE INTO socio (cf,
                                                         scadenza,
@@ -360,7 +270,13 @@ try {
                                                         VALUES(?, DATE_ADD(LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH)),".DROP_IDENTITY_MYSQL."), ?, ?, ?, ?)");
         $prepared->execute([$_POST['cf'], date('Y')."-".$_POST['mm_inserimento']."-".$_POST['gg_inserimento'], $_POST['tessera'], $adesioni, $_POST['cognome'].$_POST['nome']."-".$_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita'].".png"]);
     }
-    /* Se non e' un socio allora voglio solo aggiornare i dati dell'identita' */
+    /**
+     * Se non passo il numero tessera:
+     * 1 - Se era socio allora cancello io la tessera: REPLACE vede cge esiste gia' la riga con quel codice fiscale quindi fallisce l'inserimento di una nuova riga perche' il codice fiscale deve essere univoco
+     * REPLACE quindi cancella la riga con questo codice fiscale e ne inserisce una nuova mettendo NULL nelle colonne che io non passo nella query (ovvero data_tessera e numero_tessera)
+     * In pratica e' proprio quello che voglio: cancellarne il tesseramento
+     * 2 - Se non era socio aggiorno semplicemente i dati  
+     */
     else {
         $prepared=$dbh->prepare("REPLACE INTO socio (cf,
                                                         scadenza,
@@ -370,18 +286,19 @@ try {
         $prepared->execute([$_POST['cf'], $member->scadenza, $adesioni, $_POST['cognome'].$_POST['nome']."-".$_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita'].".png"]);  
     }
 }
-catch (PDOException $e) {
+catch (Exception $e) {
     ?>
     <div style="display: flex;">
 		<img src="../img/check_ko.png" height="256" width="256">
 	</div>
 	<?php
+	errorMessage($e);
+	
 	/* Se avevo inserito correttamente i dati in anagrafica li devo cancellare */
 	if($member->cf != $_POST['cf']) //Se ho cambiato il codice fiscale devo cancellare 2 righe (REPLACE mi ha aggiunto una riga)
 	   $dbh->query("DELETE FROM anagrafica WHERE cf= '$member->codice_fiscale' AND cf='$_POST[cf]'");
 	else //altrimenti cancello solo una riga
-	    $dbh->query("DELETE FROM anagrafica WHERE cf='$member->codice_fiscale'");
-	errorMessage($e);
+	    $dbh->query("DELETE FROM anagrafica WHERE cf='$member->codice_fiscale'");	
 	die();
 }
 ?>
@@ -389,168 +306,24 @@ catch (PDOException $e) {
 	<img src="../img/check_ok.png" height="256" width="256">
 </div>
 <?php
+successMessage();
+
 /* Se ho cambiato il codice fiscale devo cancellare la riga con il vecchio codice fiscale in quanto REPLACE ne crea una nuova */
 if($member->codice_fiscale != $_POST['cf']) {
     $dbh->query("DELETE FROM anagrafica WHERE cf='$member->codice_fiscale'");
     $dbh->query("DELETE FROM socio WHERE cf='$member->codice_fiscale'");
 }    
-successMessage();
-        	  
 
-
-/* Sto aggiornando i dati di un socio oppure da identità a socio 
-if (isset($_GET['id']))
-{   
-    $membersobj=$dbh->query("UPDATE anagrafica SET cognome=$member->cognome
-                                                    , nome='$member->nome'
-                                                    , luogo_nascita='$member->luogo_nascita'
-                                                    , sesso='$member->sesso'
-                                                    , cf='$member->codice_fiscale'
-                                                    , indirizzo=$member->indirizzo
-                                                    , cap='$member->cap'
-                                                    , citta=$member->citta
-                                                    , provincia='$member->provincia'
-                                                    , stato='$member->stato'
-                                                    , telefono='$member->telefono'
-                                                    , email='$member->email' WHERE member_id='$_GET[id]' 
-                            ");
-    $mylog->logInfo("Tentativo di aggiornare un socio (ID:".$_GET['id'].")");
-}
-/* Sto inserendo un nuovo socio 
-else
-{
-    $membersobj=$dbh->query("INSERT INTO anagrafica (cognome
-                                                    , nome
-                                                    , luogo_nascita
-                                                    , sesso
-                                                    , cf
-                                                    , indirizzo
-                                                    , cap
-                                                    , citta
-                                                    , provincia
-                                                    , stato
-                                                    , telefono
-                                                    , email
-                                                    , tessera
-                                                    , scadenza)
-                                            VALUES ($member->cognome
-                                                    , '$member->nome'
-                                                    , '$member->luogo_nascita'
-                                                    , '$member->sesso'
-                                                    , '$member->codice_fiscale'
-                                                    , $member->indirizzo
-                                                    , '$member->cap'
-                                                    , $member->citta
-                                                    , '$member->provincia'
-                                                    , '$member->stato'
-                                                    , '$member->telefono'
-                                                    , '$member->email'
-                                                    , '$member->tessera'
-                                                    , '$member->scadenza_id')
-                            ");
-}
-
-/* Metto nuovamente i campi senza quote 
-$member->cognome=$_POST['cognome'];
-$member->indirizzo=$_POST['indirizzo'];
-$member->citta=$_POST['citta'];
-
-/* Se query precedente OK 
-if ($membersobj != FALSE)
-{
-    /* Chiedo l'ultimo member_id inserito: se nuovo socio lo utilizzo altrimento no (non andrebbe neanche bene) 
-    $last_member_id=$dbh->lastInsertId();
-   
-    /* Sto aggiornando un socio oppure identità diventa socio 
-    if (isset($_GET['id']))
-    {
-        /* Gestione cambio data tessera 
-        if ($aaaa_iscrizione!=$this_year) //Se l'anno della prima iscrizione è diverso dall'anno corrente (era un'identità) aggiorno solo la data della tessera
-            $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
-        else //Se l'anno della prima iscrizione è uguale all'anno corrente aggiorno la data della tessera e la data di iscrizione
-            $membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera', iscrizione='$member->data_tessera' WHERE member_id='$_GET[id]'");
-        
-        /* La data di nascita non è stata definita nel form quindi la metto NULL 
-        if ($_POST['gg_nascita']=="GG" || $_POST['mm_nascita']=="MM" || empty($_POST['aaaa_nascita']))
-            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita=NULL WHERE member_id='$_GET[id]'");
-        /* la data di nascita è definita, la metto nel formato per MySql: AAAA-MM-GG e poi la rimetto nel formato GG/MM/AAAA 
-        else
-        {
-            $date=DateTime::createFromFormat('Y-m-d', "$_POST[aaaa_nascita]-$_POST[mm_nascita]-$_POST[gg_nascita]"); //RICICLO $date
-            $member->data_nascita=$date->format('Y-m-d');
-            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita='$member->data_nascita' WHERE member_id='$_GET[id]'");
-            $member->data_nascita=$date->format('d/m/Y'); //rimetto il formato data di nascita GG/MM/AAA in oggetto $member !!
-
-        }
-        if(isset($_POST['tessera']) && $update_card) { //Il socio cambia numero tessera
-            $membersobj=$dbh->query("UPDATE anagrafica SET tessera='$member->tessera' WHERE member_id='$_GET[id]'");
-            $mylog->loginfo("Tentativo cambio tessera socio (ID:".$_GET['id']." VECCHIA TESSERA:".$vecchia_tessera." NUOVA TESSERA:".$member->tessera.")");
-        }
-        elseif(isset($_POST['tessera']) && $id_to_member) //Da identità diventa socio
-        {
-            $last_member_id=$date_drop_identity->format('Y-m-d'); //RICICLO $last_member_id
-            $membersobj=$dbh->query("UPDATE anagrafica SET scadenza='$last_member_id', tessera='$member->tessera' WHERE member_id='$_GET[id]'");
-            //$membersobj=$dbh->query("UPDATE presenze SET data='$member->data_tessera' WHERE member_id='$_GET[id]'");
-            $mylog->loginfo("Tentativo identità diventa socio (ID:".$_GET['id']." TESSERA:".$member->tessera.")");
-        }
-        
-        if (!$membersobj) {
-            echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
-            $mylog->logError("Tentativo fallito");
-        }
-         else {
-            echo '<img src="../img/check_ok.png" height="256" width="256" alt="check_ok">';
-            $mylog->logInfo("Tentativo riuscito");
-         }
+/* Aggiorno il contatore di soci inseriti nella serata */
+if($_POST['aggiuntoSocio'] == 'aggiungi')
+    array_push($_SESSION['members_evening'], $_POST['tessera']);
+else if($_POST['aggiuntoSocio'] == 'cancella') {
+    if (($key = array_search( $_POST['tessera'], $_SESSION['members_evening'])) !== false) { //se e' stato inserito in questa sessione devo conteggiare un socio in meno nella sessione stessa
+        unset($_SESSION['members_evening'][$key]);
+        $_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
     }
-    /* Sto inserendo un nuovo socio (in pratica aggiorno quello appena inserito) 
-    else
-    {
-        $member->id=$last_member_id;
-        $membersobj=$dbh->query("INSERT INTO presenze (data, iscrizione, member_id) VALUES ('$member->data_tessera', '$member->data_iscrizione', '$member->id')");
-        /* La data di nascita non è stata definita nel form quindi la metto NULL 
-        if ($_POST['gg_nascita']=="GG" || $_POST['mm_nascita']=="MM" || empty($_POST['aaaa_nascita']))
-        {
-            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita=NULL WHERE member_id='$$member->id'");
-        }
-        /* la data di nascita è definita, la metto nel formato per MySql: AAAA-MM-GG e poi la rimetto nel formato GG/MM/AAAA
-        else
-        {
-            $date=DateTime::createFromFormat('Y-m-d', "$_POST[aaaa_nascita]-$_POST[mm_nascita]-$_POST[gg_nascita]"); //RICICLO $date
-            $member->data_nascita=$date->format('Y-m-d');
-            $membersobj=$dbh->query("UPDATE anagrafica SET data_nascita='$member->data_nascita' WHERE member_id='$member->id'");
-            $member->data_nascita=$date->format('d/m/Y'); //rimetto il formato data di nascita GG/MM/AAA in oggetto $member !!
-
-        }
-        if (!$membersobj) {
-            echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';          
-            $mylog->logError("Tentativo inserimento nuovo socio fallito (".$member->cognome." ".$member->nome." con tessera ".$member->tessera.")");
-        }
-        else {
-            echo '<img src="../img/check_ok.png" height="256" width="256" alt="check_ok">';
-            $mylog->logInfo("Inserito nuovo socio (ID:".$member->id." COGNOME:".$member->cognome." NOME:".$member->nome." TESSERA:".$member->tessera.")");
-        }
-    }
-
-    /* Aggiorno il contatore di soci inseriti nella serata */
-        if($_POST['aggiuntoSocio'] == 'aggiungi')
-            array_push($_SESSION['members_evening'], $_POST['tessera']);
-        else if($_POST['aggiuntoSocio'] == 'cancella') {
-            if (($key = array_search( $_POST['tessera'], $_SESSION['members_evening'])) !== false) { //se e' stato inserito in questa sessione devo conteggiare un socio in meno nella sessione stessa
-                unset($_SESSION['members_evening'][$key]);
-                $_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
-            }
-        }
-        //$mylog->logInfo("Soci inseriti per questa sessione: ".++$maxkey);
-/*}
-else {
-    echo '<img src="../img/check_ko.png" height="256" width="256" alt="check_ko">';
-    if(isset($_GET['id']))
-        $mylog->logError("Tentativo inserimento/aggiornamento socio fallito (".$_POST['cognome']." ".$_POST['nome'].")");
-    else
-        $mylog->logError("Tentativo inserimento nuovo socio fallito (".$_POST['cognome']." ".$_POST['nome'].")");
 }
-*/
+
 //unset($_SESSION['socio']);
 ?>
 
@@ -560,7 +333,7 @@ else {
 </span>
 </form>
 <?php 
-function errorMessage(PDOException $ex) {
+function errorMessage(Exception $ex) {
     echo "La procedura di iscrizione e' fallita con codice errore: ".$ex->getMessage();
 }
 
