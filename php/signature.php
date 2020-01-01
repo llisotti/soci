@@ -40,19 +40,20 @@ elseif (isset($_POST['tessera'])){ //Se passo il numero tessera oppure tessera=0
             $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?");
             $prepared->execute([$_POST['tessera'], date("Y-m-d"), $_POST['cf']]);
             $esito=$prepared->rowCount();
+         /* Se tento di inserire una un numero tessera gia' esistente setto la variabile al valore -2 */   
         }catch(Exception $e) {
             if($e->errorInfo[1]===1062)
                 $esito=-2;
         }
     }
     else { //Se cancello il numero tessera, lo richiedo per sapere quale sia...
-        $prepared=$dbh->prepare("SELECT numero_tessera FROM socio WHERE cf=?");
-        $prepared->execute([$_POST['cf']]);
-        $tessera=$prepared->fetch(PDO::FETCH_COLUMN);
-        if (($key = array_search($tessera, $_SESSION['members_evening'])) !== false) { //..in quanto se e' stato inserito in questa sessione devo conteggiare un socio in meno nella sessione stessa
-            unset($_SESSION['members_evening'][$key]);
-            $_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
-        }
+        //$prepared=$dbh->prepare("SELECT numero_tessera FROM socio WHERE cf=?");
+        //$prepared->execute([$_POST['cf']]);
+        //$tessera=$prepared->fetch(PDO::FETCH_COLUMN);
+        //if (($key = array_search($tessera, $_SESSION['members_evening'])) !== false) { //..in quanto se e' stato inserito in questa sessione devo conteggiare un socio in meno nella sessione stessa
+            //unset($_SESSION['members_evening'][$key]);
+            //$_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
+        //}
         $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?"); //Metto NULL il numero tessera e la data tessera
         $prepared->execute([NULL, NULL, $_POST['cf']]);
         $esito=$prepared->rowCount();
@@ -70,10 +71,10 @@ elseif (isset($_POST['tessera'])){ //Se passo il numero tessera oppure tessera=0
             echo "ko"; //...allora errore
             break;
         default:            
-            if($_POST['tessera']) { //Se ho inserito una tessera la aggiungo nella variabile di sessione del conteggio soci serata
-                array_push($_SESSION['members_evening'], $_POST['tessera']);
+            //if($_POST['tessera']) { //Se ho inserito una tessera la aggiungo nella variabile di sessione del conteggio soci serata
+                //array_push($_SESSION['members_evening'], $_POST['tessera']);
                 //$mylog->logInfo("Soci inseriti per questa sessione: ".++$maxkey);
-            }
+            //}
             echo "ok";
             break;
     }

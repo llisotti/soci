@@ -16,6 +16,10 @@ session_save_path(LOGFILE_PATH);
 session_start();
 session_cache_limiter('private,must-revalidate');
 
+/* Togliere commento per debug */
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -88,6 +92,7 @@ catch (PDOException $e) {
     ?>
 </ul>
 <table class="counter">
+	<!--
     <tr>
         <td colspan="2">N° SOCI SERATA</td>
     </tr>
@@ -97,13 +102,14 @@ catch (PDOException $e) {
         <span style="color: #F70">
         <?php
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
-        $maxkey=max(array_keys($_SESSION['members_evening']));
-        echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
+        //$maxkey=max(array_keys($_SESSION['members_evening']));
+        //echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
         ?>
         </span>
         </h1>
         </td>
     </tr>
+    -->
     <tr>
         <td colspan="2"><br/><br/></td>
     </tr>
@@ -314,7 +320,7 @@ if($member->codice_fiscale != $_POST['cf']) {
     $dbh->query("DELETE FROM socio WHERE cf='$member->codice_fiscale'");
 }    
 
-/* Aggiorno il contatore di soci inseriti nella serata */
+/* Aggiorno il contatore di soci inseriti nella serata
 if($_POST['aggiuntoSocio'] == 'aggiungi')
     array_push($_SESSION['members_evening'], $_POST['tessera']);
 else if($_POST['aggiuntoSocio'] == 'cancella') {
@@ -323,7 +329,7 @@ else if($_POST['aggiuntoSocio'] == 'cancella') {
         $_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
     }
 }
-
+*/
 //unset($_SESSION['socio']);
 ?>
 

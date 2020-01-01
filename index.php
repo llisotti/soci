@@ -167,6 +167,7 @@ catch (PDOException $exception) {
     
 </ul>
 <table class="counter">
+    <!--
     <tr>
         <td colspan="2">N° SOCI SERATA</td>
     </tr>
@@ -176,17 +177,18 @@ catch (PDOException $exception) {
         <span style="color: #F70">
         <?php
         /* Se sono stati inseriti soci per questa serata visualizzo quanti altrimenti visualizzo 0 */
-        if(!isset($_SESSION['members_evening'])) {
-            $_SESSION['members_evening']=array();
-            $_SESSION['members_evening'][0]=0;
-        }
-        $maxkey=max(array_keys($_SESSION['members_evening']));
-        echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
+        //if(!isset($_SESSION['members_evening'])) {
+            //$_SESSION['members_evening']=array();
+            //$_SESSION['members_evening'][0]=0;
+        //}
+        //$maxkey=max(array_keys($_SESSION['members_evening']));
+        //echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
         ?>
         </span>
         </h1>
         </td>
     </tr>
+    -->
     <tr>
         <td colspan="2"><br/><br/></td>
     </tr>

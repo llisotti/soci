@@ -113,6 +113,7 @@ if($member->tessera!=NULL) {
     ?>
 </ul>
 <table class="counter">
+    <!--
     <tr>
         <td colspan="2">N° SOCI SERATA</td>
     </tr>
@@ -122,13 +123,14 @@ if($member->tessera!=NULL) {
         <span style="color: #F70">
         <?php
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
-        $maxkey=max(array_keys($_SESSION['members_evening']));
-        echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
+        //$maxkey=max(array_keys($_SESSION['members_evening']));
+        //echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
         ?>
         </span>
         </h1>
         </td>
     </tr>
+    -->
     <tr>
         <td colspan="2"><br/><br/></td>
     </tr>
