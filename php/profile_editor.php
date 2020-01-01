@@ -280,6 +280,11 @@ else { //Modifico un'identita' o da identita' diventa socio
 <tr>
 <td>Codice fiscale: </td>
 <td><input name="cf" type="text" value="<?php echo $member->codice_fiscale ?>" /></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right"><a href="" onclick="return false"><img class="apri_stati_province" style="border:0;height:31px" src="../img/question.png" alt="" title="Clicca per le sigle degli stati e delle province" /></a></td>
 </table><?php /*
 if (isset($_GET['cf']))
 {
@@ -324,6 +329,12 @@ else
 <td><input name="provincia" size="1" type="text" value="<?php echo $member->provincia; ?>" /></td>
 <td style="text-align:right">Stato: </td>
 <td><input name="stato" size="1" type="text" value="<?php echo $member->stato; ?>" /><td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right"><a href="" onclick="return false"><img class="apri_stati_province" style="border:0;height:31px" src="../img/question.png" alt="" title="Clicca per le sigle degli stati e delle province" /></a></td>
 </tr>
 </table><br><br><br>
 <ol class="contact" start="3" style="padding-left: 15px">
@@ -495,8 +506,8 @@ $(document).ready(function(){
 
 
     /* Funzione visualizzazione tessere inserite nella sessione */
-    $("a#view").click(function() {
-        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
+    $(".apri_stati_province").click(function() {
+        window.open('../php/lista_stati_province.php','', "height=800,width=1100,scrollbars=1");
     });
         
     
