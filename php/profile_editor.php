@@ -94,11 +94,11 @@ if($member->tessera!=NULL) {
         echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
     <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
-
-    <li><a id="esporta_soci" href="#">Esporta soci</a></li>
-    <li><a id="esporta_identita" href="#">Esporta identità</a></li>
+	<li><a id="DB_functions" href="" onclick="return false;">Operazioni su DB</a></li>
+    <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
+    <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
     <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
-    <li><a id="DB_functions" href="#">Operazioni su database</a></li>
+    
     <?php
     if($_SESSION['update']) {
         ?>
@@ -107,7 +107,7 @@ if($member->tessera!=NULL) {
     }
     else {
         ?>
-        <li class="last"><a href="#">Aggiornamento sw</a></li>
+        <li class="last"><a href="" onclick="return false;">Aggiornamento sw</a></li>
         <?php
     }
     ?>
@@ -476,19 +476,19 @@ $(document).ready(function(){
         
     /* Funzione di creazione backup */
     $("a#DB_functions").click(function() {
-        window.open('../php/root_functions.php?action=DB_functions','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=DB_functions','', "height=450,width=900");
     });
     
     
     /* Funzione di gestione esportazione elenco soci */
     $("a#esporta_soci").click(function() {
-        window.open('../php/root_functions.php?action=members_export','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=members_export','', "height=300,width=700");
     })
     
         
     /* Funzione di gestione esportazione elenco identità*/
     $("a#esporta_identita").click(function() {
-        window.open('../php/root_functions.php?action=identities_export','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=identities_export','', "height=300,width=700");
     })
 
 

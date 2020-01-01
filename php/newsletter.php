@@ -79,10 +79,10 @@ catch (PDOException $exception) {
         echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
     <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
-    <li><a id="esporta_soci" href="">Esporta soci</a></li>
-    <li><a id="esporta_identita" href="">Esporta identità</a></li>
+    <li><a id="DB_functions" href="" onclick="return false;" >Operazioni su DB</a></li>
+    <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
+    <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
     <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
-    <li><a id="DB_functions" href="">Operazioni sul DB</a></li>
     <?php
     if($_SESSION['update']) {
         ?>
@@ -467,7 +467,7 @@ $(document).ready(function(){
 
     /* Funzione di creazione backup */
     $("a#DB_functions").click(function() {
-        window.open('../php/root_functions.php?action=DB_functions','', "height=190,width=580");
+        window.open('../php/root_functions.php?action=DB_functions','', "height=450,width=900");
     });
     
 
