@@ -174,6 +174,43 @@ $formatter= new InputFormat($format_input);
 $formatter->format($_POST);
 
 /**
+ * Se si tenta di aggiornare il nummero tessera, controllo se esiste gia' quel numero tessera associato ad un altra persona
+ */
+try {  
+    
+    if($_POST['tessera'] != NULL) {
+        
+        /* Controllo se esiste gia' la tessera passata in POST */
+        $prepared=$dbh->prepare("SELECT COUNT(*) FROM socio WHERE numero_tessera=?");
+        $prepared->execute([$_POST['tessera']]);
+        $counter=$prepared->fetch(PDO::FETCH_COLUMN);
+        
+        /* Se esiste, proseguo facendo altri controlli */
+        if($counter) {
+            $prepared=$dbh->prepare("SELECT cf FROM socio WHERE numero_tessera=?");
+            $prepared->execute([$_POST['tessera']]);
+            $cf=$prepared->fetch(PDO::FETCH_COLUMN);
+            /**
+             * Se c'e' il numero tessera ed il codice fiscale che passo in post cambia al massimo di 2 caratteri rispetto quello ottenuto dalla query
+             * ipotizzo che il socio sia lo stesso in quanto potrei anche variare il codice fiscale
+             * Se il codice fiscale cambia differisce piu' di 2 caratteri allora la tessera e' gia' occupata da un altro socio: lancio l'eccezione
+             */
+            if(similar_text($cf , $_POST['cf']) >= 2)
+                throw new Exception("Tessera gia' esistente");
+        }
+    }
+}catch (Exception $e) {
+    ?>
+    <div style="display: flex;">
+		<img src="../img/check_ko.png" height="256" width="256">
+	</div>
+	<?php
+	errorMessage($e);
+	die();
+}
+
+
+/**
  * Aggiorno i dati in anagrafica
  * ATTENZIONE: con REPLACE se la primary key (codice fiscale) gia' esiste allora aggiorno la riga
  * altrimenti creo una riga nuova. In pratica se cambio il codice fiscale creo una nuova riga
@@ -254,19 +291,6 @@ isset($_POST['diffusione_nominativo']) ? $adesioni|=1 : $adesioni&=254;
 isset($_POST['newsletter']) ? $adesioni|=2 : $adesioni&=253;
 
 try {
-    /**
-     * Se passo la tessera allora:
-     * 1 - E' gia' un socio allora ne aggiorno solo i dati
-     * 2 - Da identita' diventa socio aggiungendo la tessera, la data tessera. Eventualmente aggiorno anche i dati
-     */
-    
-    /* Per prima cosa controllo se esiste gia' quel numero tessera */
-    $prepared=$dbh->prepare("SELECT COUNT(*) FROM socio WHERE numero_tessera=?");
-    $prepared->execute([$_POST['tessera']]);
-    $counter=$prepared->fetch(PDO::FETCH_COLUMN);
-    if($counter) { //Se esiste gia' la tessera lancio l'eccezione
-        throw new Exception("Tessera gia' esistente");
-    }
     
     /* Se la tessera non esiste posso proseguire l'operazione */
     if($_POST['tessera'] != NULL) {
