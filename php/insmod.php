@@ -1,5 +1,6 @@
 <?php
 require "member.php"; //OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE  !
+require 'login.php';
 
 /* Setto la sessione di 5 ore */
 ini_set('session.gc_maxlifetime', 18000);
@@ -138,7 +139,9 @@ catch (PDOException $e) {
 </table>
 </div>
 <div id="center-column">
-<div class="top-bar"> <h1><?php if(isset($_GET['id'])) echo "MODIFICA SOCIO"; else echo "INSERIMENTO NUOVO SOCIO"; ?></h1><br/>
+<div class="top-bar">
+<a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
+<h1><?php if(isset($_GET['id'])) echo "MODIFICA SOCIO"; else echo "INSERIMENTO NUOVO SOCIO"; ?></h1>
 </div>
 <br />
 <div class="select-bar">

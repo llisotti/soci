@@ -5,6 +5,8 @@ if(PHP_OS=="Linux")
 else
     require "php\member.php";
 
+require 'php/login.php';
+
 /* Setto la sessione di 5 ore */
 ini_set('session.gc_maxlifetime', 18000);
 //echo ini_get('session.gc_maxlifetime');
@@ -47,6 +49,20 @@ ini_set("display_errors", 1);
 </head>
 <body>
 <?php
+
+
+/* Se sono correttamente loggato continuo lo script */
+try {
+    if(!isset($dbh)) {
+        $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
+    }
+}
+catch (PDOException $exception) {
+    $mylog->logError("Errore di connessione al database: ".$exception->getMessage());
+    die("Errore di connessione al database: ".$exception->getMessage());
+}
+
+
 $member_obj=array(); //Array per oggetti socio
 
 /* Inizializzo il logger, pulisco i vecchi file di sessione e controllo gli aggiornamenti*/
@@ -108,16 +124,7 @@ else
     $mylog=$_SESSION['logger'];
 
 
-/* Mi connetto al database */
-try {
-    if(!isset($dbh)) {
-        $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");       
-    }
-}
-catch (PDOException $exception) {
-    $mylog->logError("Errore di connessione al database: ".$exception->getMessage());
-    die("Errore di connessione al database: ".$exception->getMessage());
-}
+
 ?>
 <div id="main">
 <div id="header">
@@ -246,7 +253,7 @@ catch (PDOException $exception) {
 </table>
 </div>
 <div id="center-column">
-<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
+<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <?php
 /* Se non passo nulla in GET visualizzo gli iscritti ma non ancora tesserati */
 if(empty($_GET) || !isset($_GET['show']))

@@ -64,22 +64,28 @@ require "php/member.php";
                 </div>
     <div class="card-body" style="font-size: 17px; font-family: Times new Roman">
         <h2 class="title">Benvenuto nella pagina di gestione soci dell' Osservatorio Copernico</h2>
-        <div style="padding: 5px; background-color: lightgrey">
+        <div style="padding: 5px; background-color:  #9d9ea5 ">
         	<br>
-        	<table>
-        	<tr>
-        		<td><h6>Username:&nbsp</h6></td>
-        		<td><input class="input--style-1" name="username" type="text"></td>
-        		<td align="right"><h6>&nbsp;&nbsp;Password:</h6></td>
-        		<td align="right"><input class="input--style-1" name="username" type="password"></td>
-        	</tr>
-        	<tr>
-        	</tr>
-        	<tr>
-        		<td colspan="3"></td>
-        		<td align="right"><a style="color:blue; font-size:12px;" href="<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index.php"; ?>">Area riservata</a></td>
-        	</tr>
-        	</table>
+        	<form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index.php"; ?> method="POST">
+            	<table>
+            	<tr>
+            		<td><h6>Username:&nbsp</h6></td>
+            		<td><input class="input--style-1" name="username" type="text"></td>
+            		<td align="right"><h6>&nbsp;&nbsp;Password:</h6></td>
+            		<td align="right"><input id=psw_input class="input--style-1" name="password" type="password"></td>
+            		<td><img id="lock" src="img/locked.png" width="16" height="16" alt="Visualizza password" title="Visualizza password" /></td>
+            	</tr>
+            	<tr>
+            	</tr>
+            	<tr>
+            		<td colspan="2"></td>
+            		<!--  <td align="right"><a style="color:blue; font-size:12px;" href="<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index.php"; ?>">Area riservata</a></td>
+            		-->
+            	</tr>
+            	</table>
+            	<br>
+            	<button type="submit" style="float: right;">Area riservata</button><br>
+        	</form>
         </div><br>
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
         	<li>Puoi controllare lo stato della Tua iscrizione e la validita' della tessera per l'anno in corso cliccando <a style="color:blue" href="" id="cerca">qui</a>.</li>
@@ -530,6 +536,21 @@ $(document).ready(function(){
     $("#segnalazione").click(function(e) {
         e.preventDefault();
         window.open('./php/helpdesk.php','', "height=700,width=580,scrollbars=1");
+    });
+
+
+    /* Funzione per gestire la visualizzazione o meno della password */
+    $("#lock").on('click', function () {
+        if($("#psw_input").attr('type')=='password') {
+            $("#psw_input").attr('type', 'text');
+            $(this).attr('src', 'img/unlocked.png');
+            $(this).attr('title', 'Nascondi password');
+        }
+        else {
+            $("#psw_input").attr('type', 'password');
+            $(this).attr('src', 'img/locked.png');
+            $(this).attr('title', 'Visualizza password');
+        }
     });
 
 });

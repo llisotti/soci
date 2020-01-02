@@ -1,5 +1,6 @@
 <?php
 require "member.php"; //OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE  !
+require 'login.php';
 
 /* Setto la sessione di 5 ore */
 ini_set('session.gc_maxlifetime', 18000);
@@ -189,7 +190,7 @@ if($member->tessera!=NULL) {
 </div>
 <form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/soci/php/insmod.php?cf="."$_GET[cf]'"; ?> method="post"><input type="hidden" name="" value=""/>
 <div id="center-column">
-<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php" class="button" title="Aggiungi nuovo socio"></a>
+<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <h1>MODIFICA PROFILO</h1>
 <br/>
 </div>

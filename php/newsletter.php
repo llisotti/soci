@@ -3,8 +3,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 //use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+
 // Esempio invio newsletter con PHPMailer: https://github.com/PHPMailer/PHPMailer/blob/master/examples/mailing_list.phps
 require "member.php"; //OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE  !
+require 'login.php';
 require "PHPMailer/src/PHPMailer.php";
 require "PHPMailer/src/Exception.php";
 require "PHPMailer/src/SMTP.php";
@@ -158,7 +160,7 @@ if(!isset($_POST['title'])) {
 
 if(!isset($_POST['title'])) {
     ?> 
-<input type="submit" value="Invia_newsletter" title="Invia Newsletter"/>
+<a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <?php
 /* Se non ho inviato la newsletter richiedo le identità con email */
 
@@ -189,7 +191,9 @@ if(!isset($_POST['title'])) {
     <input id="psw_input" type="password" name="psw" placeholder="Password" size="13" required />
     <img id="lock" src="../img/locked.png" width="16" height="16" alt="Visualizza password" title="Visualizza password" />
     <input style="margin-left:25px" type="checkbox" name="include_image" checked/><span style="font-size:10px">Includi immagine</span>
+    <input type="submit" value="Invia_newsletter" title="Invia Newsletter"/>
     <textarea name="preImage" rows="2" cols="69" style="overflow:auto;resize:none" placeholder="Inserire qui un eventuale messaggio (ad esempio un'errata corrige) prima di un'imamgine"></textarea></br>
+   
     <table style="width:91%">
     <tr>
     <th></th>

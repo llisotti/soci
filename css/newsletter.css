@@ -220,6 +220,20 @@ ul.nav li.last {background:none;}
 	padding:0 0 0 9px;
 	margin:0 0 4px 0;
 	}
+	
+	
+.top-bar a.button {
+	float:right;
+	display:block;
+	width:35px;
+	height:35px;
+	text-align:center;
+	color:#fff;
+	text-transform:uppercase;
+	font-weight:bold;
+	line-height:15px;
+	background:url(../img/shutdown.png) no-repeat;
+}
 /* text page header */
 .top-bar h1 {
 	font:20px/21px verdana,sans-serif;
