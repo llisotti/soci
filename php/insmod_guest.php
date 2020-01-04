@@ -133,7 +133,7 @@ require "member.php";
                                                             firma)
                                                             VALUES(?, DATE_ADD(LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH)),".DROP_IDENTITY_MYSQL."), ?, ?, ?, ?)");
                 
-                $prepared->execute([$_POST['cf'], NULL, NULL, $adesioni, $_POST['cognome'].$_POST['nome']."-".str_replace("/", "", $_POST['data_nascita']).".png"]);
+                $prepared->execute([$_POST['cf'], NULL, NULL, $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".str_replace("/", "", $_POST['data_nascita']).".png"]);
             }
             catch (PDOException $e) {               
                 ?>

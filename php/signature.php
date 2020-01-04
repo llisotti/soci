@@ -5,7 +5,7 @@ if(isset($_POST['firma'])) { //Se passo la firma sto salvando l'immagine della f
     $uri=base64_decode($_POST['firma']); //convert base64($_POST['firma']);
     //$uri=base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $_POST['firma']));
     $birthday=str_replace("/", "", $_POST['birthday']);
-    $filename=SIGNATURE_IMAGE_PATH.ucfirst(strtolower(($_POST['cognome']))).ucfirst(strtolower(($_POST['nome'])))."-".$birthday.".png";
+    $filename=SIGNATURE_IMAGE_PATH.ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".$birthday.".png";
     $ret="0";
     if(!file_exists($filename))
         $ret=file_put_contents($filename, $uri);
