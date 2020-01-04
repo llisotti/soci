@@ -195,7 +195,7 @@ try {
              * ipotizzo che il socio sia lo stesso in quanto potrei anche variare il codice fiscale
              * Se il codice fiscale cambia differisce piu' di 2 caratteri allora la tessera e' gia' occupata da un altro socio: lancio l'eccezione
              */
-            if(similar_text($cf , $_POST['cf']) >= 2)
+            if(similar_text($cf , $_POST['cf']) < 14)
                 throw new Exception("Tessera gia' esistente");
         }
     }
