@@ -86,8 +86,8 @@ require "member.php";
                                     $_POST['indirizzo'],
                                     $_POST['citta'],
                                     $_POST['cap'],
-                                    $_POST['provincia'],
-                                    $_POST['stato_residenza'],
+                                    (!empty($_POST['cap']) ? $_POST['provincia'] : NULL),
+                                    (!empty($_POST['cap']) ? $_POST['stato_residenza'] : NULL),
                                     $_POST['telefono'],
                                     $_POST['email'],
                                     ]);
