@@ -380,9 +380,9 @@ else //Se e' maggiorenne firma propria
 </label></li>
 </ol>
 <?php
-$string=base64_encode(file_get_contents(str_replace(" ", "", SIGNATURE_IMAGE_PATH.$member->firma)))
+$string=base64_encode(file_get_contents(str_replace(" ", "", SIGNATURE_IMAGE_PATH.$member->firma)));
 ?>
-<img src="data:image/svg+xml;base64,<?php echo $string ?>" />
+<img src="data:image/png;base64,<?php echo $string ?>" />
 </div>
 <br><br><br>
 <span style="padding-left: 300px; padding-bottom: 0px; padding-top: 20px"></span>
