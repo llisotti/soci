@@ -72,7 +72,8 @@ $GLOBALS["script_name"] = "//"  . $GLOBALS['__SERVER']['HTTP_HOST'] . $GLOBALS['
 $GLOBALS['home_url']	= "//"  . $GLOBALS['__SERVER']['HTTP_HOST'] . dirname($GLOBALS['__SERVER']["PHP_SELF"]);
 
 $GLOBALS['home_url'] = str_replace( '/administrator', '', $GLOBALS['home_url'] );
-$GLOBALS['home_dir'] = !empty( $_SERVER['DOCUMENT_ROOT'] ) ? $_SERVER['DOCUMENT_ROOT'] : '.';
+//$GLOBALS['home_dir'] = !empty( $_SERVER['DOCUMENT_ROOT'] ) ? $_SERVER['DOCUMENT_ROOT'] : '.';
+$GLOBALS['home_dir'] = $_SERVER['DOCUMENT_ROOT']."/soci/doc";
 
 // Important Definitions!
 define ("_EXT_PATH",		realpath(dirname( __FILE__ ) . '/..'));
@@ -90,7 +91,8 @@ require_once(_EXT_PATH . '/include/functions.php');
 // check if we need login
 	if ( !ext_isjoomla() ) {
 		// login to use eXtplorer: (true/false)
-		$GLOBALS["require_login"] = true;
+		//$GLOBALS["require_login"] = true;
+	    $GLOBALS["require_login"] = false;
 	} else {
 		$GLOBALS["require_login"] = false;
 	}
