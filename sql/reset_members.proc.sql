@@ -5,7 +5,6 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS reset_members;
 CREATE PROCEDURE reset_members()
 BEGIN
-UPDATE presenze SET data=NULL;
-UPDATE anagrafica SET tessera=NULL;
+UPDATE socio SET data_tessera=NULL, numero_tessera=NULL;
 END$$
 DELIMITER ;
