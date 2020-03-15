@@ -73,18 +73,17 @@ require "php/member.php";
             		<td><input class="input--style-1" name="username" type="text"></td>
             		<td align="right"><h6>&nbsp;&nbsp;Password:</h6></td>
             		<td align="right"><input id=psw_input class="input--style-1" name="password" type="password"></td>
-            		<td><img id="lock" src="img/locked.png" width="16" height="16" alt="Visualizza password" title="Visualizza password" /></td>
+            		<td>&nbsp<img id="lock" src="img/locked.png" width="16" height="16" alt="Visualizza password" title="Visualizza password" /></td>
             	</tr>
             	<tr>
-            	</tr>
+            	<td colspan="3"></td>
+            		<td><h6>&nbsp</h6></td> <!-- Solo per creare spazio verticale tra caselle e testo Area riservata -->
+				</tr>
             	<tr>
-            		<td colspan="2"></td>
-            		<!--  <td align="right"><a style="color:blue; font-size:12px;" href="<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index.php"; ?>">Area riservata</a></td>
-            		-->
-            	</tr>
+            	<td colspan="3"></td>
+            		<td><button type="submit" style="float: right;">Area riservata</button></td>
+				</tr>
             	</table>
-            	<br>
-            	<button type="submit" style="float: right;">Area riservata</button><br>
         	</form>
         </div><br>
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
@@ -92,7 +91,7 @@ require "php/member.php";
     	</ul>
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
         	<li>Se non risulti iscritto puoi farlo velocemente compilando il modulo di registrazione sottostante facendo attenzione alla sezione obbligatoria.</li>
-        	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa di 5€ ti sara' rilasciata subito la tessera.</li>
+        	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa di 6€ ti sara' rilasciata subito la tessera.</li>
         	<li>L'iscrizione e' obbligatoria per individui di eta' uguale o maggiore ad 8 anni e non comporta alcun vincolo.</li>
     	</ul>
 		<ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
@@ -100,7 +99,7 @@ require "php/member.php";
         </ul>
     	<br><br>
         <h3 class="title">Modulo di registrazione</h3><br>
-		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">sezione obbligatoria</span>) -</h6>
+		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">sezione obbligatoria</span>) * -</h6>
 		<br>
         <form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/php/insmod_guest.php"; ?> method="POST">
 		    <div class="row row-space">
@@ -220,8 +219,8 @@ require "php/member.php";
                         </div>
 			</div>
 			</div>
-			<input id="adesione_obbligatoria" class="check" type="checkbox" name="adesione_statuto" value="aderisco" checked required><span style="font-size:13px; font-family: Arial Narrow"> Dichiaro di aver preso visione dello <a target="_blank" rel="noopener noreferrer" style="color:blue" href="">statuto</a> dell' Associazione senza scopo di lucro denominata "ASSOCIAZIONE CULTURALE GRUPPO ASTROFILI N. COPERNICO" e che, in particolare, condivido gli scopi di natura ideale dell' Associazione (art. 2 dello statuto).</span><br><br>
-			<input id="privacy_obbligatoria" class="check" type="checkbox" name="trattamento_dati" value="acconsento" checked required><span style="font-size:13px; font-family: Arial Narrow">Acconsento al trattamento dei miei dati personali da svolgersi in conformita' di quanto indicato <a id="info" target="_blank" rel="noopener noreferrer" style="color:blue" href="/soci/doc/INFORMATIVA-E-CONSENSO-PER-SOCI-2018-1.pdf">nell'informativa </a>e nel rispetto delle disposizioni del GDPR e del D. Lgs. n. 196/03.</span><br><br>
+			<input id="adesione_obbligatoria" class="check" type="checkbox" name="adesione_statuto" value="aderisco" checked required><span style="font-size:13px; font-family: Arial Narrow"> Dichiaro di aver preso visione dello <a target="_blank" rel="noopener noreferrer" style="color:blue" href="/soci/doc/STATUTO Gruppo Astrofili.pdf">statuto</a> dell' Associazione senza scopo di lucro denominata "ASSOCIAZIONE CULTURALE GRUPPO ASTROFILI N. COPERNICO" e che, in particolare, condivido gli scopi di natura ideale dell' Associazione (art. 2 dello statuto).</span><br><br>
+			<input id="privacy_obbligatoria" class="check" type="checkbox" name="trattamento_dati" value="acconsento" checked required><span style="font-size:13px; font-family: Arial Narrow">Acconsento al trattamento dei miei dati personali da svolgersi in conformita' di quanto indicato <a id="info" target="_blank" rel="noopener noreferrer" style="color:blue" href="/soci/doc/1-INFORMATIVA E CONSENSO PER SOCI_2019.pdf">nell'informativa </a>e nel rispetto delle disposizioni del GDPR e del D. Lgs. n. 196/03.</span><br><br>
 			<input id="privacy"class="check" type="checkbox" name="diffusione_nominativo" value="acconsento"><span style="font-size:13px; font-family: Arial Narrow">Acconsento alla diffusione del mio nome e cognome, della mia immagine o di video che mi riprendono nel sito istituzionale, nei social network (es. Facebook, Instagram, Youtube) e sul materiale informativo cartaceo dell'Associazione per soli fini di descrizione e promozione dell'attivita' istituzionale, nel rispetto delle disposizione del GDPR e del D. Lgs. n. 196/03 e delle autorizzazioni/indicazioni della commissione UE e del Garante per la Protezione dei Dati Personali.</span><br><br>
 			<input id="news" class="check" type="checkbox" name="newsletter" value="iscritto"><span style="font-size:13px; font-family: Arial Narrow">Desidero iscrivermi alla newsletter per rimanere informato su novita' ed eventi.</span><br><br><br>
 			<h5 id="firma" class="input--style-1" style="text-align:left">FIRMA DEL RICHIEDENTE (obbligatoria)</h5>
@@ -398,7 +397,7 @@ $(document).ready(function(){
     
 	/* Se l'utente visualizza il sito in portrait gli mando un alert che e' meglio ruotare il telefono */
     if(window.innerHeight > window.innerWidth){
-        alert("Per una migliore compilazione dei campi e' consigliabile ruotare la vista del dispositivo");
+        alert("A fine procedura, nel momento di apporre la firma digitale, e' consigliabile ruotare la vista del dispositivo in senso orizzontale");
     }
     
     /* Controllo se minorenne ed eventualmente cambio messaggio nella firma */
@@ -411,13 +410,13 @@ $(document).ready(function(){
     	var age = today_year-birthday_year;
     	if((age) < "18") {
     		$("#firma").text("FIRMA DEL GENITORE (obbligatoria)"); //Cambio l'intestazione della firma
-    		$("#info").attr("href", "/soci/doc/Informativa e consenso per i soci minorenni.pdf"); //Cambio l'informativa con quella per minorenni...
+    		$("#info").attr("href", "/soci/doc/2-INFORMATIVA E CONSENSO PER SOCI MINORENNI.pdf"); //Cambio l'informativa con quella per minorenni...
     		$("#info").text("nell'informativa per minorenni "); //...ed il testo
     		$("#etaconsenso").val("minorenne");
     	}
     	else {
     		$("#firma").text("FIRMA DEL RICHIEDENTE (obbligatoria)");
-    		$("#info").attr("href", "/soci/doc/INFORMATIVA-E-CONSENSO-PER-SOCI-2018-1.pdf"); //Cambio l'informativa con quella per maggiorenni...
+    		$("#info").attr("href", "/soci/doc/1-INFORMATIVA E CONSENSO PER SOCI _2019.pdf"); //Cambio l'informativa con quella per maggiorenni...
     		$("#info").text("nell'informativa "); //...ed il testo
     		$("#etaconsenso").val("maggiorenne");
     	}

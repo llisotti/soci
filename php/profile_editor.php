@@ -276,16 +276,13 @@ else { //Modifico un'identita' o da identita' diventa socio
 <td><input id="provincia_nascita" name="provincia_nascita" size="1" type="text" value="<?php if($member->stato_nascita=="IT") echo $member->provincia_nascita ?>"/></td>
 <td style="text-align:right">Stato: </td>
 <td><input id="stato_nascita" name="stato_nascita" size="1" type="text" value="<?php echo $member->stato_nascita ?>"/></td>
+<td style="text-align:right"><a href="" onclick="return false"><img class="apri_stati_province" style="border:0;height:31px" src="../img/question.png" alt="" title="Clicca per le sigle degli stati e delle province" /></a></td>
 <!-- <img src="../img/_nascita_estero.png" height="60" width="100"> -->
 </tr>
 <tr>
 <td>Codice fiscale: </td>
 <td><input name="cf" type="text" value="<?php echo $member->codice_fiscale ?>" /></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td style="text-align:right"><a href="" onclick="return false"><img class="apri_stati_province" style="border:0;height:31px" src="../img/question.png" alt="" title="Clicca per le sigle degli stati e delle province" /></a></td>
+</tr>
 </table><?php /*
 if (isset($_GET['cf']))
 {
@@ -321,7 +318,7 @@ else
 <td>Indirizzo: </td>
 <td><input name="indirizzo" size="46" type="text" value="<?php echo $member->indirizzo; ?>"/></td>
 <td style="text-align:right">Cap: </td>
-<td><input name="cap" size="9" type="text" value="<?php echo $member->cap; ?>" /></td>
+<td><input name="cap" size="7" type="text" value="<?php echo $member->cap; ?>" /></td>
 </tr>
 <tr>
 <td style="text-align:right">Citta': </td>
@@ -330,11 +327,6 @@ else
 <td><input name="provincia" size="1" type="text" value="<?php echo $member->provincia; ?>" /></td>
 <td style="text-align:right">Stato: </td>
 <td><input name="stato" size="1" type="text" value="<?php echo $member->stato; ?>" /><td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
 <td style="text-align:right"><a href="" onclick="return false"><img class="apri_stati_province" style="border:0;height:31px" src="../img/question.png" alt="" title="Clicca per le sigle degli stati e delle province" /></a></td>
 </tr>
 </table><br><br><br>

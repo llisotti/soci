@@ -10,6 +10,7 @@
 <dl>
 <dt>La tabella "anagrafica": contiene le classiche informazioni anagrafiche di qualsiasi persona</dt>
 <dt>La tabella "socio": contiene tutte le informazioni che puo' avere un socio o un'identita' del copernico</dt>
+<dt>La tabella "customList": si tratta di una lista personalizzata a se stante che contiene informazioni di persone/enti a cui inviare la newsletter</dt>
 <dt>La procedura "reset_members" che elimina tutti i soci. La chiamata <i>mysql>CALL reset_members()</i> come azione:</dt>
 <dd> - Mette NULL nel campo "data" della tabella "presenze"</dd>
 <dd> - Mette NULL nel campo "tessera" della tabella "anagrafica"</dd>
@@ -60,8 +61,13 @@
 <dd>BIT 6: disponibile</dd>
 <dd>BIT 7: disponibile</dd>
 <dd>*/</dd>
-
-
+<dt>customList:</dt>
+<dd>cf				CHAR(16) NOT NULL,		#codice fiscale sempre 16 cifre</dd>
+<dd>cognome		VARCHAR(30) NOT NULL,</dd>	
+<dd>nome			VARCHAR(30) NOT NULL,</dd>	
+<dd>email      		VARCHAR(40) NOT NULL,</dd>
+<dd>PRIMARY KEY (cf)</dd>
+<dd>ENGINE=INNODB;</dd>
 </dl>
 
 <h5>Le procedure sono implementate nel seguente modo:</h5>
@@ -179,14 +185,16 @@ Dal pulsante a fianco "Sfoglia" scegliere un backup che si vuole ripristinare
 Cliccare su "Esegui"
 Quando apparirà l'cona che conferma il successo dell'operazione ricaricare nuovamente la pagina Home
 
-###################
-GESTIONE NEWSLETTER
-###################
-Il funzionamento della Newsletter è il seguente:
-. Per essere iscritti alla newsletter basta inserire un indirizzo email. Viceversa per cancellarsi alla newsletter basterà cancellare l'indirizzo email
-. L'invio della email avviene tramite protocollo SMTP autenticato da password con connessione SSL/TSL
-. Il corpo della email è una pagina web in html salvata nella cartella html del sito. In essa è contenuta un'immagine con il nome evento.jpg. E' proprio quest'ultima che rappresenta la locandina dell'evento da pubblicizzare viene letta nella cartella doc del sito. Pertanto ad ogni nuovo evento occorre creare un'immagine con il nome evento.jpg e metterla nella cartella doc del sito. A quel punto automaticamente essa viene inserita nel corpo della email
- 
+<h4>Newsletter</h4>
+L'invio della newsletter puo' avvenire a due tipologie di destinatari:
+<dl>
+<dt>Pescando automaticamente le identita' che hanno una email dalle tabelle anagrafica e soci ovvero quelli che si sono iscritte con l'iscizione online. In questo caso:</dt>
+<dd>Per essere iscritti alla newsletter basta inserire un indirizzo email. Viceversa per cancellarsi alla newsletter basterà cancellare l'indirizzo email</dd>
+<dd>L'invio della email avviene tramite protocollo SMTP autenticato da password con connessione SSL/TSL</dd>
+<dd>Il corpo della email è una pagina web in html salvata nella cartella html del sito. In essa è contenuta un'immagine con il nome evento.jpg. E' proprio quest'ultima che rappresenta la locandina dell'evento da pubblicizzare viene letta nella cartella doc del sito. Pertanto ad ogni nuovo evento occorre creare un'immagine con il nome evento.jpg e metterla nella cartella doc del sito. A quel punto automaticamente essa viene inserita nel corpo della email</dd>
+<dt>Pescando da una lista che carico io (customizzata):</dt>
+</dl>
+
 Accedendo alla pagina Newsletter il layout si presenta in questo modo:
 . Accanto alla scritta ELENCO IDENTITA' ISCRITTE ALLA NEWSLETTER, dentro le parentesi tonde, viene mostrato il numero di identità che sono iscritti alla newsletter
 . A fianco sulla destra cliccando sulla busta gialla si invia la newsletter

@@ -132,7 +132,7 @@ $pdf->ln(15);
 $pdf->MultiCell(0, 10, "Premesso:", 0, 'C', 0, 0, '', '', true);
 $pdf->ln(5);
 $premessa = "- di aver preso visione dello statuto dell'Associazione senza scopo di lucro denominata \"ASSOCIAZIONE CULTURALE GRUPPO ASTROFILI N. COPERNICO\".\n"
-."- che in particolare codivido gli scopi di natura ideale dell'Associazione (art. 2 dello statuto).";
+."- che in particolare condivido gli scopi di natura ideale dell'Associazione (art. 2 dello statuto).";
 $pdf->MultiCell(0, 10, $premessa, 0, 'J', 0, 0, '', '', true);
 $pdf->ln(20);
 
@@ -165,7 +165,7 @@ $accolta ="Vista la domanda prevenuta all' \"ASSOCIAZIONE CULTURALE GRUPPO ASTRO
 $pdf->MultiCell(0, 10, $accolta, 0, 'L', 0, 0, '', '', true);
 
 /* Aggiungo la firma del Presidente */
-$string=base64_encode(file_get_contents(str_replace(" ", "", SIGNATURE_IMAGE_PATH.$member->firma)));
+$string=base64_encode(file_get_contents(str_replace(" ", "", SIGNATURE_IMAGE_PATH."LollinoGianfranco-27111957.png")));
 if($string==false)
     $pdf->writeHTML("ERRORE, firma non trovata", true, false, true, false, '');
 
@@ -221,10 +221,9 @@ cancellazione dei dati, il diritto di limitazione e opposizione al trattamento, 
 liceità del trattamento basata sul consenso acquisito prima della revoca), nonché il di proporre reclamo al Garante per la Protezione dei dati personali
 qualora Lei ritenga che il trattamento che riguarda Suo figlio/a violi il GDPR o la normativa italiana. I suddetti diritti possono essere esercitati
 mediante comunicazione scritta da inviare a mezzo posta elettronica, p.e.c. o fax, o a mezzo Raccomandata presso la sede dell’Associazione.
-Il Data Protection Officer (DPO) nominato dall’Associazione è Franca Gotelli, a cui ciascun interessato può scrivere, in relazione al trattamento dei dati
-svolto dall’Associazione e/o in relazione ai Suoi diritti, all’indirizzo segreteria@arcieritigullio.it.
-Titolare del trattamento. Il titolare del trattamento è l’Associazione A.S.D. Arcieri Tigullio, con sede in 16030 Cogorno (GE), Via Divisione Coduri
-75/5 – mail segreteria@arcieritigullio.it";
+Il Data Protection Officer (DPO) nominato dall’Associazione è LOLLINO GIAN FRANCO, a cui ciascun interessato può scrivere, in relazione al
+trattamento dei dati svolto dall’Associazione e/o in relazione ai Suoi diritti, all’indirizzo lollinogianfranco@gmail.com. Il DPO può essere altresì contattato
+telefonicamente tramite l’Associazione al numero 3334055640.Il titolare del trattamento è l’Associazione Gruppo Astrofili \"N. Copernico\" - via Pulzona, 1708 Saludecio (RN) 47835.";
 }
 else {//Se e' maggiorenne
     $titolo_informativa = "INFORMATIVA EX ART. 13 GDPR PER SOCI E ASPIRANTI SOCI E CONSENSO AL TRATTAMENTO DATI";
@@ -270,11 +269,10 @@ pregiudizio per la liceità del trattamento basata sul consenso acquisito prima 
 Protezione dei dati personali qualora tu ritenga che il trattamento che ti riguarda violi il GDPR o la normativa italiana. I suddetti diritti possono
 essere esercitati mediante comunicazione scritta da inviare a mezzo posta elettronica, pec, o a mezzo Raccomandata presso la sede
 dell’Associazione.
-Il Data Protection Officer (DPO) nominato dall’Associazione è il Segretario pro tempore, a cui ciascun interessato può scrivere, in relazione al
-trattamento dei dati svolto dall’Associazione e/o in relazione ai Suoi diritti, all’indirizzo DPO@afadoc.it. Il DPO può essere altresì contattato
-telefonicamente tramite l’Associazione al numero 0444.301570.
-Titolare del trattamento. Il titolare del trattamento è l’Associazione A.Fa.D.O.C., con sede legale in via F. Vigna n.3 a Vicenza – tel. 0444.301570 –
-fax 0444.301570 mail privacy@afadoc.it";
+Il Data Protection Officer (DPO) nominato dall’Associazione è LOLLINO GIAN FRANCO, a cui ciascun interessato può scrivere, in relazione al
+trattamento dei dati svolto dall’Associazione e/o in relazione ai Suoi diritti, all’indirizzo lollinogianfranco@gmail.com. Il DPO può essere altresì contattato
+telefonicamente tramite l’Associazione al numero 3334055640.
+Titolare del trattamento. Il titolare del trattamento è l’Associazione Gruppo Astrofili \"N. Copernico\" - via Pulzona, 1708 Saludecio (RN) 47835.";
 }
 $pdf->MultiCell(0, 10, $informativa, 1, 'L', 0, 0, '', '', true);
 $pdf->ln(160);
@@ -306,8 +304,7 @@ if($adesioni & 4) //Se e' minorenne
 else //Se e' maggiorenne
     $pdf->MultiCell(140, 10, "(firma del socio)", 0, 'R', 0, 0, '', '', true);
 
-// Close and output PDF document
-// This method has several options, check the source code documentation for more information.
+/* Stampo e apro il PDF */
 $pdf->Output(PDF_PATH.$member->tessera."-".$member->cognome.$member->nome.".pdf", 'FI');
 
 

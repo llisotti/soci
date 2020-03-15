@@ -130,7 +130,7 @@ catch (PDOException $exception) {
     $counter=$members->fetchColumn();
    
     ?>
-        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href=""><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
+        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href="" onclick="return false"><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
     </tr>
     <tr>
         <td colspan="2"><br/><br/><br/><br/></td>

@@ -158,20 +158,31 @@ require "member.php";
 		</div>
 	</div>
 </div>
-</div>
+
 <?php 
 function errorMessage(PDOException $ex) {
     echo "La procedura di iscrizione e' fallita con codice errore: ".$ex->errorInfo[1];
     echo "<p>Torna alla pagina di registrazione e verifica di non essere gia' iscritto. Verifica inoltre i dati immessi nei campi.</p>";
     echo "<p>Se l'errore persiste invia una segnalazione cliccando sull'apposito link nella pagina di registrazione.</p>";
+?>
+<br>
+<div style="text-align:center">
+<a style="color:blue" href=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index_guest.php"?> >Torna alla pagina di registrazione</a>
+</div>
+<?php
 }
 
 function successMessage() {
-    echo "<br><ul style='font-family: Arial; font-size:15px'>";
+    echo "<br>";
     echo "COMPLIMENTI, la Tua iscrizione e' andata a buon fine.";
-    echo "<li>Ora puoi recarti in Osservatorio nei giorni di apertura. Dopo il versamento della quota associativa di 5€ Ti sara' rilasciata subito la tessera.</li>";
-    echo "<li>La tessera e' valida sino al 31 Dicembre</li>";
-    echo "</ul><br>";
+    echo "<p>Ora puoi recarti in Osservatorio nei giorni di apertura. Dopo il versamento della quota associativa sara' rilasciata subito la tessera.</p>";
+    echo "<p>La tessera e' valida sino al 31 Dicembre</p>";
+    ?>
+<br>
+<div style="text-align:center">
+<a style="color:blue" href=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index_guest.php"?> >Torna alla pagina di registrazione</a>
+</div>
+<?php
 }
 ?>
 </body>
