@@ -277,13 +277,13 @@ else {
             ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
             break;
         case "backup-completo": //Faccio il backup completo (struttura + dati)
-            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci > ".BACKUP_PATH.$data."_BackupCompleto.sql 2>&1", $return_value);
             break;
         case "backup-solodati": //Faccio il backup solo dei dati (non della struttura)
-            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-create-info > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-create-info > ".BACKUP_PATH.$data."_BackupSoloDati.sql 2>&1", $return_value);
             break;
         case "backup-solostruttura": //Faccio il backup solo della struttura (non dei dati)
-            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-data > ".BACKUP_PATH.$data."_Backup.sql 2>&1", $return_value);
+            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-data > ".BACKUP_PATH.$data."_BackupSoloStruttura.sql 2>&1", $return_value);
             break;
         case "restore": //Faccio il backup solo della struttura (non dei dati)
             system(MYSQL_EXECUTABLE."-u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
