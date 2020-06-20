@@ -55,7 +55,7 @@ define ("FROM_ADDRESS", "info@osservatoriocopernico.it");
  * Percorso per il backup del database
  */
 if(PHP_OS=="Linux")
-    define ("BACKUP_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/");
+    define ("BACKUP_PATH", $_SERVER['DOCUMENT_ROOT']."/doc/");
 else
     define("BACKUP_PATH", "D:\\\\dati\\\\xampp\\\\htdocs\\\\soci\\\\doc\\\\");
 
@@ -70,7 +70,7 @@ define("LOGFILE_MAXSIZE", 1024);
  * Percorso dove salvare il file di log
  */
 if(PHP_OS=="Linux")
-    define ("LOGFILE_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/");
+    define ("LOGFILE_PATH", $_SERVER['DOCUMENT_ROOT']."/doc/");
 else
 define("LOGFILE_PATH", 'D:\\dati\\xampp\\htdocs\\soci\\doc\\');
 
@@ -113,13 +113,13 @@ else
 /**
  * Percorso dove salvo le immagini della firma
  */
-define ("SIGNATURE_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/firme/");
+define ("SIGNATURE_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT']."/doc/firme/");
 
 
 /**
  * Percorso dove salvo i moduli di adesione
  */
-define ("PDF_PATH", $_SERVER['DOCUMENT_ROOT']."/soci/doc/moduli_adesione/");
+define ("PDF_PATH", $_SERVER['DOCUMENT_ROOT']."/doc/moduli_adesione/");
 
 /** @} */
 

@@ -22,7 +22,7 @@ session_unset();
 session_destroy();
 session_write_close();
 
-header('Location: /soci/index_guest.php');
+header('Location: /index_guest.php');
 exit();
 
 ?>

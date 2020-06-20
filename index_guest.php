@@ -66,7 +66,7 @@ require "php/member.php";
         <h2 class="title">Benvenuto nella pagina di gestione soci dell' Osservatorio Copernico</h2>
         <div style="padding: 5px; background-color:  #9d9ea5 ">
         	<br>
-        	<form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/index.php"; ?> method="POST">
+        	<form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/index.php"; ?> method="POST">
             	<table>
             	<tr>
             		<td><h6>Username:&nbsp</h6></td>
@@ -101,7 +101,7 @@ require "php/member.php";
         <h3 class="title">Modulo di registrazione</h3><br>
 		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">sezione obbligatoria</span>) * -</h6>
 		<br>
-        <form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/soci/php/insmod_guest.php"; ?> method="POST">
+        <form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/php/insmod_guest.php"; ?> method="POST">
 		    <div class="row row-space">
 		    	<div class="col-2">
             		<div class="input-group">
@@ -219,8 +219,8 @@ require "php/member.php";
                         </div>
 			</div>
 			</div>
-			<input id="adesione_obbligatoria" class="check" type="checkbox" name="adesione_statuto" value="aderisco" checked required><span style="font-size:13px; font-family: Arial Narrow"> Dichiaro di aver preso visione dello <a target="_blank" rel="noopener noreferrer" style="color:blue" href="/soci/doc/STATUTO Gruppo Astrofili.pdf">statuto</a> dell' Associazione senza scopo di lucro denominata "ASSOCIAZIONE CULTURALE GRUPPO ASTROFILI N. COPERNICO" e che, in particolare, condivido gli scopi di natura ideale dell' Associazione (art. 2 dello statuto).</span><br><br>
-			<input id="privacy_obbligatoria" class="check" type="checkbox" name="trattamento_dati" value="acconsento" checked required><span style="font-size:13px; font-family: Arial Narrow">Acconsento al trattamento dei miei dati personali da svolgersi in conformita' di quanto indicato <a id="info" target="_blank" rel="noopener noreferrer" style="color:blue" href="/soci/doc/1-INFORMATIVA E CONSENSO PER SOCI_2019.pdf">nell'informativa </a>e nel rispetto delle disposizioni del GDPR e del D. Lgs. n. 196/03.</span><br><br>
+			<input id="adesione_obbligatoria" class="check" type="checkbox" name="adesione_statuto" value="aderisco" checked required><span style="font-size:13px; font-family: Arial Narrow"> Dichiaro di aver preso visione dello <a target="_blank" rel="noopener noreferrer" style="color:blue" href="/doc/STATUTO Gruppo Astrofili.pdf">statuto</a> dell' Associazione senza scopo di lucro denominata "ASSOCIAZIONE CULTURALE GRUPPO ASTROFILI N. COPERNICO" e che, in particolare, condivido gli scopi di natura ideale dell' Associazione (art. 2 dello statuto).</span><br><br>
+			<input id="privacy_obbligatoria" class="check" type="checkbox" name="trattamento_dati" value="acconsento" checked required><span style="font-size:13px; font-family: Arial Narrow">Acconsento al trattamento dei miei dati personali da svolgersi in conformita' di quanto indicato <a id="info" target="_blank" rel="noopener noreferrer" style="color:blue" href="/doc/1-INFORMATIVA E CONSENSO PER SOCI_2019.pdf">nell'informativa </a>e nel rispetto delle disposizioni del GDPR e del D. Lgs. n. 196/03.</span><br><br>
 			<input id="privacy"class="check" type="checkbox" name="diffusione_nominativo" value="acconsento"><span style="font-size:13px; font-family: Arial Narrow">Acconsento alla diffusione del mio nome e cognome, della mia immagine o di video che mi riprendono nel sito istituzionale, nei social network (es. Facebook, Instagram, Youtube) e sul materiale informativo cartaceo dell'Associazione per soli fini di descrizione e promozione dell'attivita' istituzionale, nel rispetto delle disposizione del GDPR e del D. Lgs. n. 196/03 e delle autorizzazioni/indicazioni della commissione UE e del Garante per la Protezione dei Dati Personali.</span><br><br>
 			<input id="news" class="check" type="checkbox" name="newsletter" value="iscritto"><span style="font-size:13px; font-family: Arial Narrow">Desidero iscrivermi alla newsletter per rimanere informato su novita' ed eventi.</span><br><br><br>
 			<h5 id="firma" class="input--style-1" style="text-align:left">FIRMA DEL RICHIEDENTE (obbligatoria)</h5>
@@ -410,13 +410,13 @@ $(document).ready(function(){
     	var age = today_year-birthday_year;
     	if((age) < "18") {
     		$("#firma").text("FIRMA DEL GENITORE (obbligatoria)"); //Cambio l'intestazione della firma
-    		$("#info").attr("href", "/soci/doc/2-INFORMATIVA E CONSENSO PER SOCI MINORENNI.pdf"); //Cambio l'informativa con quella per minorenni...
+    		$("#info").attr("href", "/doc/2-INFORMATIVA E CONSENSO PER SOCI MINORENNI.pdf"); //Cambio l'informativa con quella per minorenni...
     		$("#info").text("nell'informativa per minorenni "); //...ed il testo
     		$("#etaconsenso").val("minorenne");
     	}
     	else {
     		$("#firma").text("FIRMA DEL RICHIEDENTE (obbligatoria)");
-    		$("#info").attr("href", "/soci/doc/1-INFORMATIVA E CONSENSO PER SOCI _2019.pdf"); //Cambio l'informativa con quella per maggiorenni...
+    		$("#info").attr("href", "/doc/1-INFORMATIVA E CONSENSO PER SOCI _2019.pdf"); //Cambio l'informativa con quella per maggiorenni...
     		$("#info").text("nell'informativa "); //...ed il testo
     		$("#etaconsenso").val("maggiorenne");
     	}

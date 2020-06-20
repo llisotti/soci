@@ -73,7 +73,7 @@ $GLOBALS['home_url']	= "//"  . $GLOBALS['__SERVER']['HTTP_HOST'] . dirname($GLOB
 
 $GLOBALS['home_url'] = str_replace( '/administrator', '', $GLOBALS['home_url'] );
 //$GLOBALS['home_dir'] = !empty( $_SERVER['DOCUMENT_ROOT'] ) ? $_SERVER['DOCUMENT_ROOT'] : '.';
-$GLOBALS['home_dir'] = $_SERVER['DOCUMENT_ROOT']."/soci/doc";
+$GLOBALS['home_dir'] = $_SERVER['DOCUMENT_ROOT']."/doc";
 
 // Important Definitions!
 define ("_EXT_PATH",		realpath(dirname( __FILE__ ) . '/..'));

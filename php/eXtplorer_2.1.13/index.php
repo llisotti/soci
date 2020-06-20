@@ -33,7 +33,7 @@
 // When eXtplorer is running as a component in Joomla! or Mambo, we deny access to this standalone version
 if( stristr( $_SERVER['SCRIPT_NAME'], 'com_extplorer') || stristr( $_SERVER['SCRIPT_NAME'], 'components')) {
 	header( 'HTTP/1.0 404 Not Found');
-	header( 'Location: http://'.$_SERVER['HTTP_HOST']."/soci/php/doc");
+	header( 'Location: http://'.$_SERVER['HTTP_HOST']."/php/doc");
 	exit;
 }
 

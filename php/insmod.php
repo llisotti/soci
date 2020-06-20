@@ -54,9 +54,9 @@ catch (PDOException $e) {
 <a class="logo"><img src="../img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
 <a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
-    <li><span><span><a href= 'http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php'>Home</a></span></span></li>
-    <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/profile_editor.php">Profilo</a></span></span></li>
-    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href= 'http://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php'>Home</a></span></span></li>
+    <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/profile_editor.php">Profilo</a></span></span></li>
+    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
@@ -72,13 +72,13 @@ catch (PDOException $e) {
 <ul class="nav">
     <?php
 
-        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/soci/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
+        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
-    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
+    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
     <li><a id="DB_functions" href="" onclick="return false;" >Operazioni su DB</a></li> <!-- onclick="return false; evita che si ricarichi la pagina (altrimenti usare href="#" ma dopo mette il carattere # nella pagina e falsa eventuali variabili passate in GET) -->
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
-    <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
     <?php
     if($_SESSION['update']) {
         ?>
@@ -140,7 +140,7 @@ catch (PDOException $e) {
 </div>
 <div id="center-column">
 <div class="top-bar">
-<a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
+<a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <h1><?php if(isset($_GET['id'])) echo "MODIFICA SOCIO"; else echo "INSERIMENTO NUOVO SOCIO"; ?></h1>
 </div>
 <br />
@@ -360,7 +360,7 @@ else if($_POST['aggiuntoSocio'] == 'cancella') {
 //unset($_SESSION['socio']);
 ?>
 
-<form action="http://<?php echo $_SERVER['HTTP_HOST'] ?>/soci/index.php" method="get" > 
+<form action="http://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php" method="get" > 
 <span style="margin-left: 270px">
 <input name="insert_member" value="Home page" type="submit" style="display: inline" >    
 </span>
