@@ -97,8 +97,8 @@ if(!isset($_SESSION['logger'])) {
     $_SESSION['update']=FALSE; //La prima volta suppongo che non ci siano aggiornamenti disponibili
     $local_commit = NULL;
     $remote_commit=NULL;
-    system("ping -w 3 www.google.com > null", $local_commit);
-    system("ping -w 3 www.bitbucket.org > null", $remote_commit);
+    system("ping -c 3 www.google.com > null", $local_commit);
+    system("ping -c 3 www.bitbucket.org > null", $remote_commit);
     /* Se sono connesso ad internet controllo se ci sono aggiornamenti */
     if($local_commit == 0 && $remote_commit == 0) {
         $mylog->logInfo("Connessione ad internet e repository remoto ok, controllo se ci sono aggiornamenti");
