@@ -133,7 +133,7 @@ else
 <ul id="top-navigation">
     <li class="active"><span><span><a href="<?php echo $_SERVER['PHP_SELF']; ?>">Home</a></span></span></li>
     <li><span><span><a href="">Profilo</a></span></span></li>
-    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Opzioni</a></span></span></li>
     <li><span><span><a href="#">Statistics</a></span></span></li>
@@ -149,16 +149,16 @@ else
     <?php
     /* Se sto visualizzando solo gli iscritti senza tessera (default) propongo la visualizzazione dei soli soci tesserati*/
     if(!isset($_GET['show']))
-        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/index.php?show=allmembers'>Visualizza elenco soci tesserati</a></li>";
+        echo "<li><a href='https://{$_SERVER['HTTP_HOST']}/index.php?show=allmembers'>Visualizza elenco soci tesserati</a></li>";
     /* Altrimenti propongo la visualizzazione di default (iscritti senza tessera) */
     else
-        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
+        echo "<li><a href='https://{$_SERVER['HTTP_HOST']}/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
-    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
+    <li><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
     <li><a id="DB_functions" href="" onclick="return false;">Operazioni su DB</a></li>
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
-    <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
     <?php
     if($_SESSION['update']) {
         ?>
@@ -253,7 +253,7 @@ else
 </table>
 </div>
 <div id="center-column">
-<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
+<div class="top-bar"> <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <?php
 /* Se non passo nulla in GET visualizzo gli iscritti ma non ancora tesserati */
 if(empty($_GET) || !isset($_GET['show']))

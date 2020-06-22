@@ -184,7 +184,7 @@ if(!isset($_POST['export'])) {
             ?>
             <br/><br/>
             <?php
-            echo "Aggiornamento fallito!, <a href=http://{$_SERVER['HTTP_HOST']}/index.php>Torna alla Pagina iniziale</a>";
+            echo "Aggiornamento fallito!, <a href=https://{$_SERVER['HTTP_HOST']}/index.php>Torna alla Pagina iniziale</a>";
         }
         break;
         default:

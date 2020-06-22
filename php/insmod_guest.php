@@ -167,7 +167,7 @@ function errorMessage(PDOException $ex) {
 ?>
 <br>
 <div style="text-align:center">
-<a style="color:blue" href=<?php echo "http://{$_SERVER['HTTP_HOST']}/index_guest.php"?> >Torna alla pagina di registrazione</a>
+<a style="color:blue" href=<?php echo "https://{$_SERVER['HTTP_HOST']}/index_guest.php"?> >Torna alla pagina di registrazione</a>
 </div>
 <?php
 }
@@ -180,7 +180,7 @@ function successMessage() {
     ?>
 <br>
 <div style="text-align:center">
-<a style="color:blue" href=<?php echo "http://{$_SERVER['HTTP_HOST']}/index_guest.php"?> >Torna alla pagina di registrazione</a>
+<a style="color:blue" href=<?php echo "https://{$_SERVER['HTTP_HOST']}/index_guest.php"?> >Torna alla pagina di registrazione</a>
 </div>
 <?php
 }

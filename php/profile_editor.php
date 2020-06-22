@@ -74,9 +74,9 @@ if($member->tessera!=NULL) {
 <a class="logo"><img src="../img/logo_copernico.jpg" width="300" height="54" alt="" /></a>
 <a class="version" alt="<?php echo $_SESSION['local_commit_hash']; ?>" title="<?php echo $_SESSION['local_commit_hash']; ?>"><?php echo VERSION; ?></a>
 <ul id="top-navigation">
-    <li><span><span><a href= 'http://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php'>Home</a></span></span></li>
-    <li class="active"><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/profile_editor.php">Profilo</a></span></span></li>
-    <li><span><span><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/newsletter.php">Newsletter</a></span></span></li>
+    <li><span><span><a href= 'https://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php'>Home</a></span></span></li>
+    <li class="active"><span><span><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/profile_editor.php">Profilo</a></span></span></li>
+    <li><span><span><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/newsletter.php">Newsletter</a></span></span></li>
     <!--
     <li><span><span><a href="#">Statistiche</a></span></span></li>
     <li><span><span><a href="#">Opzioni</a></span></span></li>
@@ -92,13 +92,13 @@ if($member->tessera!=NULL) {
 <ul class="nav">
     <?php
 
-        echo "<li><a href='http://{$_SERVER['HTTP_HOST']}/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
+        echo "<li><a href='https://{$_SERVER['HTTP_HOST']}/index.php'>Visualizza elenco iscritti ma non tesserati</a></li>";
     ?>
-    <li><a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
+    <li><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/index.php?show=allidentities">Visualizza elenco iscritti completo</a></li>
 	<li><a id="DB_functions" href="" onclick="return false;">Operazioni su DB</a></li>
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
-    <li><a target="_blank" rel="noopener noreferrer" href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
     
     <?php
     if($_SESSION['update']) {
@@ -188,9 +188,9 @@ if($member->tessera!=NULL) {
     </tr>
 </table>
 </div>
-<form action=<?php echo "'http://{$_SERVER['HTTP_HOST']}/php/insmod.php?cf="."$_GET[cf]'"; ?> method="post"><input type="hidden" name="" value=""/>
+<form action=<?php echo "'https://{$_SERVER['HTTP_HOST']}/php/insmod.php?cf="."$_GET[cf]'"; ?> method="post"><input type="hidden" name="" value=""/>
 <div id="center-column">
-<div class="top-bar"> <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
+<div class="top-bar"> <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <h1>MODIFICA PROFILO</h1>
 <br/>
 </div>

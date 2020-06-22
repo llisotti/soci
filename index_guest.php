@@ -66,7 +66,7 @@ require "php/member.php";
         <h2 class="title">Benvenuto nella pagina di gestione soci dell' Osservatorio Copernico</h2>
         <div style="padding: 5px; background-color:  #9d9ea5 ">
         	<br>
-        	<form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/index.php"; ?> method="POST">
+        	<form id='form' action=<?php echo "https://{$_SERVER['HTTP_HOST']}/index.php"; ?> method="POST">
             	<table>
             	<tr>
             		<td><h6>Username:&nbsp</h6></td>
@@ -101,7 +101,7 @@ require "php/member.php";
         <h3 class="title">Modulo di registrazione</h3><br>
 		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">sezione obbligatoria</span>) * -</h6>
 		<br>
-        <form id='form' action=<?php echo "http://{$_SERVER['HTTP_HOST']}/php/insmod_guest.php"; ?> method="POST">
+        <form id='form' action=<?php echo "https://{$_SERVER['HTTP_HOST']}/php/insmod_guest.php"; ?> method="POST">
 		    <div class="row row-space">
 		    	<div class="col-2">
             		<div class="input-group">
