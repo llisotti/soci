@@ -166,7 +166,7 @@ if(!isset($_POST['title'])) {
 
     /* Carico i dati da anagrafica e socio */
     if(!isset($_GET['custom_list'])) {
-        $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf AND anagrafica.email!='' AND email is not null ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
+        $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf AND socio.adesioni & 2 = 2 ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
     }
     /* Carico i dati dalla sola tabella "customList" */
     else {
