@@ -278,11 +278,11 @@ $pdf->MultiCell(0, 10, $informativa, 1, 'L', 0, 0, '', '', true);
 $pdf->ln(160);
 $pdf->MultiCell(0, 10, "Io sottoscritto/a ".$member->cognome." ".$member->nome." nella qualita' di interessato, letta la suddetta informativa resa ai sensi dell’art. 13 GDPR, autorizzo/do il consenso", 0, 'L', 0, 0, '', '', true);
 $pdf->ln(6);
-$pdf->RadioButton('', 5, array(), array(), '', true);
+$pdf->RadioButton('adesione_statuto', 5, array(), array(), '', true);
 $pdf->MultiCell(190, 5, 'al trattamento dei miei dati personali, da svolgersi in conformità a quanto indicato nella suddetta informativa e nel rispetto delle disposizioni
 del GDPR e del D.Lgs. n. 196/03',0,'L');
 $pdf->ln(6);
-$pdf->RadioButton('', 5, array(), array(), '', ($adesioni & 1 ? true : false));
+$pdf->RadioButton('adesione_diffusione', 5, array(), array(), '', ($adesioni & 1 ? true : false));
 $pdf->MultiCell(190, 5, 'alla diffusione del mio nome e cognome, della mia immagine o di video che mi riprendono nel sito istituzionale, nei social network (es. pagina
 Facebook/Instagram/Youtube) e sul materiale informativo cartaceo dell’Associazione, per soli fini di descrizione e promozione dell’attività
 istituzionale, nel rispetto delle disposizioni del GDPR e del D.Lgs. n. 196/03 e delle autorizzazioni/indicazioni della Commissione UE e del Garante
