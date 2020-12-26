@@ -48,7 +48,7 @@ define ("FROM_NAME", "Osservatorio Copernico");
 /**
  * Indirizzo che appare nel campo from della newsletter
  */
-define ("FROM_ADDRESS", "info@osservatoriocopernico.it");
+define ("FROM_ADDRESS", "info@osservatoriocopernico.org");
 
 
 /**

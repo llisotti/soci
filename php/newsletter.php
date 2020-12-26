@@ -341,24 +341,29 @@ else {
     /* Configuro server SMTP */
     $mail->isSMTP();
     $mail->Sender= FROM_ADDRESS;
-    $mail->Host = "smtps.aruba.it";
+    //$mail->Sender = "luca.lisotti@outlook.com"; //per far prove con la mia casella di posta outlook.com
+    $mail->Host = "mail.tophost.it";
+    //$mail->Host = "smtp.live.com"; //per far prove con la mia casella di posta outlook.com
     $mail->SMTPAuth = TRUE;
-    $mail->SMTPKeepAlive = true; // SMTP connection will not close after each email sent, reduces SMTP overhead
+    $mail->SMTPKeepAlive = true; // Serve per non chiudere la connessione SMTP dopo ogni email inviata: riduce il sovraccarico del server SMTP
     /* 
      * Per inviare le email tramite aruba e non avere errori SSL:
      * 1) Occorre commentare la linea CipherString = DEFAULT@SECLEVEL=2 nel file /etc/ssl/openssl.conf
      * 2) Riavviare il server Apache per far rileggere la configurazione: #/etc/init.d/apache2 restart
      */
-    $mail->SMTPSecure = "ssl";
-    $mail->addReplyTo("l.lisotti@osservatoriocopernico.it");
-    $mail->Username = FROM_ADDRESS;
+    $mail->SMTPSecure = "tls";
+    $mail->addReplyTo("luca.lisotti@yahoo.com"); 
+    //$mail->addReplyTo("luca.lisotti@outlook.com"); //per far prove con la mia casella di posta outlook.com
+    $mail->Username = "osservatoriocopernico.org";
+    //$mail->Username = "luca.lisotti@outlook.com"; //per far prove con la mia casella di posta outlook.com
     $mail->Password = $_POST['psw'];
-    $mail->Port = "465";    //25 (per TLS) oppure 465 (per SSL) oppure 587
+    $mail->Port = "587";    //587 (per TLS) oppure 465 (per SSL) oppure 25 per nessuna crittografia
     
     /* Setto le codifiche e i campi della email */
     $mail->IsHTML(TRUE);
     $mail->CharSet= "ISO-8859-15";
     $mail->setFrom(FROM_ADDRESS, FROM_NAME);
+    //$mail->setFrom("luca.lisotti@outlook.com", FROM_NAME); //per far prove con la mia casella di posta outlook.com
     
     $mail->Subject  = $_POST['title'];
     
