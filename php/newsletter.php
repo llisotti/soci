@@ -229,8 +229,8 @@ if(!isset($_POST['title'])) {
     /* Controllo coerenza indirizzi email e dominio */
     $invalid_mail=0;
     foreach($rows as $row) {
-        $pattern = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/";
-        if(!preg_match($pattern, $row['email'])) {
+        //$pattern = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/";
+        if(!filter_var($row['email'], FILTER_VALIDATE_EMAIL)) {
             if(!$invalid_mail) {
                 echo "<h3 style='background-color:orange'>ATTENZIONE: i seguenti indirizzi email potrebbero essere non validi</h3>";
                 $invalid_mail=1;
@@ -372,6 +372,7 @@ else {
     $mail->AddEmbeddedImage('../img/logo_copernico.jpg', 'logo');
     $mail->AddEmbeddedImage('../img/web.png', 'web');
     $mail->AddEmbeddedImage('../img/facebook.jpg', 'facebook');
+    $mail->AddEmbeddedImage('../img/telegram.png', 'telegram');
     $mail->AddEmbeddedImage('../img/g_map.png', 'map');
     
     /* Costruisco il corpo della mail */
@@ -429,7 +430,7 @@ else {
     else
         echo '<img class="message_sent" src="../img/check_ok.png" height="256" width="256" alt="check_ok.png">';
     
-    echo "</br></br>Controllare il file di log per i dettagli";
+    echo "</br></br>Controllare il file newsletter.log nella cartella doc";
     
 
 }
