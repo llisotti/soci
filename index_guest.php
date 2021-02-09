@@ -90,40 +90,40 @@ require "php/member.php";
         	<li>Puoi controllare lo stato della Tua iscrizione e la validita' della tessera per l'anno in corso cliccando <a style="color:blue" href="" id="cerca">qui</a>.</li>
     	</ul>
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
-        	<li>Se non risulti iscritto puoi farlo velocemente compilando il modulo di registrazione sottostante facendo attenzione alla sezione obbligatoria.</li>
-        	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa di 6€ ti sara' rilasciata subito la tessera.</li>
-        	<li>L'iscrizione e' obbligatoria per individui di eta' uguale o maggiore ad 8 anni e non comporta alcun vincolo.</li>
+        	<li>Se non risulti iscritto puoi farlo velocemente compilando il modulo di registrazione sottostante.</li>
+        	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa di 6€ sara' rilasciata subito la tessera.</li>
+        	<li>L'iscrizione e' obbligatoria per individui di eta' uguale o maggiore ad 8 anni.</li>
     	</ul>
 		<ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
 			<li>In caso di problemi con l'iscizione o ulteriori chiarimenti invia una segnalazione <a style="color:blue" href="" id="segnalazione">qui</a>.</li>
         </ul>
     	<br><br>
         <h3 class="title">Modulo di registrazione</h3><br>
-		<h6 style="text-align:center">- DATI ANAGRAFICI (<span style="color:red">sezione obbligatoria</span>) * -</h6>
+		<h6 style="text-align:center">- DATI ANAGRAFICI -</h6>
 		<br>
         <form id='form' action=<?php echo "https://{$_SERVER['HTTP_HOST']}/php/insmod_guest.php"; ?> method="POST">
 		    <div class="row row-space">
 		    	<div class="col-2">
             		<div class="input-group">
-                        <input id="cognome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Cognome *" name="cognome" required>
+                        <input id="cognome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Cognome" name="cognome" required pattern="[A-Za-z]+">
 					</div>
 				</div>
 				<div class="col-2">
 					<div class="input-group">
-                        <input id="nome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Nome *" name="nome" required>
+                        <input id="nome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Nome" name="nome" required pattern="[A-Za-z]+">
                     </div>
 				</div>
 			</div>
             <div class="row row-space">
                 <div class="col-2">
                     <div class="input-group">
-                        <input id="birthday" class="input--style-1 js-datepicker" type="text" placeholder="Data di Nascita *" name="data_nascita" required>
+                        <input id="birthday" class="input--style-1 js-datepicker" type="text" placeholder="Data di Nascita" name="data_nascita" required>
                         <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                     </div>
                 </div>
                 <div class="col-2">
     				<div class="input-group">
-    					<input id="cf" class="input--style-1" style="width:80%" type="text" placeholder="Codice Fiscale *" name="cf"  maxlength="16" required style="background-image: url(img/credit-card.png); no-repeat; text-indent: 20px">&nbsp;&nbsp;&nbsp;&nbsp;
+    					<input id="cf" class="input--style-1" style="width:80%" type="text" placeholder="Codice Fiscale" name="cf"  maxlength="16" required style="background-image: url(img/credit-card.png); no-repeat; text-indent: 20px">&nbsp;&nbsp;&nbsp;&nbsp;
     					<a target="_blank" rel="noopener noreferrer" href="https://www.codicefiscale.com/"><img src="img/credit-card.png" align="right" title="Calcola codice fiscale online" alt="Calcola codice fiscale online" style="margin-right:5px"></img></a>
     				</div>
 				</div>
@@ -132,7 +132,7 @@ require "php/member.php";
 			<div class="row row-space">
 				<div class="col-3">
                 	<div class="input-group">
-                        <input id="comune" type="text" pattern="^[a-zA-Z\s]*$" id="cm" class="input--style-1" type="text" placeholder="Comune di nascita *" name="comune_nascita" required>
+                        <input id="comune" type="text" pattern="^[a-zA-Z\s]*$" id="cm" class="input--style-1" type="text" placeholder="Comune di nascita" name="comune_nascita" required>
                     </div>
                 </div>
                 <div class="col-3">
@@ -162,23 +162,23 @@ require "php/member.php";
 			<h6 style="text-align:center">- DATI DI RESIDENZA -</h6>
 			<!-- <h6 style="text-align:center; font-style:italic">(se residente all'estero selezionare solo lo Stato)</h6>  -->
 			<br>
-			<span id="nascosto_2" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se residente all'estero selezionare solo lo Stato</span>
+			<!-- <span id="nascosto_2" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se residente all'estero selezionare solo lo Stato</span> -->
 			<div class="row row-space">
                 <div class="col-2">
                     <div class="input-group">
-                        <input id="indirizzo" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Indirizzo" name="indirizzo">
+                        <input id="indirizzo" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Indirizzo" name="indirizzo" required>
                     </div>
 			    </div>
 				<div class="col-2">
                 	<div class="input-group">
-                        <input id="citta" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Citta'" name="citta">
+                        <input id="citta" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Citta'" name="citta" required>
                     </div>
                 </div>
             </div>
 			<div class="row row-space">			
 				<div class="col-3">					
 					<div class="input-group">						
-						<input id="cap" pattern="[0-9]*" class="input--style-1" type="text" placeholder="CAP" name="cap">
+						<input id="cap" pattern="[0-9]*" class="input--style-1" type="text" placeholder="CAP" name="cap" required>
 					</div>
 				</div>
 				<div class="col-3">
@@ -223,7 +223,7 @@ require "php/member.php";
 			<input id="privacy_obbligatoria" class="check" type="checkbox" name="trattamento_dati" value="acconsento" checked required><span style="font-size:13px; font-family: Arial Narrow">Acconsento al trattamento dei miei dati personali da svolgersi in conformita' di quanto indicato <a id="info" target="_blank" rel="noopener noreferrer" style="color:blue" href="/doc/1-INFORMATIVA E CONSENSO PER SOCI_2019.pdf">nell'informativa </a>e nel rispetto delle disposizioni del GDPR e del D. Lgs. n. 196/03.</span><br><br>
 			<input id="privacy"class="check" type="checkbox" name="diffusione_nominativo" value="acconsento"><span style="font-size:13px; font-family: Arial Narrow">Acconsento alla diffusione del mio nome e cognome, della mia immagine o di video che mi riprendono nel sito istituzionale, nei social network (es. Facebook, Instagram, Youtube) e sul materiale informativo cartaceo dell'Associazione per soli fini di descrizione e promozione dell'attivita' istituzionale, nel rispetto delle disposizione del GDPR e del D. Lgs. n. 196/03 e delle autorizzazioni/indicazioni della commissione UE e del Garante per la Protezione dei Dati Personali.</span><br><br>
 			<input id="news" class="check" type="checkbox" name="newsletter" value="iscritto"><span style="font-size:13px; font-family: Arial Narrow">Desidero iscrivermi alla newsletter per rimanere informato su novita' ed eventi.</span><br><br><br>
-			<h5 id="firma" class="input--style-1" style="text-align:left">FIRMA DEL RICHIEDENTE (obbligatoria)</h5>
+			<h5 id="firma" class="input--style-1" style="text-align:left">FIRMA DEL RICHIEDENTE (leggibile)</h5>
 			<div class="signature-panel" style="background-color: gainsboro"></div><br>
 			<div class="controls-panel">
 			      <a href="" class="btn submit-button btn--disabled">Valida firma</a>
@@ -330,22 +330,24 @@ $(document).ready(function(){
         return ((filledCount / totalCount) * 100) > percentRequired;
     }
 
-    /* Validazione cognome */
+    /* Validazione cognome
 	$("#cognome").blur(function() {
 		var hasNumber = /\d/;
 		var value = $(this).val();
 		if(hasNumber.test(value) || !($.trim(value)))
         	alert("Attenzione: controllare che il cognome immesso sia corretto");
 	});
+	*/
 
-	/* Validazione nome */
+	/* Validazione nome
 	$("#nome").blur(function() {
 		var hasNumber = /\d/;
 		var value = $(this).val();
 		if(hasNumber.test(value) || !($.trim(value)))
         	alert("Attenzione: controllare che il nome immesso sia corretto");
 	});
-	
+	*/
+
     /* Validazione codice fiscale (lo controllo quando entro nel campo comune) */
 	$("#comune").focus(function() {
     	// http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/
@@ -409,13 +411,13 @@ $(document).ready(function(){
     	var today_year = data.getFullYear().toString();
     	var age = today_year-birthday_year;
     	if((age) < "18") {
-    		$("#firma").text("FIRMA DEL GENITORE (obbligatoria)"); //Cambio l'intestazione della firma
+    		$("#firma").text("FIRMA DEL GENITORE/TUTORE (leggibile)"); //Cambio l'intestazione della firma
     		$("#info").attr("href", "/doc/2-INFORMATIVA E CONSENSO PER SOCI MINORENNI.pdf"); //Cambio l'informativa con quella per minorenni...
     		$("#info").text("nell'informativa per minorenni "); //...ed il testo
     		$("#etaconsenso").val("minorenne");
     	}
     	else {
-    		$("#firma").text("FIRMA DEL RICHIEDENTE (obbligatoria)");
+    		$("#firma").text("FIRMA DEL RICHIEDENTE (leggibile)");
     		$("#info").attr("href", "/doc/1-INFORMATIVA E CONSENSO PER SOCI _2019.pdf"); //Cambio l'informativa con quella per maggiorenni...
     		$("#info").text("nell'informativa "); //...ed il testo
     		$("#etaconsenso").val("maggiorenne");
@@ -462,7 +464,7 @@ $(document).ready(function(){
     	}
     });
 
-    /* Gestione se mostrare o meno tutti i campi di residenza a seconda dello stato di residenza */
+    /* Gestione se mostrare o meno tutti i campi di residenza a seconda dello stato di residenza
     $("#stato_residenza").change( function(){
     	var state = $(this).val();
     	if(state != "IT") {
@@ -488,6 +490,7 @@ $(document).ready(function(){
     		//$("#provincia_residenza").prop("disabled", false);
     	}
 	});
+	*/
 		
     /* Faccio apparire la scritta di compilazione alcuni campi solo se nato in Italia */
     $("#comune").focus(function() {
@@ -499,15 +502,17 @@ $(document).ready(function(){
     	$("#nascosto_1").css("visibility","hidden");
     });
     
-    /* Faccio apparire la scritta di compilazione alcuni campi solo se resisdente in Italia */
+    /* Faccio apparire la scritta di compilazione alcuni campi solo se resisdente in Italia
     $("#indirizzo").focus(function() {
     	$("#nascosto_2").css("visibility","visible");
     });
+	*/
     
-    /* Faccio scomparire la scritta di compilazione alcuni campi solo se resisdente in Italia */
+    /* Faccio scomparire la scritta di compilazione alcuni campi solo se resisdente in Italia
     $("#indirizzo").blur(function() {
     	$("#nascosto_2").css("visibility","hidden");
     });
+	*/
         
 	/* Ricerca se esiste gia' l'iscrizione */
     $("#cerca").on('click', function(e) {
