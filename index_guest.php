@@ -175,6 +175,7 @@ require "php/member.php";
                     </div>
                 </div>
             </div>
+			<span id="nascosto_2" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se residente all'estero selezionare solo lo Stato</span>
 			<div class="row row-space">			
 				<div class="col-3">					
 					<div class="input-group">						
@@ -464,16 +465,16 @@ $(document).ready(function(){
     	}
     });
 
-    /* Gestione se mostrare o meno tutti i campi di residenza a seconda dello stato di residenza
+    /* Gestione se mostrare o meno tutti i campi di residenza a seconda dello stato di residenza */
     $("#stato_residenza").change( function(){
     	var state = $(this).val();
     	if(state != "IT") {
-    		$("#indirizzo").val('');
-    		$("#indirizzo").prop("disabled", true);
-    		$("#indirizzo").attr("placeholder", "");
-    		$("#citta").val('');
-    		$("#citta").prop("disabled", true);
-    		$("#citta").attr("placeholder", "");
+    		//$("#indirizzo").val('');
+    		//$("#indirizzo").prop("disabled", true);
+    		//$("#indirizzo").attr("placeholder", "");
+    		//$("#citta").val('');
+    		//$("#citta").prop("disabled", true);
+    		//$("#citta").attr("placeholder", "");
     		$("#cap").val('');
     		$("#cap").prop("disabled", true);
     		$("#cap").attr("placeholder", "");
@@ -481,16 +482,15 @@ $(document).ready(function(){
     		$("#provincia_residenza").empty();
     	}
     	else {
-    		$("#indirizzo").prop("disabled", false);
-    		$("#indirizzo").attr("placeholder", "indirizzo");
-    		$("#citta").prop("disabled", false);
-    		$("#citta").attr("placeholder", "citta'");
+    		//$("#indirizzo").prop("disabled", false);
+    		//$("#indirizzo").attr("placeholder", "indirizzo");
+    		//$("#citta").prop("disabled", false);
+    		//$("#citta").attr("placeholder", "citta'");
     		$("#cap").prop("disabled", false);
     		$("#cap").attr("placeholder", "cap");
     		//$("#provincia_residenza").prop("disabled", false);
     	}
 	});
-	*/
 		
     /* Faccio apparire la scritta di compilazione alcuni campi solo se nato in Italia */
     $("#comune").focus(function() {
@@ -502,17 +502,15 @@ $(document).ready(function(){
     	$("#nascosto_1").css("visibility","hidden");
     });
     
-    /* Faccio apparire la scritta di compilazione alcuni campi solo se resisdente in Italia
-    $("#indirizzo").focus(function() {
+    /* Faccio apparire la scritta di compilazione alcuni campi solo se resisdente in Italia */
+    $("#cap").focus(function() {
     	$("#nascosto_2").css("visibility","visible");
     });
-	*/
     
-    /* Faccio scomparire la scritta di compilazione alcuni campi solo se resisdente in Italia
-    $("#indirizzo").blur(function() {
+    /* Faccio scomparire la scritta di compilazione alcuni campi solo se resisdente in Italia */
+    $("#cap").blur(function() {
     	$("#nascosto_2").css("visibility","hidden");
     });
-	*/
         
 	/* Ricerca se esiste gia' l'iscrizione */
     $("#cerca").on('click', function(e) {
