@@ -105,12 +105,12 @@ require "php/member.php";
 		    <div class="row row-space">
 		    	<div class="col-2">
             		<div class="input-group">
-                        <input id="cognome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Cognome" name="cognome" required pattern="[A-Za-z]+">
+                        <input id="cognome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Cognome" name="cognome" required pattern="^([^0-9]*)$">
 					</div>
 				</div>
 				<div class="col-2">
 					<div class="input-group">
-                        <input id="nome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Nome" name="nome" required pattern="[A-Za-z]+">
+                        <input id="nome" style="text-transform: capitalize" class="input--style-1" type="text" placeholder="Nome" name="nome" required pattern="^([^0-9]*)$">
                     </div>
 				</div>
 			</div>
