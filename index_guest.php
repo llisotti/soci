@@ -91,8 +91,8 @@ require "php/member.php";
     	</ul>
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
         	<li>Se non risulti iscritto puoi farlo velocemente compilando il modulo di registrazione sottostante.</li>
-        	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa di 6€ sara' rilasciata subito la tessera.</li>
-        	<li>L'iscrizione e' obbligatoria per individui di eta' uguale o maggiore ad 8 anni.</li>
+        	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa sara' rilasciata subito la tessera.</li>
+        	<!-- <li>L'iscrizione e' obbligatoria per individui di eta' uguale o maggiore ad 8 anni.</li> -->
     	</ul>
 		<ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
 			<li>In caso di problemi con l'iscizione o ulteriori chiarimenti invia una segnalazione <a style="color:blue" href="" id="segnalazione">qui</a>.</li>
