@@ -366,7 +366,7 @@ $(document).ready(function(){
     }); */
 
     /* Validazione data nascita (la controllo quando entro nel campo codice fiscale) */
-    $("#cf").focus(function() {
+    $("#cf").one('focus',function() {
     	var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
     	if(!value.test($('#birthday').val())) {
         	alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
@@ -403,20 +403,41 @@ $(document).ready(function(){
         alert("A fine procedura, nel momento di apporre la firma digitale, e' consigliabile ruotare la vista del dispositivo in senso orizzontale");
     }
     
-    /* Controllo se minorenne ed eventualmente cambio messaggio nella firma */
-    $("#cf").focus(function() { // La funzione parte quando entro nel campo inserimento codice fiscale
-    	var birthday_year = $("#birthday").val().substr(6,4);
-    	if((birthday_year) == "")
-    		return;
-    	var data = new Date();
-    	var today_year = data.getFullYear().toString();
-    	var age = today_year-birthday_year;
-    	if((age) < "18") {
+    /**
+	 * Controllo età 
+	 * La funzione parte quando entro nel campo inserimento codice fiscale
+	 */
+    $("#cf").one('focus',function() {
+
+		/* Calcolo l'età */
+		var today = new Date();
+		var todayMonth = today.getMonth()+1;
+		var birthDate = new Date($('#birthday').val().substring(6,10), $('#birthday').val().substring(3,5), $('#birthday').val().substring(0,2));
+		if (todayMonth === birthDate.getMonth()) {
+			if (birthDate.getDate() <= today.getDate()) {
+				age = today.getFullYear() - birthDate.getFullYear();
+			}
+			else {
+				age = today.getFullYear() - birthDate.getFullYear();
+				age--;
+			}
+		}
+		else {
+			age = today.getFullYear() - birthDate.getFullYear();
+		}
+
+		/* Sotto i 6 anni non occorre iscriversi */
+		if (age < "6") {
+			alert("L'iscrizione non è necessaria per individui sotto i 6 anni");
+		}
+		/* Tra i 6 ed i 18 anni cambio messaggio nella firma e visualizzo informativa per minorenni */
+    	else if(age < "18") {
     		$("#firma").text("FIRMA DEL GENITORE/TUTORE (leggibile)"); //Cambio l'intestazione della firma
     		$("#info").attr("href", "/doc/2-INFORMATIVA E CONSENSO PER SOCI MINORENNI.pdf"); //Cambio l'informativa con quella per minorenni...
     		$("#info").text("nell'informativa per minorenni "); //...ed il testo
     		$("#etaconsenso").val("minorenne");
     	}
+		/* Sopra i 18 anni visualizzo informativa per i maggiorenni */
     	else {
     		$("#firma").text("FIRMA DEL RICHIEDENTE (leggibile)");
     		$("#info").attr("href", "/doc/1-INFORMATIVA E CONSENSO PER SOCI _2019.pdf"); //Cambio l'informativa con quella per maggiorenni...
@@ -554,7 +575,6 @@ $(document).ready(function(){
             $(this).attr('title', 'Visualizza password');
         }
     });
-
 });
 </script>
 </body>
