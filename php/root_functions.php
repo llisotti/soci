@@ -170,7 +170,7 @@ if(!isset($_POST['export'])) {
             die();
         case "update": //Aggiornamento software
             $mylog->logInfo("Tentativo di aggiornamento software dalla versione ".VERSION);
-            system(GIT_EXECUTABLE."pull --tags origin master", $return_value); //Per eseguire delle prove aggiungere --dry-run al comando git
+            system(GIT_EXECUTABLE."pull --tags origin", $return_value); //Per eseguire delle prove aggiungere --dry-run al comando git
             if($return_value==0) {
                 $mylog->logInfo("Tentativo riuscito: nuova versione: ".VERSION);
                 $_SESSION['update']=FALSE;
