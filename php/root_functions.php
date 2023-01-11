@@ -168,6 +168,7 @@ if(!isset($_POST['export'])) {
                 echo $breakCards."<br/>";
             }
             die();
+        /*
         case "update": //Aggiornamento software
             $mylog->logInfo("Tentativo di aggiornamento software dalla versione ".VERSION);
             system(GIT_EXECUTABLE."pull --tags origin", $return_value); //Per eseguire delle prove aggiungere --dry-run al comando git
@@ -187,6 +188,7 @@ if(!isset($_POST['export'])) {
             echo "Aggiornamento fallito!, <a href=https://{$_SERVER['HTTP_HOST']}/index.php>Torna alla Pagina iniziale</a>";
         }
         break;
+        */
         default:
             break;
     }

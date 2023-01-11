@@ -93,12 +93,15 @@ if(!isset($_SESSION['logger'])) {
         $index++;
     }
     
-    /* Controllo se c'è connessione internet */
+    $local_commit=exec(GIT_EXECUTABLE."rev-parse @");
+    $_SESSION['local_commit_hash']=$local_commit;
+
+    /* Controllo se c'è connessione internet
     $_SESSION['update']=FALSE; //La prima volta suppongo che non ci siano aggiornamenti disponibili
     $local_commit = NULL;
     $remote_commit=NULL;
     
-    /* Se sono connesso ad internet controllo se ci sono aggiornamenti */
+    /* Se sono connesso ad internet controllo se ci sono aggiornamenti
     if(connection_status() == 0) {
         $mylog->logInfo("Connessione ad internet, controllo se ci sono aggiornamenti");
         exec(GIT_EXECUTABLE."fetch -v -t");
@@ -118,6 +121,7 @@ if(!isset($_SESSION['logger'])) {
         $_SESSION['local_commit_hash']=$local_commit;
         $mylog->logInfo("Nessuna connessione ad internet disponibile oppure repository remoto non raggiungibile");
     }
+    */
 }
 else
     $mylog=$_SESSION['logger'];
@@ -158,7 +162,9 @@ else
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
     <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="/doc/Manuale.pdf">Manuale utente</a></li>
     <?php
+    /*  
     if($_SESSION['update']) {
         ?>
         <li class="last"><a href="./php/root_functions.php?action=update">Aggiornamento sw *</a></li>
@@ -169,6 +175,7 @@ else
         <li class="last"><a href="#">Aggiornamento sw</a></li>
         <?php
     }
+    */
     ?>
     
 </ul>

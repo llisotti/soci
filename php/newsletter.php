@@ -85,7 +85,9 @@ catch (PDOException $exception) {
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
     <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="../doc/Manuale.pdf">Manuale utente</a></li>
     <?php
+    /*
     if($_SESSION['update']) {
         ?>
         <li class="last"><a href="./root_functions.php?action=update">Aggiornamento sw *</a></li>
@@ -96,6 +98,7 @@ catch (PDOException $exception) {
         <li class="last"><a href="">Aggiornamento sw</a></li>
         <?php
     }
+    */
     ?>
 </ul>
 <table class="counter">
