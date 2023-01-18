@@ -134,7 +134,7 @@ if(!isset($_POST['export'])) {
                     ?>
                     </td>
                 </tr>            
-                <tr><td style="text-align: left"><input name="azione" value="allidentities" type="radio" />Esporta tutte le identità</td></tr>
+                <tr><td style="text-align: left"><input name="azione" value="allidentities" type="radio" />Esporta tutti gli iscritti</td></tr>
             </table>                    
             <hr>
             <table>           
@@ -142,14 +142,14 @@ if(!isset($_POST['export'])) {
                 <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="backup-solodati" type="radio" />Backup database (solo dati)</td></tr>
                 <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="backup-solostruttura" type="radio" />Backup database (solo struttura)</td></tr>
                 <tr><td style="text-align: left"><input class="disable_submit" name="azione" value="restore" type="radio" />Ripristino database</td><td><input type="file" name="restorefile" accept=".sql" /></td>
-                <td><img style="border:0;height:31px" src="../img/question.png" alt="" title="Il file .csv (separato da , e fine riga \n) deve trovarsi nella cartella /doc" /><td>
+                <td><img style="border:0;height:31px" src="../img/question.png" alt="" title="Il file .tsv (separato da \t e fine riga \n) deve trovarsi nella cartella /doc" /><td>
                 </tr>
             </table>
             <hr>
             <table>           
                 <tr><td style="text-align: left"><input class="disable_submit" name="azione" value="loadCustomList" type="radio"/>Carica lista custom newsletter</td>
                 <td><input type="file" name="customList" accept=".csv" /></td>
-                <td><img style="border:0;height:31px" src="../img/question.png" alt="" title="Il file .csv (separato da , e fine riga \n) deve trovarsi nella cartella /doc e deve avere i seguenti campi: codice_fiscale,cognome,nome,email" /><td>             
+                <td><img style="border:0;height:31px" src="../img/question.png" alt="" title="Il file .tsv (separato da \t e fine riga \n) deve trovarsi nella cartella /doc e deve avere i seguenti campi: codice_fiscale,cognome,nome,email" /><td>             
                 </tr>
             </table>
             <hr>
@@ -223,15 +223,15 @@ else {
             $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.cf = socio.cf WHERE socio.numero_tessera IS NOT NULL "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."_frontespizio.csv' "
-            ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-frontespizio.tsv' "
+            ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
         case "allmembers": //Esporto tutti i soci
             $members=$dbh->query(" SELECT * FROM anagrafica "
             ."INNER JOIN socio ON anagrafica.cf = socio.cf WHERE socio.numero_tessera IS NOT NULL "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco soci.csv' "
-            ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci.tsv' "
+            ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
         case "members_evening": //Esporto i soci inseriti in questa sessione
             $cards=  join(',', $_SESSION['members_evening']);
@@ -239,8 +239,8 @@ else {
             $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.cf = socio.cf WHERE socio.numero_tessera IN ($cards) "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco soci serata.csv'  "
-            ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");              
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci serata.tsv'  "
+            ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");              
             break;
         case "members_date": //Esporto i soci da una certa data ad una certa data
             $date_start=DateTime::createFromFormat('Y-m-d', date('Y')."-$_POST[mm_start]-$_POST[gg_start]");
@@ -268,31 +268,31 @@ else {
             $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.cf = socio.cf WHERE socio.data_tessera>='$start' AND socio.data_tessera<='$end' "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco soci $namefile.csv' "
-            ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");                
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci $namefile.tsv' "
+            ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");                
             break;
         case "allidentities": //Esporto identità
             $members=$dbh->query(" SELECT * FROM anagrafica "
             ."INNER JOIN socio ON anagrafica.cf = socio.cf "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."_Elenco identita\'.csv' "
-            ."FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' ");
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco iscritti\'.tsv' "
+            ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
         case "backup-completo": //Faccio il backup completo (struttura + dati)
-            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci > ".BACKUP_PATH.$data."_BackupCompleto.sql 2>&1", $return_value);
+            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci > ".BACKUP_PATH.$data."-BackupCompleto.sql 2>&1", $return_value);
             break;
         case "backup-solodati": //Faccio il backup solo dei dati (non della struttura)
-            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-create-info > ".BACKUP_PATH.$data."_BackupSoloDati.sql 2>&1", $return_value);
+            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-create-info > ".BACKUP_PATH.$data."-BackupSoloDati.sql 2>&1", $return_value);
             break;
         case "backup-solostruttura": //Faccio il backup solo della struttura (non dei dati)
-            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-data > ".BACKUP_PATH.$data."_BackupSoloStruttura.sql 2>&1", $return_value);
+            system(MYSQLDUMP_EXECUTABLE."-u copernico --routines soci --no-data > ".BACKUP_PATH.$data."-BackupSoloStruttura.sql 2>&1", $return_value);
             break;
         case "restore": //Faccio il backup solo della struttura (non dei dati)
             system(MYSQL_EXECUTABLE."-u copernico soci < ".BACKUP_PATH.$_POST['restorefile']." 2>&1", $return_value);
         break;
         case "loadCustomList": //Caricamento custom list per newsletter
             $members=$dbh->query("DELETE FROM customList"); //svuoto l'attuale lista custom
-            $members=$dbh->query("LOAD DATA INFILE '".BACKUP_PATH.$_POST[customList]."' INTO TABLE customList FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n'");         
+            $members=$dbh->query("LOAD DATA INFILE '".BACKUP_PATH.$_POST[customList]."' INTO TABLE customList FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n'");         
             break;
         default:
             break;
