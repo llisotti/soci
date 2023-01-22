@@ -169,7 +169,7 @@ if(!isset($_POST['title'])) {
 
     /* Carico i dati da anagrafica e socio */
     if(!isset($_GET['custom_list'])) {
-        $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf AND socio.adesioni & 2 = 2 ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
+        $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.adesioni & 2 = 2 ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
     }
     /* Carico i dati dalla sola tabella "customList" */
     else {
@@ -211,7 +211,7 @@ if(!isset($_POST['title'])) {
     <input type="checkbox" id="domain_control" <?php if(isset($_GET['domain_control'])) echo "checked" ?>/><span style="font-size:10px">Controllo domini</span>
     </td>
     <td>
-    <input type="checkbox" id="custom_list" <?php if(isset($_GET['custom_list'])) echo "checked" ?>/><span style="font-size:10px">Utilizza lista custom</span>
+    <input type="checkbox" disabled id="custom_list" <?php if(isset($_GET['custom_list'])) echo "checked" ?>/><span style="font-size:10px">Utilizza lista custom</span>
     </td>
     <td style="text-align: right">
     <input type="button" id="reload" value="Ricarica pagina" title="Ricarica pagina"/>
@@ -277,7 +277,7 @@ if(!isset($_POST['title'])) {
             /* Se carico i dati da anagrafica e socio allora creo l'oggetto socio popolandolo con tutti i dati */
             if(!isset($_GET['custom_list'])) {
                 $member=new Socio_Copernico($row['cognome'], $row['nome']);
-                $member->codice_fiscale=($row['cf']); //Ho usato un alias nella query
+                $member->id=($row['id']); //Ho usato un alias nella query
                 $member->data_nascita=($row['data_nascita']);
                 $member->comune_nascita=($row['comune_nascita']);
                 $member->provincia_nascita=($row['provincia_nascita']);
