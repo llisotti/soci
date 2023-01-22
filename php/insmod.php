@@ -160,7 +160,7 @@ $data_nascita=$_POST['aaaa_nascita']."-".$_POST['mm_nascita']."-".$_POST['gg_nas
 /* Inizializzo un array di formattazione */
 $format_input=array("cognome" => "FUC",
                     "nome" => "FUC",
-                    "cf" => "UC",
+                    //"cf" => "UC",
                     "comune_nascita" => "FUC",
                     "provincia_nascita" => "UC",
                     "stato_nascita" => "UC",
@@ -177,19 +177,21 @@ $formatter= new InputFormat($format_input);
 $formatter->format($_POST);
 
 /**
- * Se si tenta di aggiornare il nummero tessera, controllo se esiste gia' quel numero tessera associato ad un altra persona
+ * Se si tenta di aggiornare il numero tessera allo stesso tesserato, controllo se esiste gia' quel numero tessera associato ad un altra persona
  */
 try {  
     
-    if($_POST['tessera'] != NULL) {
+    if($_POST['tessera'] != NULL && ($member->tessera!=$_POST['tessera'])) {
         
         /* Controllo se esiste gia' la tessera passata in POST */
         $prepared=$dbh->prepare("SELECT COUNT(*) FROM socio WHERE numero_tessera=?");
         $prepared->execute([$_POST['tessera']]);
         $counter=$prepared->fetch(PDO::FETCH_COLUMN);
         
-        /* Se esiste, proseguo facendo altri controlli */
-        if($counter) {
+        /* Se esiste una tessera ed essa appartiene ad una persona che ha il cognome o il nome diverso da quello appena passato in POST lancio l'eccezione  */
+        if($counter)
+            throw new Exception("Tessera gia' esistente");
+            /*
             $prepared=$dbh->prepare("SELECT cf FROM socio WHERE numero_tessera=?");
             $prepared->execute([$_POST['tessera']]);
             $cf=$prepared->fetch(PDO::FETCH_COLUMN);
@@ -197,10 +199,10 @@ try {
              * Se c'e' il numero tessera ed il codice fiscale che passo in post cambia al massimo di 2 caratteri rispetto quello ottenuto dalla query
              * ipotizzo che il socio sia lo stesso in quanto potrei anche variare il codice fiscale
              * Se il codice fiscale cambia differisce piu' di 2 caratteri allora la tessera e' gia' occupata da un altro socio: lancio l'eccezione
-             */
+             
             if(similar_text($cf , $_POST['cf']) < 14)
                 throw new Exception("Tessera gia' esistente");
-        }
+        }*/
     }
 }catch (Exception $e) {
     ?>
@@ -212,12 +214,10 @@ try {
 	die();
 }
 
-
 /**
  * Aggiorno i dati in anagrafica
- * ATTENZIONE: con REPLACE se la primary key (codice fiscale) gia' esiste allora aggiorno la riga
- * altrimenti creo una riga nuova. In pratica se cambio il codice fiscale creo una nuova riga
- * Quindi se cambio il codice fiscale creo una nuova riga => devo cancellare la vecchia riga!!
+ * ATTENZIONE: con REPLACE se la primary key (id) gia' esiste allora aggiorno la riga
+ * altrimenti creo una riga nuova.
  * ATTENZIONE: se aggiorno il nome oppure il cognome oppure la data di nascita
  * devo aggiornare anche il nome della firma tramite file manager altrimenti non mi carica la firma in profile_editor
  */
@@ -225,7 +225,7 @@ try {
     $prepared=$dbh->prepare("REPLACE INTO anagrafica (cognome,
                                                                 nome,
                                                                 data_nascita,
-                                                                cf,
+                                                                id,
                                                                 comune_nascita,
                                                                 provincia_nascita,
                                                                 stato_nascita,
@@ -242,7 +242,7 @@ try {
     $prepared->execute([$_POST['cognome'],
         $_POST['nome'],
         $data_nascita,
-        $_POST['cf'],
+        $member->id,
         $_POST['comune_nascita'],
         $_POST['provincia_nascita'],
         $_POST['stato_nascita'],
@@ -275,8 +275,8 @@ $date_drop_identity->modify(DROP_IDENTITY); //Data scadenza identità
   
 /* Leggo i flag di adesione */
 try {
-    $prepared=$dbh->prepare("SELECT CAST(adesioni AS unsigned integer) FROM socio WHERE cf=?");
-    $prepared->execute([$_POST['cf']]);
+    $prepared=$dbh->prepare("SELECT CAST(adesioni AS unsigned integer) FROM socio WHERE id=?");
+    $prepared->execute([$member->id]);
 }
 catch (PDOException $e) {
     ?>
@@ -295,16 +295,20 @@ isset($_POST['newsletter']) ? $adesioni|=2 : $adesioni&=253;
 
 try {
     
-    /* Se la tessera non esiste posso proseguire l'operazione */
+    /**
+     * Se passo la tessera posso proseguire l'operazione
+     * Attenzione: con questa query non permetto di aggiornare l'iscrizione: se servirà la modificherò
+     */ 
     if($_POST['tessera'] != NULL) {
-        $prepared=$dbh->prepare("REPLACE INTO socio (cf,
+        $prepared=$dbh->prepare("REPLACE INTO socio (id,
+                                                        iscrizione,
                                                         scadenza,
                                                         data_tessera,
                                                         numero_tessera,
                                                         adesioni,
                                                         firma)
-                                                        VALUES(?, DATE_ADD(LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH)),".DROP_IDENTITY_MYSQL."), ?, ?, ?, ?)");
-        $prepared->execute([$_POST['cf'], date('Y')."-".$_POST['mm_inserimento']."-".$_POST['gg_inserimento'], $_POST['tessera'], $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".$_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita'].".png"]);
+                                                        VALUES(?, STR_TO_DATE(?, '%d/%m/%Y'), DATE_ADD(LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH)),".DROP_IDENTITY_MYSQL."), ?, ?, ?, ?)");
+        $prepared->execute([$member->id, $member->iscrizione, date('Y')."-".$_POST['mm_inserimento']."-".$_POST['gg_inserimento'], $_POST['tessera'], $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".$_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita'].".png"]);
     }
     /**
      * Se non passo il numero tessera:
@@ -314,12 +318,13 @@ try {
      * 2 - Se non era socio aggiorno semplicemente i dati  
      */
     else {
-        $prepared=$dbh->prepare("REPLACE INTO socio (cf,
+        $prepared=$dbh->prepare("REPLACE INTO socio (id,
+                                                        iscrizione,
                                                         scadenza,
                                                         adesioni,
                                                         firma)
-                                                        VALUES(?, STR_TO_DATE(?, '%d/%m/%Y'), ?, ?)");
-        $prepared->execute([$_POST['cf'], $member->scadenza, $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".$_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita'].".png"]);  
+                                                        VALUES(?, STR_TO_DATE(?, '%d/%m/%Y'), STR_TO_DATE(?, '%d/%m/%Y'), ?, ?)");
+        $prepared->execute([$member->id, $member->iscrizione, $member->scadenza, $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".$_POST['gg_nascita'].$_POST['mm_nascita'].$_POST['aaaa_nascita'].".png"]);  
     }
 }
 catch (Exception $e) {
@@ -331,10 +336,10 @@ catch (Exception $e) {
 	errorMessage($e);
 	
 	/* Se avevo inserito correttamente i dati in anagrafica li devo cancellare */
-	if($member->cf != $_POST['cf']) //Se ho cambiato il codice fiscale devo cancellare 2 righe (REPLACE mi ha aggiunto una riga)
-	   $dbh->query("DELETE FROM anagrafica WHERE cf= '$member->codice_fiscale' AND cf='$_POST[cf]'");
-	else //altrimenti cancello solo una riga
-	    $dbh->query("DELETE FROM anagrafica WHERE cf='$member->codice_fiscale'");	
+	//if($member->cf != $_POST['cf']) //Se ho cambiato il codice fiscale devo cancellare 2 righe (REPLACE mi ha aggiunto una riga)
+	   //$dbh->query("DELETE FROM anagrafica WHERE cf= '$member->codice_fiscale' AND cf='$_POST[cf]'");
+	//else //altrimenti cancello solo una riga
+	    $dbh->query("DELETE FROM anagrafica WHERE id='$member->id'");	
 	die();
 }
 ?>
@@ -344,11 +349,12 @@ catch (Exception $e) {
 <?php
 successMessage();
 
-/* Se ho cambiato il codice fiscale devo cancellare la riga con il vecchio codice fiscale in quanto REPLACE ne crea una nuova */
+/* Se ho cambiato il codice fiscale devo cancellare la riga con il vecchio codice fiscale in quanto REPLACE ne crea una nuova
 if($member->codice_fiscale != $_POST['cf']) {
     $dbh->query("DELETE FROM anagrafica WHERE cf='$member->codice_fiscale'");
     $dbh->query("DELETE FROM socio WHERE cf='$member->codice_fiscale'");
-}    
+}
+*/    
 
 /* Aggiorno il contatore di soci inseriti nella serata
 if($_POST['aggiuntoSocio'] == 'aggiungi')
