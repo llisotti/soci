@@ -40,7 +40,6 @@ require "member.php";
             /* Inizializzo un array di formattazione */
             $format_input=array("cognome" => "FUC",
                                 "nome" => "FUC",
-                                "cf" => "UC",
                                 "comune_nascita" => "FUC",
                                 "provincia_nascita" => "UC",
                                 "stato_nascita" => "UC",
@@ -61,7 +60,6 @@ require "member.php";
                 $prepared=$dbh->prepare("INSERT INTO anagrafica (cognome,
                                                                     nome,
                                                                     data_nascita,
-                                                                    cf,
                                                                     comune_nascita,
                                                                     provincia_nascita,
                                                                     stato_nascita,
@@ -73,12 +71,12 @@ require "member.php";
                                                                     stato,
                                                                     telefono,
                                                                     email)
-                                                                    VALUES (?, ?, STR_TO_DATE(?, '%d/%m/%Y'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                                                    VALUES (?, ?, STR_TO_DATE(?, '%d/%m/%Y'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
                 $prepared->execute([$_POST['cognome'],
                                     $_POST['nome'],
                                     $_POST['data_nascita'],
-                                    $_POST['cf'],
+                                    //$_POST['cf'],
                                     $_POST['comune_nascita'],
                                     $_POST['provincia_nascita'],
                                     $_POST['stato_nascita'],
@@ -103,11 +101,14 @@ require "member.php";
         		errorMessage($e);
         		die();
             }
+
+            /* Chiedo l'ultimo id inserito */
+            $last_id = $dbh->lastInsertId();
             
             /* Leggo i flag di adesione */
             try {
-                $prepared=$dbh->prepare("SELECT CAST(adesioni AS unsigned integer) FROM socio WHERE cf=?");
-                $prepared->execute([$_POST['cf']]);
+                $prepared=$dbh->prepare("SELECT CAST(adesioni AS unsigned integer) FROM socio WHERE id=?");
+                $prepared->execute([$last_id]);
             }
             catch (PDOException $e) {               
                 ?>
@@ -124,18 +125,21 @@ require "member.php";
             isset($_POST['diffusione_nominativo']) ? $adesioni|=1 : $adesioni&=254;
             isset($_POST['newsletter']) ? $adesioni|=2 : $adesioni&=253;
             $_POST['etaconsenso'] == "minorenne" ?  $adesioni|=4 : $adesioni&=251;
+
+            
             
             /* Inserisco i dati in socio */
             try {
-                $prepared=$dbh->prepare("INSERT INTO socio (cf,
+                $prepared=$dbh->prepare("INSERT INTO socio (id,
+                                                            iscrizione,
                                                             scadenza,
                                                             data_tessera,
                                                             numero_tessera,
                                                             adesioni,
                                                             firma)
-                                                            VALUES(?, DATE_ADD(LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH)),".DROP_IDENTITY_MYSQL."), ?, ?, ?, ?)");
+                                                            VALUES(?, CURDATE(), DATE_ADD(LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH)),".DROP_IDENTITY_MYSQL."), ?, ?, ?, ?)");
                 
-                $prepared->execute([$_POST['cf'], NULL, NULL, $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".str_replace("/", "", $_POST['data_nascita']).".png"]);
+                $prepared->execute([$last_id, NULL, NULL, $adesioni, ucfirst(strtolower(str_replace(" ","",$_POST['cognome']))).ucfirst(strtolower(str_replace(" ","",$_POST['nome'])))."-".str_replace("/", "", $_POST['data_nascita']).".png"]);
             }
             catch (PDOException $e) {               
                 ?>
@@ -144,8 +148,8 @@ require "member.php";
         		</div>
         		<?php
         		/* Se ho inserito correttamente i dati in anagrafica li devo cancellare */
-        		$prepared=$dbh->prepare("DELETE FROM anagrafica WHERE cf=?");
-        		$prepared->execute([$_POST['cf']]);
+        		$prepared=$dbh->prepare("DELETE FROM anagrafica WHERE id=?");
+        		$prepared->execute([$last_id]);
         		
         		errorMessage($e);
         		die();

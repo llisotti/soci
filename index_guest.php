@@ -86,9 +86,11 @@ require "php/member.php";
             	</table>
         	</form>
         </div><br>
+		<!--
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
         	<li>Puoi controllare lo stato della Tua iscrizione e la validita' della tessera per l'anno in corso cliccando <a style="color:blue" href="" id="cerca">qui</a>.</li>
     	</ul>
+		-->
         <ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
         	<li>Se non risulti iscritto puoi farlo velocemente compilando il modulo di registrazione sottostante.</li>
         	<li>Dopo la conferma della corretta iscrizione puoi recarti direttamente in sede. Versando la quota associativa sara' rilasciata subito la tessera.</li>
@@ -121,12 +123,14 @@ require "php/member.php";
                         <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                     </div>
                 </div>
+				<!--
                 <div class="col-2">
     				<div class="input-group">
     					<input id="cf" class="input--style-1" style="width:80%" type="text" placeholder="Codice Fiscale" name="cf"  maxlength="16" required style="background-image: url(img/credit-card.png); no-repeat; text-indent: 20px">&nbsp;&nbsp;&nbsp;&nbsp;
     					<a target="_blank" rel="noopener noreferrer" href="https://www.codicefiscale.com/"><img src="img/credit-card.png" align="right" title="Calcola codice fiscale online" alt="Calcola codice fiscale online" style="margin-right:5px"></img></a>
     				</div>
 				</div>
+				-->
             </div>
             <span id="nascosto_1" style="visibility:hidden; font-size:10px; font-family: Arial Narrow; color:red">Se nato all'estero selezionare solo lo Stato</span>
 			<div class="row row-space">
@@ -349,13 +353,13 @@ $(document).ready(function(){
 	});
 	*/
 
-    /* Validazione codice fiscale (lo controllo quando entro nel campo comune) */
+    /* Validazione codice fiscale (lo controllo quando entro nel campo comune)
 	$("#comune").focus(function() {
     	// http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/
     	var pattern = /^(?:[A-Z][AEIOU][AEIOUX]|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i;
     	if(!$("#cf").val().match(pattern))
         	alert("Attenzione: controllare che il codice fiscale immesso sia corretto");
-    });
+    });*/
 
     /* Validazione data nascita
     $("#birthday").blur(function() {
@@ -365,8 +369,8 @@ $(document).ready(function(){
     	}
     }); */
 
-    /* Validazione data nascita (la controllo quando entro nel campo codice fiscale) */
-    $("#cf").focus(function() {
+    /* Validazione data nascita (la controllo quando entro nel campo comune di nascita) */
+    $("#comune").focus(function() {
     	var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
     	if(!value.test($('#birthday').val())) {
         	alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
@@ -405,10 +409,10 @@ $(document).ready(function(){
     
     /**
 	 * Controllo età 
-	 * La funzione parte quando entro nel campo inserimento codice fiscale
+	 * La funzione parte quando entro nel campo inserimento comune
 	 */
     //$("#cf").one('focus',function() {
-	$("#cf").focus(function() {
+	$("#comune").focus(function() {
 
 		/* Calcolo l'età */
 		var today = new Date();
@@ -534,7 +538,7 @@ $(document).ready(function(){
     	$("#nascosto_2").css("visibility","hidden");
     });
         
-	/* Ricerca se esiste gia' l'iscrizione */
+	/* Ricerca se esiste gia' l'iscrizione 
     $("#cerca").on('click', function(e) {
     	e.preventDefault();
     	var codice_fiscale = prompt("Inserisci il codice fiscale");
@@ -545,7 +549,7 @@ $(document).ready(function(){
             url: "./php/cf.php",
             data: {cf: codice_fiscale},
             dataType: 'html',
-            /* ritorno un messaggio e visualizzo il popup */
+            /* ritorno un messaggio e visualizzo il popup 
             success: function (response) {
             	if(response=="ko")
             		alert("I Tuoi dati non risultano nel nostro archivio. E' necessario eseguire una nuova registrazione");
@@ -555,7 +559,7 @@ $(document).ready(function(){
             		alert("I Tuoi dati risultano correttamente inseriti nel nostro archivio ed il tuo numero tessera e':  " + response);
             }
     	});
-    });
+    });*/
 
     $("#segnalazione").click(function(e) {
         e.preventDefault();
