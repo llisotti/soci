@@ -9,7 +9,7 @@ CREATE TABLE anagrafica
   cognome		VARCHAR(30) NOT NULL,
   nome			VARCHAR(30) NOT NULL,
   data_nascita		DATE NOT NULL,			#data nel formato YYYY-MM-GG
-  cf				CHAR(16) NOT NULL,		#codice fiscale sempre 16 cifre
+  id				SMALLINT UNSIGNED AUTO_INCREMENT,		#id
   comune_nascita	VARCHAR(40) NULL,		#puo essere nullo se nato all estero
   provincia_nascita	CHAR(2) NULL,			#puo essere nullo se nato all estero
   stato_nascita		CHAR(2) NOT NULL,		#stato nascita sempre 2 lettere (IT, US, ecc)
@@ -21,5 +21,5 @@ CREATE TABLE anagrafica
   stato			CHAR(2) NULL,			#stato sempre 2 lettere (IT, MD, ecc)
   telefono			VARCHAR(15) NULL, 		#anche se è un numero lo tratto come testo (formato E.164 vuole 15 digit)
   email      		VARCHAR(40) NULL,
-  PRIMARY KEY (cf)
+  PRIMARY KEY (id)
 ) ENGINE=INNODB;

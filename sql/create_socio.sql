@@ -6,13 +6,14 @@ DROP TABLE IF EXISTS socio;
 
 CREATE TABLE socio
 (
-  cf				CHAR(16) NOT NULL,		#codice fiscale sempre 16 cifre
+  id				SMALLINT UNSIGNED NOT NULL,		#id
+  iscrizione  DATE NOT NULL,       #Data di iscizione nel database
   scadenza		DATE NOT NULL,			#Data della scadenza iscrizione database (+ DROP_IDENTITY anni da ultima data_tessera)
   data_tessera		DATE,					#Data del tesseramento per anno corrente
   numero_tessera	SMALLINT UNSIGNED NULL UNIQUE,
   adesioni			BIT(8) NOT NULL,			#Campo bit che contiene diversi flag
   firma			VARCHAR(100) NOT NULL,	#CognomeNome-datanascita
-PRIMARY KEY (cf)
+PRIMARY KEY (id)
 ) ENGINE=INNODB;
 
 /**Configurazione bit adesioni
