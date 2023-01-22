@@ -145,6 +145,7 @@ class Socio_Copernico extends Person {
     const EXCEPTION_MESSAGE="Errore socio copernico";
     private $tessera; /**< Numero tessera socio per l'anno corrente */
     private $data_tessera; /**< Data in cui è stata effettuata la tessera */
+    private $iscrizione; /**< Data in cui è stata effettuata l'iscrizione */
     private $scadenza; /**< Data di iscrizione per la prima volta ovvero nuova identità */
     private $adesioni; /**< Scadenza identità: cancellazione dal database */
     private $firma; /**< Nome del file immagine della firma */
@@ -169,6 +170,7 @@ class Socio_Copernico extends Person {
                                     "email",
                                     "tessera",
                                     "data_tessera",
+                                    "iscrizione",
                                     "scadenza",
                                     "adesioni",
                                     "firma",

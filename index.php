@@ -264,7 +264,7 @@ else
 /* Se non passo nulla in GET visualizzo gli iscritti ma non ancora tesserati */
 if(empty($_GET) || !isset($_GET['show']))
 {
-    $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf AND socio.numero_tessera IS NULL ORDER BY anagrafica.cognome ASC");
+    $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY anagrafica.cognome ASC");
     echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$members->rowCount().")</h1>";
 }
 else
@@ -275,24 +275,24 @@ else
             $fullname_trimmed=trim($_GET['fullname']); // Tolgo tutti gli spazi dopo l'ultimo carattere
             $param=$dbh->quote('%'.$fullname_trimmed.'%');
             if(ctype_digit($fullname_trimmed)) { //Se inserisco un numero nel campo ricerca allora cerco per numero tessera
-                $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica LEFT JOIN socio ON anagrafica.cf = socio.cf WHERE socio.numero_tessera = $fullname_trimmed");
+                $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica LEFT JOIN socio ON anagrafica.id = socio.id WHERE socio.numero_tessera = $fullname_trimmed");
             }
             else { //altrimenti cerco per Cognome e per Nome
-                $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica LEFT JOIN socio ON anagrafica.cf = socio.cf WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
+                $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica LEFT JOIN socio ON anagrafica.id = socio.id WHERE anagrafica.cognome LIKE $param || anagrafica.nome LIKE $param ORDER BY anagrafica.cognome ASC");
             }            
             echo "<h1>ELENCO IDENTITA' TROVATE (".$members->rowCount().")</h1>";
             $mylog->logInfo("Ricerca (".$fullname_trimmed.") tra le identità");
             break;
         case "allmembers": //Visualizzo solo i soci tesserati
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf AND socio.numero_tessera IS NOT NULL ORDER BY socio.numero_tessera DESC");
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NOT NULL ORDER BY socio.numero_tessera DESC");
             echo "<h1>ELENCO SOCI TESSERATI (".$members->rowCount().")</h1>";
             break;
         case "allidentities": //Visualizzo tutte le identità (persone in anagrafica + soci= TUTTI)
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
             echo "<h1>ELENCO ISCRITTI COMPLETO (".$members->rowCount().")</h1>";
             break;
         default: //Di default visualizzo gli iscritti che ancora non sono tesserati
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.cf=socio.cf AND socio.numero_tessera IS NULL ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");           
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");           
             echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$members->rowCount().")</h1>";
             break;
     }
@@ -316,12 +316,14 @@ $odd_tr=1;
 ?>
 <table class="listing">
     <tr>
-        <th class="first" style="width: 160px">Cognome e Nome</th>
+        <th class="first">ID</th>
+        <th style="width: 160px">Cognome e nome</th>
         <th>Data di nascita</th>
         <th>N° Tessera</th>
         <th>Data Tessera</th>
-        <th colspan="3">Azioni</th>
-        <th class="last" style="width: 140px">Codice Fiscale</th>
+        <th>Data Iscrizione</th>
+        <th class="last" colspan="3">Azioni</th>
+        <!-- <th class="last" style="width: 140px">Codice Fiscale</th> -->
     </tr>
     <?php
     foreach($rows as $row)
@@ -334,7 +336,7 @@ $odd_tr=1;
 
         /* Creo l'oggetto socio e lo popolo con tutti i dati */
         $member=new Socio_Copernico($row['cognome'], $row['nome']);
-        $member->codice_fiscale=($row['cf']); //Ho usato un alias nella query
+        $member->id=($row['id']);
         $member->data_nascita=($row['data_nascita']);
         $member->comune_nascita=($row['comune_nascita']);
         $member->provincia_nascita=($row['provincia_nascita']);
@@ -349,6 +351,7 @@ $odd_tr=1;
         $member->email=($row['email']);
         $member->tessera=$row['numero_tessera'];
         $member->data_tessera=$row['data_tessera'];
+        $member->iscrizione=($row['iscrizione']);
         $member->scadenza=($row['scadenza']);
         $member->firma=$row['firma'];
         $member->flags=$row['adesioni'];
@@ -356,15 +359,17 @@ $odd_tr=1;
         /* Lo aggiungo all'array che contiene gli oggetti soci */
         array_push($member_obj, $member);
         ?>
-            <td class="first style3"><?php echo $member->cognome." ".$member->nome ?></td>
+            <td class="first style3"><?php echo $member->id?></td>
+            <td><?php echo $member->cognome." ".$member->nome ?></td>
             <td><?php echo $member->data_nascita ?></td>
             <td><?php echo $member->tessera ?></td>
             <td><?php echo $member->data_tessera ?></td>
+            <td><?php echo $member->iscrizione ?></td>
             <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo" title="Visualizza profilo" src="img/login-icon.gif" width="16" height="16" /></a></td>
             <td class="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="img/edit-icon.gif" width="16" height="16" /></a></td>
             <td class="edit_card"><a href="#"><img alt="<?php if(!$member->tessera) echo 'Aggiungi tessera'; else echo 'Elimina tessera' ?>" title="<?php if(!$member->tessera) echo 'Aggiungi tessera'; else echo 'Elimina tessera' ?>" src="<?php if(!$member->tessera) echo 'img/debit-card.png'; else echo 'img/card-denied.png' ?>" width="16" height="16" /></a></td>
-            <td><?php echo $member->codice_fiscale ?></td>
             <!--
+            <td><//?php echo $member->codice_fiscale ?></td>
             <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
             <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>
             -->
@@ -411,17 +416,17 @@ $(document).ready(function(){
     /* Funzione di gestione 'Visualizza profilo' */
     $("td.see_profile").click(function() {
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
-        var codice_fiscale = $(this).siblings(":last").text();
+        var id = $(this).prevAll().eq(5).text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_viewer.php"
-        window.open('./php/profile_viewer.php?codice_fiscale='+codice_fiscale,'', "height=300,width=800");
+        window.open('./php/profile_viewer.php?id='+id,'', "height=300,width=800");
     });
 
     /* Funzione di gestione 'Aggiungi o cancella tessera' */
     $("td.edit_card").click(function() {
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
         var tessera = 0; //Inizializzo a 0 il valore della tessera (se rimane 0 significa che e' una cancellazione)
-        var cognome_nome = $(this).siblings(":first").text(); 
-        var codice_fiscale = $(this).siblings(":last").text();
+        var cognome_nome = $(this).prevAll().eq(6).text(); 
+        var id = $(this).siblings(":first").text();
         var action = $(this).children().children().attr("alt");
         if(action == "Aggiungi tessera") {
     		tessera = prompt("Inserisci il numero di tessera da aggiungere a "+cognome_nome);
@@ -436,7 +441,7 @@ $(document).ready(function(){
     	$.ajax({
             type: "POST",
             url: "./php/signature.php",
-            data: {cf: codice_fiscale, tessera:tessera},
+            data: {id: id, tessera:tessera},
             dataType: 'html',
             /* ritorno un messaggio e visualizzo il popup */
             success: function (response) {
@@ -461,9 +466,9 @@ $(document).ready(function(){
     /* Funzione di gestione 'Modifica profilo' */
     $("td.edit_profile").click(function() {
         //recupero il testo dentro due td precedenti (che per come ho strutturato la tabella è il numero di tessera)
-        var codice_fiscale = $(this).siblings(":last").text();
+        var id = $(this).prevAll().eq(6).text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_editor.php" inviando il numero tessera quindi MODIFICO il socio
-        window.location.href='./php/profile_editor.php?cf='+codice_fiscale;
+        window.location.href='./php/profile_editor.php?id='+id;
     });
 
 

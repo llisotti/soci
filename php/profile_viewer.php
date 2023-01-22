@@ -31,7 +31,7 @@ if(isset($_SESSION['members']))
 {
     foreach($_SESSION['members'] as $member)
     {
-        if($member->codice_fiscale==$_GET['codice_fiscale'])
+        if($member->id==$_GET['id'])
         {
         ?>
     <table>
@@ -58,11 +58,13 @@ if(isset($_SESSION['members']))
             <!--<td><label>SESSO:</label></td>
             <td><input readonly id=sesso value="<?php echo $member->sesso; ?>"></td>-->
         </tr>
+        <!--
         <tr>
             <td style="text-align:right"><label>CODICE FISCALE:</label></td>
-            <td><input readonly value="<?php echo $member->codice_fiscale; ?>"></td>
+            <td><input readonly value="<?php //echo $member->codice_fiscale; ?>"></td>
             <td colspan="4"></td>
         </tr>
+        -->
         <tr>
             <td style="text-align:right"><label>INDIRIZZO:</label></td> 
             <td colspan="4"><input readonly id=residenza value="<?php echo $member->indirizzo." - ".$member->cap." ".$member->citta." (".$member->provincia.") - (".$member->stato.")"; ?>"></td>
@@ -79,11 +81,16 @@ if(isset($_SESSION['members']))
             <td colspan="6"></td>
         </tr>
         <tr>
-            <td style="text-align:right"><label>TESSERA:</label></td>
-            <td><input readonly value="<?php if($member->tessera) echo "N°".$member->tessera." del ".$member->data_tessera; else echo "" ?>"></td>
+            <td style="text-align:right"><label>DATA ISCRIZIONE:</label></td>
+            <td><input readonly value="<?php echo $member->iscrizione; ?>"></td>
             <td style="text-align:right"><label>SCADENZA ISCRIZIONE:</label></td>
             <td><input readonly value="<?php echo $member->scadenza; ?>"></td>
             <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label>NUMERO TESSERA:</label></td>
+            <td colspan="4"><input readonly style="width:40%;" value="<?php if($member->tessera) echo "N°".$member->tessera." del ".$member->data_tessera.""; else echo ""; ?>"></td>
+            <td></td>
         </tr>
     </table>
         <?php

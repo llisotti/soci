@@ -46,8 +46,8 @@ $mm_nascita=NULL; $mm_inserimento=NULL;
 
 /* Cerco il socio corrispondente */
 foreach($_SESSION['members'] as $member) {
-    if($member->codice_fiscale==$_GET['cf'])
-        break; //Ho trovato il socio (variabile $member) con cf passato in GET
+    if($member->id==$_GET['id'])
+        break; //Ho trovato il socio (variabile $member) con id passato in GET
 }
 
 /* Salvo il socio nella sessione: mi serve in insmod.php */
@@ -190,7 +190,7 @@ if($member->tessera!=NULL) {
     </tr>
 </table>
 </div>
-<form action=<?php echo "'https://{$_SERVER['HTTP_HOST']}/php/insmod.php?cf="."$_GET[cf]'"; ?> method="post"><input type="hidden" name="" value=""/>
+<form action=<?php echo "'https://{$_SERVER['HTTP_HOST']}/php/insmod.php?id="."$_GET[id]'"; ?> method="post"><input type="hidden" name="" value=""/>
 <div id="center-column">
 <div class="top-bar"> <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/logout.php" class="button" title="<?php echo $_SESSION['username']?> - Clicca per uscire" /></a>
 <h1>MODIFICA PROFILO</h1>
@@ -281,10 +281,12 @@ else { //Modifico un'identita' o da identita' diventa socio
 <td style="text-align:right"><a href="" onclick="return false"><img class="apri_stati_province" style="border:0;height:31px" src="../img/question.png" alt="" title="Clicca per le sigle degli stati e delle province" /></a></td>
 <!-- <img src="../img/_nascita_estero.png" height="60" width="100"> -->
 </tr>
+<!--
 <tr>
 <td>Codice fiscale: </td>
-<td><input name="cf" type="text" value="<?php echo $member->codice_fiscale ?>" /></td>
+<td><input name="cf" type="text" value="<?php //echo $member->codice_fiscale ?>" /></td>
 </tr>
+-->
 </table><?php /*
 if (isset($_GET['cf']))
 {

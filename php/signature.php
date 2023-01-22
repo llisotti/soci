@@ -37,8 +37,8 @@ elseif (isset($_POST['tessera'])){ //Se passo il numero tessera oppure tessera=0
     
     if($_POST['tessera']) { //Se passo un numero di tessera (quindi diverso da 0) significa che voglio inserire una tessera
         try {
-            $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?");
-            $prepared->execute([$_POST['tessera'], date("Y-m-d"), $_POST['cf']]);
+            $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE id=?");
+            $prepared->execute([$_POST['tessera'], date("Y-m-d"), $_POST['id']]);
             $esito=$prepared->rowCount();
          /* Se tento di inserire una un numero tessera gia' esistente setto la variabile al valore -2 */   
         }catch(Exception $e) {
@@ -54,8 +54,8 @@ elseif (isset($_POST['tessera'])){ //Se passo il numero tessera oppure tessera=0
             //unset($_SESSION['members_evening'][$key]);
             //$_SESSION['members_evening'] = array_values($_SESSION['members_evening']); //Reimposto l'array
         //}
-        $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE cf=?"); //Metto NULL il numero tessera e la data tessera
-        $prepared->execute([NULL, NULL, $_POST['cf']]);
+        $prepared=$dbh->prepare("UPDATE socio SET numero_tessera=?, data_tessera=? WHERE id=?"); //Metto NULL il numero tessera e la data tessera
+        $prepared->execute([NULL, NULL, $_POST['id']]);
         $esito=$prepared->rowCount();
     }
     
