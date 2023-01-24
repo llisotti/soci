@@ -97,8 +97,8 @@ if(!isset($_POST['export'])) {
             ?>
 			<table>
 				<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="frontespizio" type="radio" checked />Estrai frontespizio</td></tr>
-                <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="allmembers" type="radio" checked />Esporta tutti i soci</td></tr>
-                <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_evening" type="radio" />Esporta soci serata</tr>
+                <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="allmembers" type="radio" checked />Esporta libro soci</td></tr>
+                <!--<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_evening" type="radio" />Esporta soci serata</tr>-->
                 <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_date" type="radio" />Esporta soci dal</td>
                     <td>
                     <?php
@@ -219,29 +219,31 @@ else {
 
     /* Verifico l'azione che devo fare */
     switch ($_POST['azione']) {
-        case "frontespizio": //Esporto tutti i soci
-            $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome FROM socio "
-            ."INNER JOIN anagrafica ON anagrafica.cf = socio.cf WHERE socio.numero_tessera IS NOT NULL "
+        case "frontespizio": //Esporto il frontespizio
+            $members=$dbh->query("SELECT numero_tessera, anagrafica.cognome, anagrafica.nome, anagrafica.data_nascita FROM socio "
+            ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.numero_tessera IS NOT NULL "
             ."ORDER BY socio.numero_tessera ASC "
             ."INTO OUTFILE '".BACKUP_PATH.$data."-frontespizio.tsv' "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
-        case "allmembers": //Esporto tutti i soci
-            $members=$dbh->query(" SELECT * FROM anagrafica "
-            ."INNER JOIN socio ON anagrafica.cf = socio.cf WHERE socio.numero_tessera IS NOT NULL "
+        case "allmembers": //Esporto il libro soci
+            $members=$dbh->query("SELECT data_tessera, NULL, NULL, numero_tessera, anagrafica.cognome, anagrafica.nome, CONCAT(anagrafica.indirizzo,' ', anagrafica.citta,' ', anagrafica.provincia_nascita,' [', anagrafica.stato_nascita,']') AS residenza, anagrafica.comune_nascita, anagrafica.data_nascita FROM socio "
+            ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.numero_tessera IS NOT NULL "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci.tsv' "
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Libro soci online.tsv' "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
+        /*
         case "members_evening": //Esporto i soci inseriti in questa sessione
             $cards=  join(',', $_SESSION['members_evening']);
             echo $cards;
-            $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome FROM socio "
-            ."INNER JOIN anagrafica ON anagrafica.cf = socio.cf WHERE socio.numero_tessera IN ($cards) "
+            $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome, anagrafica.data_nascita FROM socio "
+            ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.numero_tessera IN ($cards) "
             ."ORDER BY socio.numero_tessera ASC "
             ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci serata.tsv'  "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");              
             break;
+        */
         case "members_date": //Esporto i soci da una certa data ad una certa data
             $date_start=DateTime::createFromFormat('Y-m-d', date('Y')."-$_POST[mm_start]-$_POST[gg_start]");
             $date_end=DateTime::createFromFormat('Y-m-d', date('Y')."-$_POST[mm_end]-$_POST[gg_end]");
@@ -265,17 +267,17 @@ else {
             $start=$date_start->format('Y-m-d');
             $end=$date_end->format('Y-m-d');
             $namefile=  str_replace('-', '', $start)."-".str_replace('-', '', $end); //Desinenza del nome del file: data iniziale-data finale nel formato AAAMMGG-AAAMMGG
-            $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome FROM socio "
-            ."INNER JOIN anagrafica ON anagrafica.cf = socio.cf WHERE socio.data_tessera>='$start' AND socio.data_tessera<='$end' "
+            $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome, anagrafica.data_nascita FROM socio "
+            ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.data_tessera>='$start' AND socio.data_tessera<='$end' "
             ."ORDER BY socio.numero_tessera ASC "
             ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci $namefile.tsv' "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");                
             break;
         case "allidentities": //Esporto identità
             $members=$dbh->query(" SELECT * FROM anagrafica "
-            ."INNER JOIN socio ON anagrafica.cf = socio.cf "
+            ."INNER JOIN socio ON anagrafica.id = socio.id "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco iscritti\'.tsv' "
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco iscritti.tsv' "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
         case "backup-completo": //Faccio il backup completo (struttura + dati)
