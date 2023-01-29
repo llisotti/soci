@@ -316,13 +316,13 @@ $odd_tr=1;
 ?>
 <table class="listing">
     <tr>
-        <th class="first">ID</th>
+        <th class="first" style="width: 10%">ID</th>
         <th style="width: 160px">Cognome e nome</th>
         <th>Data di nascita</th>
         <th>N° Tessera</th>
         <th>Data Tessera</th>
-        <th>Data Iscrizione</th>
-        <th class="last" colspan="3">Azioni</th>
+        <!--<th>Data Iscrizione</th>-->
+        <th class="last" colspan="4">Azioni</th>
         <!-- <th class="last" style="width: 140px">Codice Fiscale</th> -->
     </tr>
     <?php
@@ -364,15 +364,13 @@ $odd_tr=1;
             <td><?php echo $member->data_nascita ?></td>
             <td><?php echo $member->tessera ?></td>
             <td><?php echo $member->data_tessera ?></td>
-            <td><?php echo $member->iscrizione ?></td>
+            <!--<td><//?php echo $member->iscrizione ?></td>-->
             <td class="see_profile"><a href="#" onclick="return false"><img alt="Visualizza profilo" title="Visualizza profilo" src="img/login-icon.gif" width="16" height="16" /></a></td>
             <td class="edit_profile"><a href="#" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="img/edit-icon.gif" width="16" height="16" /></a></td>
             <td class="edit_card"><a href="#"><img alt="<?php if(!$member->tessera) echo 'Aggiungi tessera'; else echo 'Elimina tessera' ?>" title="<?php if(!$member->tessera) echo 'Aggiungi tessera'; else echo 'Elimina tessera' ?>" src="<?php if(!$member->tessera) echo 'img/debit-card.png'; else echo 'img/card-denied.png' ?>" width="16" height="16" /></a></td>
-            <!--
-            <td><//?php echo $member->codice_fiscale ?></td>
-            <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
-            <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>
-            -->
+            <!--<td><//?php echo $member->codice_fiscale ?></td>-->
+            <td id="cancel_profile"><a href="#"><img alt="Elimina socio" title="Elimina iscizione" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
+            <!--<td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td>-->
         </tr>
     <?php	
     }
@@ -416,7 +414,7 @@ $(document).ready(function(){
     /* Funzione di gestione 'Visualizza profilo' */
     $("td.see_profile").click(function() {
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
-        var id = $(this).prevAll().eq(5).text();
+        var id = $(this).prevAll().eq(4).text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_viewer.php"
         window.open('./php/profile_viewer.php?id='+id,'', "height=300,width=800");
     });
@@ -425,7 +423,7 @@ $(document).ready(function(){
     $("td.edit_card").click(function() {
         //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
         var tessera = 0; //Inizializzo a 0 il valore della tessera (se rimane 0 significa che e' una cancellazione)
-        var cognome_nome = $(this).prevAll().eq(6).text(); 
+        var cognome_nome = $(this).prevAll().eq(5).text(); 
         var id = $(this).siblings(":first").text();
         var action = $(this).children().children().attr("alt");
         if(action == "Aggiungi tessera") {
@@ -466,7 +464,7 @@ $(document).ready(function(){
     /* Funzione di gestione 'Modifica profilo' */
     $("td.edit_profile").click(function() {
         //recupero il testo dentro due td precedenti (che per come ho strutturato la tabella è il numero di tessera)
-        var id = $(this).prevAll().eq(6).text();
+        var id = $(this).prevAll().eq(5).text();
         //lo invio in GET alla nuova finestra contenente la pagina "profile_editor.php" inviando il numero tessera quindi MODIFICO il socio
         window.location.href='./php/profile_editor.php?id='+id;
     });
