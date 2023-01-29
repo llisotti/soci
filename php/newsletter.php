@@ -258,11 +258,11 @@ if(!isset($_POST['title'])) {
 ?>
 <table class="listing">
     <tr>
-        <!-- <th class="first" style="width: 30px">ID</th> -->
-        <th class="first" style="width: 150px">Cognome e Nome</th>
-        <th style="width: 190px">Email</th>
+        <th class="first" style="width: 10%">ID</th>
+        <th style="width: 150px">Cognome e Nome</th>
+        <th style="width: 300px">Email</th>
         <th style="width: 100px">N° Tessera</th>
-        <th style="width: 200px">Codice Fiscale</th>
+        <!--<th style="width: 200px">Codice Fiscale</th>-->
         <th class="last"><input id="allchecked" type="checkbox" title="Seleziona o deseleziona tutti" checked /></th>
     </tr>
     <?php
@@ -305,18 +305,18 @@ if(!isset($_POST['title'])) {
         /* Lo aggiungo all'array che contiene gli oggetti soci */
         array_push($member_obj, $member);
         ?>
-            <!-- <td class="first style3"><?php //echo $member->id ?></td> -->
-            <td class="first style3"><?php echo $member->cognome." ".$member->nome ?></td>
+            <td class="first style3"><?php echo $member->id ?></td>
+            <td><?php echo $member->cognome." ".$member->nome ?></td>
             <td><?php echo $member->email ?></td>
             <td><?php if(!isset($_GET['custom_list'])) echo $member->tessera ?></td> <!-- Nella tabella customList non c'e' il numero tessera -->
-            <td><?php echo $member->codice_fiscale ?></td>
-            <!-- 
+            <!--
+            <td><?//php echo $member->codice_fiscale ?></td>             
             <td class="see_profile"><a href="" onclick="return false"><img alt="Visualizza profilo completo" title="Visualizza profilo completo" src="../img/login-icon.gif" width="16" height="16" /></a></td>
             <td class="edit_profile"><a href="" onclick="return false"><img alt="Modifica profilo" title="Modifica profilo" src="../img/edit-icon.gif" width="16" height="16" /></a></td>
             <td class="add_presence"><a href="" onclick="return false"><img alt="Aggiungi presenza" title="Aggiungi presenza" src="../img/add-icon.gif" width="16" height="16" /></a></td>
             <td class="link_profile"><a href=""><img alt="Collega profilo" title="Collega profilo" src="../img/not_linked.png" width="16" height="16" /></a></td>
             -->
-            <td><input class="member_checkbox" name="checklist[]" type="checkbox" value="<?php echo $member->codice_fiscale; ?>" checked /></td>
+            <td><input class="member_checkbox" name="checklist[]" type="checkbox" value="<?php echo $member->id; ?>" checked /></td>
             <!-- <td id="cancel_profile"><a href=""><img alt="Elimina socio" title="Elimina socio" src="img/hr.gif" width="16" height="16" alt="" /></a></td>                                    
             <td><img src="img/save-icon.gif" width="16" height="16" alt="save" /> </td> -->
         </tr>
@@ -393,7 +393,7 @@ else {
     $sent=0;        //Numero di Email inviate
     foreach ($_POST['checklist'] as $id_checked) {
         foreach ($_SESSION['members'] as $member) {
-            if($member->codice_fiscale != $id_checked)
+            if($member->id != $id_checked)
                 continue;
             else {
                 try {
