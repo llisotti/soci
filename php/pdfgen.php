@@ -20,12 +20,12 @@ catch (PDOException $exception) {
     die("Errore di connessione al database: ".$exception->getMessage());
 }
 
-$members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica LEFT JOIN socio ON anagrafica.cf = socio.cf WHERE socio.numero_tessera = $_GET[tessera]");
+$members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica LEFT JOIN socio ON anagrafica.id = socio.id WHERE socio.numero_tessera = $_GET[tessera]");
 $row=$members->fetch();
 
 /* Creo l'oggetto socio e lo popolo con tutti i dati */
 $member=new Socio_Copernico($row['cognome'], $row['nome']);
-$member->codice_fiscale=($row['cf']); //Ho usato un alias nella query
+$member->id=($row['id']); //Ho usato un alias nella query
 $member->data_nascita=($row['data_nascita']);
 $member->comune_nascita=($row['comune_nascita']);
 $member->provincia_nascita=($row['provincia_nascita']);
@@ -115,7 +115,8 @@ $pdf->ln(10);
 $pdf->MultiCell(90, 10, "PROVINCIA: ".$member->provincia_nascita, 'L', 'L', 1, 0, '', '', true);
 $pdf->MultiCell(90, 10, "STATO: ".$member->stato_nascita, 'R', 'L', 1, 0, '', '', true);
 $pdf->ln(10);
-$pdf->MultiCell(0, 10, "CODICE FISCALE: ".$member->codice_fiscale, 'LR', 'L', 1, 0, '', '', true);
+//$pdf->MultiCell(0, 10, "CODICE FISCALE: ".$member->codice_fiscale, 'LR', 'L', 1, 0, '', '', true);
+$pdf->MultiCell(0, 10, "CODICE FISCALE: ", 'LR', 'L', 1, 0, '', '', true);
 $pdf->ln(10);
 $pdf->MultiCell(90, 10, "RESIDENTE IN: ".$member->indirizzo, 'L', 'L', 1, 0, '', '', true);
 $pdf->MultiCell(90, 10, "CITTA': ".$member->citta, 'R', 'L', 1, 0, '', '', true);
