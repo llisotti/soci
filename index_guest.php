@@ -271,40 +271,56 @@ $(document).ready(function(){
         }
       });
 
-    /* Gestione validazione firma */
+    /**
+	 * Gestione validazione firma
+	 * Prima di validare la firma controllo che:
+	 * - La firma sia valida
+	 * - L'età minima di iscrizione sia stata raggiunta
+	 * - Il formato della data sia corretto
+	 */
     $('.submit-button').on('click', function(e) {
         e.preventDefault();
         if(isValidSignature()) {
-        	var datapair = $(".signature-panel").jSignature("getData", "image");
-    		var i = new Image();
-        	i.src = "data:" + datapair[0] + "," + datapair[1];
-        	var cognome = $("#cognome").val();
-        	var nome = $("#nome").val();
-        	var birthday = $("#birthday").val();
-        	if(cognome.trim() && nome.trim() && birthday.trim()) {
-            	$.ajax({
-                    type: "POST",
-                    url: "./php/signature.php",
-                    data: {firma: datapair[1], cognome: cognome, nome: nome, birthday: birthday},
-                    dataType: 'html',
-                    /* ritorno un messaggio e visualizzo il popup */
-                    success: function (response) {	
-                    	if(response=="ok") {
-                    		$('.clear-button').hide(); //Una volta inserita correttamente la firma evito che sia cancellata
-                    		$('.submit-button').hide(); //Una volta inserita correttamente la firma evito che sia inserita nuovamente
-                    		alert("Firma validata correttamente. Ora e' possibile iscriversi");
-                    	}
-                    	else if (response=="0") {
-                    		alert("Errore validazione: la firma e' gia' presente nel nostro database");
-                    	}
-                    	else {
-                    		alert("Errore validazione: ripetere nuovamente la firma assicurandosi che occupi quanto piu' spazio possibile");
-                        }
-            		}
-            	});
-        	}
-        	else
-        		alert("Prima di validare la firma e' necessario riempire almeno i campi obbligatori");
+			if(AgeCalculation() >= 6) {
+				/* Verifica formato data */
+				var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
+    			if(value.test($('#birthday').val())) {
+					var datapair = $(".signature-panel").jSignature("getData", "image");
+					var i = new Image();
+					i.src = "data:" + datapair[0] + "," + datapair[1];
+					var cognome = $("#cognome").val();
+					var nome = $("#nome").val();
+					var birthday = $("#birthday").val();
+					if(cognome.trim() && nome.trim() && birthday.trim()) {
+						$.ajax({
+							type: "POST",
+							url: "./php/signature.php",
+							data: {firma: datapair[1], cognome: cognome, nome: nome, birthday: birthday},
+							dataType: 'html',
+							/* ritorno un messaggio e visualizzo il popup */
+							success: function (response) {	
+								if(response=="ok") {
+									$('.clear-button').hide(); //Una volta inserita correttamente la firma evito che sia cancellata
+									$('.submit-button').hide(); //Una volta inserita correttamente la firma evito che sia inserita nuovamente
+									alert("Firma validata correttamente. Ora e' possibile iscriversi");
+								}
+								else if (response=="0") {
+									alert("Errore validazione: la firma e' gia' presente nel nostro database");
+								}
+								else {
+									alert("Errore validazione: ripetere nuovamente la firma assicurandosi che occupi quanto piu' spazio possibile");
+								}
+							}
+						});
+					}
+					else
+						alert("Prima di validare la firma e' necessario riempire almeno i campi obbligatori");
+				}
+				else
+					alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
+			}
+			else
+				alert("L'iscrizione non è necessaria per individui sotto i 6 anni oppure controllare che la data di nascita inserita sia corretta");
         }
         else
         	alert("Errore validazione: cancellare e ripetere nuovamente la firma. E' necessario che la firma occupi quanto piu' spazio possibile");
@@ -369,13 +385,18 @@ $(document).ready(function(){
     	}
     }); */
 
-    /* Validazione data nascita (la controllo quando entro nel campo comune di nascita) */
+    /* Validazione formato data di nascita e verifica se età minima per iscriversi */
     $("#comune").focus(function() {
+
+		/* Verifica formato data */
     	var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
     	if(!value.test($('#birthday').val())) {
         	alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
-        	//$(this).val('');
     	}
+		
+		/* Verifica età minima iscrizione */
+		if(AgeCalculation() < 6)
+			alert("L'iscrizione non è necessaria per individui sotto i 6 anni oppure controllare che la data di nascita inserita sia corretta");
     }); 
 
 	/* Validazione cap */
@@ -407,14 +428,24 @@ $(document).ready(function(){
         alert("A fine procedura, nel momento di apporre la firma digitale, e' consigliabile ruotare la vista del dispositivo in senso orizzontale");
     }
     
-    /**
-	 * Controllo età 
-	 * La funzione parte quando entro nel campo inserimento comune
-	 */
-    //$("#cf").one('focus',function() {
-	$("#comune").focus(function() {
+	/* Validazione formato data di nascita e verifica se età minima per iscriversi */
+	$('#stato_nascita').change(function()
+	{
+		/* Verifica formato data */
+    	var value = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
+    	if(!value.test($('#birthday').val())) {
+        	alert("Attenzione: La data deve essere nel formato GG/MM/AAAA (esempio 14/04/1976)");
+    	}
+		
+		/* Verifica età minima iscrizione */
+		if(AgeCalculation() < 6)
+			alert("L'iscrizione non è necessaria per individui sotto i 6 anni oppure controllare che la data di nascita inserita sia corretta");
+    }); 
 
-		/* Calcolo l'età */
+	/**
+	 * Funzione per il calcolo dell'età
+	 */
+	function AgeCalculation() {
 		var today = new Date();
 		var todayMonth = today.getMonth()+1;
 		var birthDate = new Date($('#birthday').val().substring(6,10), $('#birthday').val().substring(3,5), $('#birthday').val().substring(0,2));
@@ -432,24 +463,25 @@ $(document).ready(function(){
 		}
 
 		/* Sotto i 6 anni non occorre iscriversi */
-		if (age < "6") {
-			alert("L'iscrizione non è necessaria per individui sotto i 6 anni");
+		if(age >=6 )
+		{
+			/* Tra i 6 ed i 18 anni cambio messaggio nella firma e visualizzo informativa per minorenni */
+			if(age < "18") {
+				$("#firma").text("FIRMA DEL GENITORE/TUTORE (leggibile)"); //Cambio l'intestazione della firma
+				$("#info").attr("href", "https://www.osservatoriocopernico.org/lassociazione/statuto-e-privacy/#informativa_minorenni"); //Cambio l'informativa con quella per minorenni...
+				$("#info").text("nell'informativa per minorenni "); //...ed il testo
+				$("#etaconsenso").val("minorenne");
+			}
+			/* Sopra i 18 anni visualizzo informativa per i maggiorenni */
+			else {
+				$("#firma").text("FIRMA DEL RICHIEDENTE (leggibile)");
+				$("#info").attr("href", "https://www.osservatoriocopernico.org/lassociazione/statuto-e-privacy/#informativa_maggiorenni"); //Cambio l'informativa con quella per maggiorenni...
+				$("#info").text("nell'informativa "); //...ed il testo
+				$("#etaconsenso").val("maggiorenne");
+			}
 		}
-		/* Tra i 6 ed i 18 anni cambio messaggio nella firma e visualizzo informativa per minorenni */
-    	else if(age < "18") {
-    		$("#firma").text("FIRMA DEL GENITORE/TUTORE (leggibile)"); //Cambio l'intestazione della firma
-    		$("#info").attr("href", "https://www.osservatoriocopernico.org/lassociazione/statuto-e-privacy/#informativa_minorenni"); //Cambio l'informativa con quella per minorenni...
-    		$("#info").text("nell'informativa per minorenni "); //...ed il testo
-    		$("#etaconsenso").val("minorenne");
-    	}
-		/* Sopra i 18 anni visualizzo informativa per i maggiorenni */
-    	else {
-    		$("#firma").text("FIRMA DEL RICHIEDENTE (leggibile)");
-    		$("#info").attr("href", "https://www.osservatoriocopernico.org/lassociazione/statuto-e-privacy/#informativa_maggiorenni"); //Cambio l'informativa con quella per maggiorenni...
-    		$("#info").text("nell'informativa "); //...ed il testo
-    		$("#etaconsenso").val("maggiorenne");
-    	}
-	});
+		return age;
+	};
 
     /* Controllo che nel caso si voglia iscriversi alla newsletter sia riempito il campo email */
     $("#news").change( function(){
