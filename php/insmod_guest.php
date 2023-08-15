@@ -55,6 +55,16 @@ require "member.php";
             $formatter= new InputFormat($format_input);
             $formatter->format($_POST);
 
+            /* Controllo se l'identita' esiste */
+            $prepared=$dbh->prepare("SELECT COUNT(*) FROM anagrafica WHERE cognome = ? AND nome = ? AND data_nascita = STR_TO_DATE(?, '%d/%m/%Y')");
+            $prepared->execute([$_POST['cognome'], $_POST['nome'], $_POST['data_nascita']]);
+            $counter=$prepared->fetch(PDO::FETCH_COLUMN);
+            /* Se trovo una occorrenza allora sono già iscitto */
+            if($counter == 1) {
+              errorAlreadySubscribtedMessage();
+              die();
+            }
+
             /* Inserisco i dati in anagrafica */
             try {                
                 $prepared=$dbh->prepare("INSERT INTO anagrafica (cognome,
@@ -170,13 +180,26 @@ function errorMessage(PDOException $ex) {
     echo "La procedura di iscrizione e' fallita con codice errore: ".$ex->errorInfo[1];
     echo "<p>Torna alla pagina di registrazione e verifica di non essere gia' iscritto. Verifica inoltre i dati immessi nei campi.</p>";
     echo "<p>Se l'errore persiste invia una segnalazione cliccando sull'apposito link nella pagina di registrazione.</p>";
+}
+?>
+<br>
+<div style="text-align:center">
+<a style="color:blue" href=<?php echo "https://{$_SERVER['HTTP_HOST']}/index_guest.php"?> >Torna alla pagina di registrazione</a>
+</div>
+
+<?php
+function errorAlreadySubscribtedMessage() {
+    echo "<br>";
+    echo "<p>ATTENZIONE: risulti già iscritto.</p>";
+    echo "<br>";
+    echo "<p>Puoi recarti direttamente in Osservatorio.</p>";
+}
 ?>
 <br>
 <div style="text-align:center">
 <a style="color:blue" href=<?php echo "https://{$_SERVER['HTTP_HOST']}/index_guest.php"?> >Torna alla pagina di registrazione</a>
 </div>
 <?php
-}
 
 function successMessage() {
     echo "<br>";
