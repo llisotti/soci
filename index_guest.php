@@ -570,28 +570,31 @@ $(document).ready(function(){
     	$("#nascosto_2").css("visibility","hidden");
     });
         
-	/* Ricerca se esiste gia' l'iscrizione 
-    $("#cerca").on('click', function(e) {
-    	e.preventDefault();
-    	var codice_fiscale = prompt("Inserisci il codice fiscale");
-    	if(!codice_fiscale)
-        	return;
+	/* Ricerca se esiste gia' l'iscrizione */
+    $("#indirizzo").on('focusout', function(e) {
+    	//e.preventDefault();
+    	//var codice_fiscale = prompt("Inserisci il codice fiscale");
+    	//if(!codice_fiscale)
+        	//return;
+		var surname = $('input[name="cognome"]').val();
+		var name = $('input[name="nome"]').val();
+		var born = $('input[name="data_nascita"]').val();
     	$.ajax({
             type: "POST",
             url: "./php/cf.php",
-            data: {cf: codice_fiscale},
+            data: {cognome: surname, nome: name, data_nascita: born},
             dataType: 'html',
-            /* ritorno un messaggio e visualizzo il popup 
+            /* ritorno un messaggio e visualizzo il popup */
             success: function (response) {
             	if(response=="ko")
-            		alert("I Tuoi dati non risultano nel nostro archivio. E' necessario eseguire una nuova registrazione");
+            		;//alert("I Tuoi dati non risultano nel nostro archivio. Puoi continuare con la registrazione");
             	else if(response == 0)
-            		alert("I Tuoi dati risultano correttamente inseriti nel nostro archivio ma non sei ancora tesserato. E' sufficiente recarsi in Osservatorio e Ti sara' rilasciata subito una nuova tessera");
+            		alert("I Tuoi dati risultano correttamente inseriti nel nostro archivio ma non sei ancora tesserato.\n\nPuoi interrompere la registrazione e recarti direttamente in Osservatorio: Ti sara' rilasciata subito una nuova tessera");
             	else
-            		alert("I Tuoi dati risultano correttamente inseriti nel nostro archivio ed il tuo numero tessera e':  " + response);
+            		alert("I Tuoi dati risultano correttamente inseriti nel nostro archivio ed il tuo numero tessera e':  " + response + "\n\nPuoi interrompere la registrazione e recarti direttamente in Osservatorio");
             }
     	});
-    });*/
+    });
 
     $("#segnalazione").click(function(e) {
         e.preventDefault();
