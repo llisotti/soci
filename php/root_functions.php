@@ -96,7 +96,7 @@ if(!isset($_POST['export'])) {
         case "DB_functions": //Voglio eseguire un'operazine sul database
             ?>
 			<table>
-				<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="frontespizio" type="radio" checked />Estrai frontespizio</td></tr>
+				<!--<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="frontespizio" type="radio" checked />Estrai frontespizio</td></tr>-->
                 <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="allmembers" type="radio" checked />Esporta libro soci</td></tr>
                 <!--<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_evening" type="radio" />Esporta soci serata</tr>-->
                 <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_date" type="radio" />Esporta soci dal</td>
@@ -267,7 +267,7 @@ else {
             $start=$date_start->format('Y-m-d');
             $end=$date_end->format('Y-m-d');
             $namefile=  str_replace('-', '', $start)."-".str_replace('-', '', $end); //Desinenza del nome del file: data iniziale-data finale nel formato AAAMMGG-AAAMMGG
-            $members=$dbh->query(" SELECT numero_tessera, anagrafica.cognome, anagrafica.nome, anagrafica.data_nascita FROM socio "
+            $members=$dbh->query(" SELECT data_tessera, numero_tessera, anagrafica.cognome, anagrafica.nome, anagrafica.data_nascita FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.data_tessera>='$start' AND socio.data_tessera<='$end' "
             ."ORDER BY socio.numero_tessera ASC "
             ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci $namefile.tsv' "
