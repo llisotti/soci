@@ -461,6 +461,40 @@ $(document).ready(function(){
     	});       		
     });
 
+
+    /* Funzione di gestione 'Elimina iscrizione' */
+    $("td#cancel_profile").click(function() {
+        //recupero il testo dentro il td precedente (che per come ho strutturato la tabella è il member_id)
+        var id = $(this).siblings(":first").text();
+        var cognome_nome = $(this).prevAll().eq(6).text(); 
+        var action = confirm("Sei sicuro di voler eliminare l'iscrizione di "+cognome_nome+" ?");
+        if(!action) //Se voglio inserire la tessera e non metto niente nel prompt allora esco
+            return;
+
+    	$.ajax({
+            type: "POST",
+            url: "./php/drop_subscription.php",
+            data: {id: id},
+            dataType: 'html',
+            /* ritorno un messaggio e visualizzo il popup */
+            success: function (response) {
+            	if(response=="koAnagrafica")
+            		alert("Cancellazione dalla tabella Anagrafica fallita");
+            	else if (response=="koSocio")
+                    alert("Cancellazione dalla tabella Socio fallita");
+            	else
+                {
+            		alert("Operazione conclusa correttamente: "+response+" riga cancellata.\n\nATTENZIONE: E' necessario cancellare anche il file della firma elettronica !");
+                    window.location.reload();
+                }
+            },
+            error: function(p) {
+                alert("Operazione fallita: e' capitato un errore grave !");
+            }
+    	});   		
+    });
+
+
     /* Funzione di gestione 'Modifica profilo' */
     $("td.edit_profile").click(function() {
         //recupero il testo dentro due td precedenti (che per come ho strutturato la tabella è il numero di tessera)
