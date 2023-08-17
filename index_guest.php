@@ -97,6 +97,9 @@ require "php/member.php";
         	<!-- <li>L'iscrizione e' obbligatoria per individui di eta' uguale o maggiore ad 8 anni.</li> -->
     	</ul>
 		<ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
+			<li>Nel caso fossi incerto se in precedenza hai effettuato l'iscrizione online o meno per verificare inizia comunque a copilare il form sottostante. Quando i dati inseriti saranno sufficienti, il sistema ti avviserà automaticamente se risulti già iscritto e potrai interrompere la procedura.</li>
+        </ul>
+		<ul style="list-style-type:none; padding-top: 10px; font-family: Arial; font-size:12px">
 			<li>In caso di problemi con l'iscizione o ulteriori chiarimenti invia una segnalazione <a style="color:blue" href="" id="segnalazione">qui</a>.</li>
         </ul>
     	<br><br>

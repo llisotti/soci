@@ -64,7 +64,9 @@
 			<div class="row row-space">
 		    <div class="col-2">
                         <div class="input-group">
-                            <input type="text" id="contatto" class="input--style-1" placeholder="Telefono o email" name="telefono" required>
+                            <input type="text" id="contatto" class="input--style-1" placeholder="email*" name="telefono" required>
+                            <h6>&nbsp</h6>
+                            <h6><i>* Controllare che la mail di risposta non sia finita nello spam</i></h6>
 			</div>
 			</div>
 			</div>
@@ -115,7 +117,7 @@ $(document).ready(function(){
 		if(cognome.trim() && nome.trim() && contatto.trim() && messaggio.trim()) {
     		$.ajax({
     			type: "GET",
-    	        url: "https://api.telegram.org/bot934524385:AAF1mrxMHPyXRWtVGBfFgWwj8WZDokIrevc/sendMessage?chat_id=123730580&text=Cognome: "+cognome+"%0ANome: "+nome+"%0Acontatto: "+contatto+"%0ASegnalazione: "+messaggio,
+    	        url: "https://api.telegram.org/bot934524385:AAF1mrxMHPyXRWtVGBfFgWwj8WZDokIrevc/sendMessage?chat_id=123730580&text=Cognome: "+cognome+"%0ANome: "+nome+"%0AContatto: "+contatto+"%0ASegnalazione: "+messaggio,
     	        dataType: 'html',
     	        async: false,		
         		success: function() {
