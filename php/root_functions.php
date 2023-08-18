@@ -227,7 +227,7 @@ else {
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
         case "allmembers": //Esporto il libro soci
-            $members=$dbh->query("SELECT data_tessera, NULL, NULL, numero_tessera, anagrafica.cognome, anagrafica.nome, CONCAT(anagrafica.indirizzo,' ', anagrafica.citta,' ', anagrafica.provincia_nascita,' [', anagrafica.stato_nascita,']') AS residenza, anagrafica.comune_nascita, anagrafica.data_nascita FROM socio "
+            $members=$dbh->query("SELECT data_tessera, NULL, iscrizione, numero_tessera, anagrafica.cognome, anagrafica.nome, CONCAT(IFNULL(anagrafica.indirizzo, ''),' ', IFNULL(anagrafica.citta,''),' ', IFNULL(anagrafica.provincia,''),' [', anagrafica.stato,']') AS residenza, CONCAT(IFNULL(anagrafica.comune_nascita,''), ' [', anagrafica.stato_nascita, ']') AS nascita , anagrafica.data_nascita FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.numero_tessera IS NOT NULL "
             ."ORDER BY socio.numero_tessera ASC "
             ."INTO OUTFILE '".BACKUP_PATH.$data."-Libro soci online.tsv' "
