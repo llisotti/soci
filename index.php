@@ -214,11 +214,12 @@ else
     $members=$dbh->query("SELECT COUNT(*) FROM socio WHERE numero_tessera IS NOT NULL");
     $counter=$members->fetchColumn();
     
+    /*
     if(isset($_SESSION['breakCards'])) {
         unset($_SESSION['breakCards']);
     }
     
-    /* Calcolo eventuali buchi di tessere */
+    /* Calcolo eventuali buchi di tessere
     $breakCards=array();
     $cards=$dbh->query("SELECT numero_tessera FROM socio WHERE numero_tessera IS NOT NULL ORDER BY socio.numero_tessera DESC");
     $numCards=$cards->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -242,6 +243,7 @@ else
     }
     rsort($breakCards);
     $_SESSION['breakCards']=$breakCards;
+    */
     ?>
         <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href="#"><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
     </tr>
