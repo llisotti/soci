@@ -96,7 +96,6 @@ catch (PDOException $e) {
     ?>
 </ul>
 <table class="counter">
-	<!--
     <tr>
         <td colspan="2">N° SOCI SERATA</td>
     </tr>
@@ -105,15 +104,16 @@ catch (PDOException $e) {
         <h1>
         <span style="color: #F70">
         <?php
+        $members=$dbh->query("SELECT COUNT(*) FROM socio WHERE socio.data_tessera=CURDATE() OR socio.data_tessera=(CURDATE() - INTERVAL 1 DAY)");
+        $counter=$members->fetchColumn();
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
         //$maxkey=max(array_keys($_SESSION['members_evening']));
-        //echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
+        echo "<a id='view' href='#' style='color:#F70'/>$counter</a>";
         ?>
         </span>
         </h1>
         </td>
     </tr>
-    -->
     <tr>
         <td colspan="2"><br/><br/></td>
     </tr>

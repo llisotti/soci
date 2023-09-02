@@ -116,7 +116,6 @@ if($member->tessera!=NULL) {
     ?>
 </ul>
 <table class="counter">
-    <!--
     <tr>
         <td colspan="2">N° SOCI SERATA</td>
     </tr>
@@ -125,15 +124,16 @@ if($member->tessera!=NULL) {
         <h1>
         <span style="color: #F70">
         <?php
+        $members=$dbh->query("SELECT COUNT(*) FROM socio WHERE socio.data_tessera=CURDATE() OR socio.data_tessera=(CURDATE() - INTERVAL 1 DAY)");
+        $counter=$members->fetchColumn();
         /* Visualizzo la chiave dell'array che corrisponde al numero di soci inseriti */
         //$maxkey=max(array_keys($_SESSION['members_evening']));
-        //echo "<a id='view' href='#' style='color:#F70'/>$maxkey</a>";
+        echo "<a id='view' href='#' style='color:#F70'/>$counter</a>";
         ?>
         </span>
         </h1>
         </td>
     </tr>
-    -->
     <tr>
         <td colspan="2"><br/><br/></td>
     </tr>
@@ -515,6 +515,10 @@ $(document).ready(function(){
         window.open('../php/root_functions.php?action=view_drop_cards','', "height=190,width=580,scrollbars=1");
     });
 
+    /* Funzione visualizzazione tessere inserite nella sessione */
+    $("a#view").click(function() {
+        window.open('../php/root_functions.php?action=view_members_evening','', "height=190,width=580,scrollbars=1");
+    });
     
     /* Funzione per la generazione del PDF */
     $("#pdf").click(function() {

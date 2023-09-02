@@ -163,11 +163,22 @@ if(!isset($_POST['export'])) {
             <hr>
             <?php
             break;
-        case "view_members_evening": //Visualizzo i soci della serata
-            foreach (array_reverse($_SESSION['members_evening'], TRUE) as $key => $value) {
-                if($key==0)
-                    continue;
-                echo $key."<sup>a</sup> tessera inserita: ".$value."<br/>";
+        case "view_members_evening": //Visualizzo le tessere della serata
+            /* Mi connetto al database */
+            try {
+                $dbh = new PDO(SOCI_DBCONNECTION, "copernico", "");
+            }
+            catch (PDOException $exception) {
+                echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
+                echo "<br/>Errore di connessione al database: ".$exception->getMessage();
+                die();
+            }
+            $members=$dbh->query("SELECT numero_tessera FROM socio WHERE socio.data_tessera=CURDATE() OR socio.data_tessera=(CURDATE() - INTERVAL 1 DAY)");
+            $cards=$members->fetchAll();
+            sort($cards);
+            echo "ELENCO TESSERE INSERITE:<br/>";
+            foreach ($cards as $key => $value) {
+                echo $value['numero_tessera']."<br/>";
             }
             die();
         case "view_drop_cards": //Visualizzo le tessere mancanti
