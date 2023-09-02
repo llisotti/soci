@@ -264,7 +264,7 @@ else
 /* Se non passo nulla in GET visualizzo gli iscritti ma non ancora tesserati */
 if(empty($_GET) || !isset($_GET['show']))
 {
-    $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY anagrafica.cognome ASC");
+    $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY socio.iscrizione DESC");
     echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$members->rowCount().")</h1>";
 }
 else
@@ -292,7 +292,7 @@ else
             echo "<h1>ELENCO ISCRITTI COMPLETO (".$members->rowCount().")</h1>";
             break;
         default: //Di default visualizzo gli iscritti che ancora non sono tesserati
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");           
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY socio.iscrizione DESC");           
             echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$members->rowCount().")</h1>";
             break;
     }
