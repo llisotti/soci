@@ -97,10 +97,10 @@ if(!isset($_POST['export'])) {
         case "DB_functions": //Voglio eseguire un'operazine sul database
             ?>
 			<table>
-				<!--<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="frontespizio" type="radio" checked />Estrai frontespizio</td></tr>-->
-                <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="allmembers" type="radio" checked />Esporta libro soci</td></tr>
+				<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="frontespizio" type="radio" checked />Esporta frontespizio soci</td></tr>
+                <!--<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="frontespizio" type="radio" checked />Esporta libro soci</td></tr>-->
                 <!--<tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_evening" type="radio" />Esporta soci serata</tr>-->
-                <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="members_date" type="radio" />Esporta soci dal</td>
+                <tr><td style="text-align: left"><input class="enable_submit" name="azione" value="libro_soci" type="radio" />Esporta libro soci dal</td>
                     <td>
                     <?php
                     echo "<select style='width: 100%' name=gg_start>";
@@ -234,6 +234,7 @@ else {
             ."INTO OUTFILE '".BACKUP_PATH.$data."-frontespizio.tsv' "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");
             break;
+        /*
         case "allmembers": //Esporto il libro soci
             $members=$dbh->query("SELECT data_tessera, NULL, iscrizione, numero_tessera, anagrafica.cognome, anagrafica.nome, CONCAT(IFNULL(anagrafica.indirizzo, ''),' ', IFNULL(anagrafica.citta,''),' ', IFNULL(anagrafica.provincia,''),' [', anagrafica.stato,']') AS residenza, CONCAT(IFNULL(anagrafica.comune_nascita,''), ' [', anagrafica.stato_nascita, ']') AS nascita , anagrafica.data_nascita FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.numero_tessera IS NOT NULL "
@@ -252,7 +253,7 @@ else {
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");              
             break;
         */
-        case "members_date": //Esporto i soci da una certa data ad una certa data
+        case "libro_soci": //Esporto il libro soci da una certa data ad una certa data
             $date_start=DateTime::createFromFormat('Y-m-d', date('Y')."-$_POST[mm_start]-$_POST[gg_start]");
             $date_end=DateTime::createFromFormat('Y-m-d', date('Y')."-$_POST[mm_end]-$_POST[gg_end]");
 
@@ -275,10 +276,10 @@ else {
             $start=$date_start->format('Y-m-d');
             $end=$date_end->format('Y-m-d');
             $namefile=  str_replace('-', '', $start)."-".str_replace('-', '', $end); //Desinenza del nome del file: data iniziale-data finale nel formato AAAMMGG-AAAMMGG
-            $members=$dbh->query(" SELECT data_tessera, numero_tessera, anagrafica.cognome, anagrafica.nome, anagrafica.data_nascita FROM socio "
+            $members=$dbh->query("SELECT data_tessera, NULL, iscrizione, numero_tessera, anagrafica.cognome, anagrafica.nome, CONCAT(IFNULL(anagrafica.indirizzo, ''),' ', IFNULL(anagrafica.citta,''),' ', IFNULL(anagrafica.provincia,''),' [', anagrafica.stato,']') AS residenza, CONCAT(IFNULL(anagrafica.comune_nascita,''), ' [', anagrafica.stato_nascita, ']') AS nascita , anagrafica.data_nascita FROM socio "
             ."INNER JOIN anagrafica ON anagrafica.id = socio.id WHERE socio.data_tessera>='$start' AND socio.data_tessera<='$end' "
             ."ORDER BY socio.numero_tessera ASC "
-            ."INTO OUTFILE '".BACKUP_PATH.$data."-Elenco soci $namefile.tsv' "
+            ."INTO OUTFILE '".BACKUP_PATH.$data."-Libro soci $namefile.tsv' "
             ."FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n' ");                
             break;
         case "pdf_export": //Stampo PDF dei soci da una certa tessera ad una certa tessera
@@ -352,7 +353,7 @@ else {
             break;
     }    
     /* Se sto facendo un'operazione di estrazione da database */
-    if($_POST['azione'] == "frontespizio" || $_POST['azione'] == "allmembers" || $_POST['azione'] == "members_evening" || $_POST['azione'] == "members_date" || $_POST['azione'] == "allidentities") {
+    if($_POST['azione'] == "frontespizio" || $_POST['azione'] == "libro_soci" || $_POST['azione'] == "members_evening" || $_POST['azione'] == "members_date" || $_POST['azione'] == "allidentities") {
         if(!$members) {
             echo '<img src="../img/check_ko.png" height="100" width="100" alt="check_ko">';
             echo "<br/>ERRORE CREAZIONE FILE !";

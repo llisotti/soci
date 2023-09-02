@@ -36,7 +36,7 @@ define ("DROP_IDENTITY_MYSQL", "INTERVAL 5 YEAR");
 /**
  * Versione del software
  */
-define ("VERSION", "GESTIONE SOCI 5.4");
+define ("VERSION", "GESTIONE SOCI 5.5");
 
 
 /**
