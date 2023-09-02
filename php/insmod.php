@@ -126,7 +126,7 @@ catch (PDOException $e) {
     $members=$dbh->query("SELECT COUNT(*) FROM socio WHERE numero_tessera IS NOT NULL");
     $counter=$members->fetchColumn();
     ?>
-        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><a href="#"><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></a></td>
+        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></td>
     </tr>
     <tr>
         <td colspan="2"><br/><br/><br/><br/></td>
@@ -419,11 +419,11 @@ $(document).ready(function(){
     });
         
     
-    /* Funzione visualizzazione numeri di tessera mancanti */
+    /* Funzione visualizzazione numeri di tessera mancanti
     $("td#view_drop_cards").click(function() {
         window.open('../php/root_functions.php?action=view_drop_cards','', "height=190,width=580,scrollbars=1");
     });
-    
+    */
     
     /* Funzione per ritornare alla pagina di inserimento nuovo socio premendo il tasto Enter
     $(document).keydown( function(e) {
