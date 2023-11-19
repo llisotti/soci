@@ -98,7 +98,7 @@ if($member->tessera!=NULL) {
 	<li><a id="DB_functions" href="" onclick="return false;">Operazioni su DB</a></li>
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
-    <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/tinyfilemanager.php">Documenti</a></li>
     <li><a target="_blank" rel="noopener noreferrer" href="../doc/Manuale.pdf">Manuale utente</a></li>
     <?php
     /*

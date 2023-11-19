@@ -78,7 +78,7 @@ catch (PDOException $e) {
     <li><a id="DB_functions" href="" onclick="return false;" >Operazioni su DB</a></li> <!-- onclick="return false; evita che si ricarichi la pagina (altrimenti usare href="#" ma dopo mette il carattere # nella pagina e falsa eventuali variabili passate in GET) -->
     <!-- <li><a id="esporta_soci" href="#">Esporta soci</a></li> -->
     <!-- <li><a id="esporta_identita" href="#">Esporta identità</a></li> -->
-    <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/eXtplorer_2.1.13/index.php">Documenti</a></li>
+    <li><a target="_blank" rel="noopener noreferrer" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/php/tinyfilemanager.php">Documenti</a></li>
     <li><a target="_blank" rel="noopener noreferrer" href="../doc/Manuale.pdf">Manuale utente</a></li>
     <?php
     /*
