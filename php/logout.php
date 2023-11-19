@@ -1,4 +1,9 @@
 <?php
+/* OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE! */
+if(PHP_OS=="Linux")
+    require "member.php";
+else
+    require "member.php";
 
 /* Setto la sessione di 5 ore */
 ini_set('session.gc_maxlifetime', 18000);
