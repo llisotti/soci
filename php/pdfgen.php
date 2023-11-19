@@ -3,8 +3,9 @@
 require "member.php"; //OBBLIGATORIO AVERE IL TEMPLATE DELLA CLASSE PRIMA DELL'INIZIO DELLA SESSIONE  !
 require_once('./TCPDF/tcpdf.php');
 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+/* Togliere commento per debug */
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 
 // Include the main TCPDF library (search for installation path).
 

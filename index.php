@@ -22,8 +22,8 @@ session_save_path(LOGFILE_PATH);
 session_start();
 
 /* Togliere commento per debug */
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 
 /**
  * @mainpage GESTIONE SOCI

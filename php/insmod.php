@@ -18,8 +18,8 @@ session_start();
 session_cache_limiter('private,must-revalidate');
 
 /* Togliere commento per debug */
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 
 ?>
 <!DOCTYPE html>
