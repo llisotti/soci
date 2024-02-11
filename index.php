@@ -212,8 +212,14 @@ else
     <?php
     /* Conto i soci ovvero le righe di anagrafica che hanno la tessera per l'anno corrente */
     $members=$dbh->query("SELECT COUNT(*) FROM socio WHERE numero_tessera IS NOT NULL");
-    $counter=$members->fetchColumn();
-    
+    $counter_members=$members->fetchColumn();
+
+    $no_members=$dbh->query("SELECT COUNT(*) FROM socio WHERE numero_tessera IS NULL");
+    $counter_nomembers=$no_members->fetchColumn();
+
+    $all=$dbh->query("SELECT COUNT(*) FROM socio");
+    $counter_all=$all->fetchColumn();
+
     /*
     if(isset($_SESSION['breakCards'])) {
         unset($_SESSION['breakCards']);
@@ -245,7 +251,7 @@ else
     $_SESSION['breakCards']=$breakCards;
     */
     ?>
-        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><span style="color: #F70"><?php echo $counter; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></td>
+        <td id="view_drop_cards" style="width: 137px; text-align: center" colspan="2"><h1><span style="color: #F70"><?php echo $counter_members; if (!empty($_SESSION['breakCards'])) { echo "<sup>+".count($_SESSION['breakCards'])."</sup>";}?></span></h1></td>
     </tr>
     <tr>
         <td colspan="2"><br/><br/><br/><br/></td>
@@ -266,8 +272,8 @@ else
 /* Se non passo nulla in GET visualizzo gli iscritti ma non ancora tesserati */
 if(empty($_GET) || !isset($_GET['show']))
 {
-    $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY socio.iscrizione DESC");
-    echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$members->rowCount().")</h1>";
+    $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY socio.iscrizione DESC LIMIT 100");
+    echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$counter_nomembers.")</h1>";
 }
 else
 {
@@ -286,16 +292,16 @@ else
             $mylog->logInfo("Ricerca (".$fullname_trimmed.") tra le identità");
             break;
         case "allmembers": //Visualizzo solo i soci tesserati
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NOT NULL ORDER BY socio.numero_tessera DESC");
-            echo "<h1>ELENCO SOCI TESSERATI (".$members->rowCount().")</h1>";
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza,DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NOT NULL ORDER BY socio.numero_tessera DESC LIMIT 100");
+            echo "<h1>ELENCO SOCI TESSERATI (".$counter_members.")</h1>";
             break;
         case "allidentities": //Visualizzo tutte le identità (persone in anagrafica + soci= TUTTI)
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC");
-            echo "<h1>ELENCO ISCRITTI COMPLETO (".$members->rowCount().")</h1>";
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza, DATE_FORMAT(socio.data_tessera,'%d/%m/%Y') data_tessera FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id ORDER BY anagrafica.cognome ASC, anagrafica.nome ASC LIMIT 100");
+            echo "<h1>ELENCO ISCRITTI COMPLETO (".$counter_all.")</h1>";
             break;
         default: //Di default visualizzo gli iscritti che ancora non sono tesserati
-            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY socio.iscrizione DESC");           
-            echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$members->rowCount().")</h1>";
+            $members=$dbh->query("SELECT *, DATE_FORMAT(anagrafica.data_nascita,'%d/%m/%Y') data_nascita, DATE_FORMAT(socio.iscrizione,'%d/%m/%Y') iscrizione, DATE_FORMAT(socio.scadenza,'%d/%m/%Y') scadenza FROM anagrafica INNER JOIN socio WHERE anagrafica.id=socio.id AND socio.numero_tessera IS NULL ORDER BY socio.iscrizione DESC LIMIT 100");           
+            echo "<h1>ELENCO ISCRITTI MA NON ANCORA TESSERATI (".$counter_nomembers.")</h1>";
             break;
     }
 }
